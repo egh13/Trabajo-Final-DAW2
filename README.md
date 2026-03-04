@@ -1,46 +1,67 @@
+# SecureTenis – Ecommerce de Zapatillas
+Proyecto desarrollado como Trabajo de Fin de Grado (TFG) para 2º de Desarrollo de Aplicaciones Web (DAW).
 
-![Título](https://i.imgur.com/J377FxI.png)
+## Descripción del Proyecto
 
-![Status](https://img.shields.io/badge/Status-Educational-orange) ![Vulnerabilities](https://img.shields.io/badge/Vulnerabilities-Intentionally%20Broken-red)
+* Aplicación ecommerce completamente funcional especializada en la venta de zapatillas.
+*  Especial hincapié en el uso de buenas prácticas en cuanto a la seguridad de la web.
 
-> **Hecho por:** Mario Muela, Daniel Gatón y Eric García
+## Arquitectura del Proyecto
 
-Ecommerce educativo diseñado específicamente con **vulnerabilidades intencionadas** para demostrar riesgos de ciberseguridad (SQLi, XSS, RCE) y analizar su impacto en la protección de datos. **¡No usar en producción!**
+La aplicación sigue una arquitectura cliente-servidor desacoplada.
 
----
+* Frontend: Vue.js aplicando el patrón de diseño MVVM (Model–View–ViewModel).
+  - Estilos mediante la librería bootstrap
+* Backend: Express.js sobre el entorno Node.js
+  - Comunicación mediante endpoints API REST.
+  - Base de datos relacional con MariaDB.
+ 
+> Tanto frontend como backend utilizan TypeScript para asegurar un código más robusto y seguro.
 
-## Quick Start
+### Características Frontend
 
-¡Pon la tienda en marcha en segundos!
+* SPA (Single Page Application)
+* Componentes reutilizables
+* Routing con Vue Router
+* Validación de formularios
+* Protección de rutas
 
-```bash
-cd sitio-malo.com
-npm install
-npm run dev
-```
-La aplicación estará disponible en `http://sitio-malo.com`
+### Características Backend
 
----
+* API RESTful
+* Autenticación con JWT
+* Middleware para:
+  - Autenticación
+  - Control de roles
+  - Manejo de errores
+* Encriptación de contraseñas (bcrypt)
+* Validación de datos
+* Conexión a MariaDB
 
-## 🧨 Vulnerabilidades Incluidas
+## Despliegue Final
 
-Explora, explota y aprende.
+### Frontend
+* Vercel
+### Backend (Servidor + Base de datos)
+* Render o Railway
 
-| Vulnerabilidad | Descripción | Objetivo del Atacante |
-| :--- | :--- | :--- |
-| **SQL Injection (SQLi)** | Formularios y búsquedas sin sanitizar. | Acceso no autorizado, robo de datos. |
-| **RCE** | Subida de archivos insegura. | Ejecución remota de comandos en el servidor. |
-| **SSTI** | Inyección en motores de plantillas. | Lectura de archivos internos, ejecución de código. |
-| **Business Logic** | Manipulación de precios y cupones. | Comprar gratis o modificar el flujo de negocio. |
+## Reparto de Tareas para Desarrollo
 
----
+> Poner una X cuando se complete la tarea.
+## Frontend
+### Paginas
+- [ ] Página de Inicio – listado de productos destacados, banner
+- [ ] Página de Productos (poder filtrar y paginacion)
+- [ ] Página para producto individual
+- [ ] Página carrito de compras
+- [ ] Página Checkout (Sin pasarela de pago)
+- [ ] Página panel de Usuario -> CRUD usuario usando API
+- [ ] Página panel de Administrador -> CRUD administrador
 
-## 🗂️ Estructura Clave
+## Backend
+- [ ] CRUD usuarios -> Register, Login, Eliminar y Actualizar
+- [ ] CRUD carrito
+- [ ] CRUD productos -> panel de administracion
+- [ ] Login y autenticación usando JWT (usando middleware)
+- [ ] Roles de cliente y administrador (usando middleware)
 
-- **`sitio-malo.com/`**: Código fuente de la aplicación (Frontend + Backend simulado).
-- **`docs/`**: Documentación teórica, análisis de riesgos y mitigaciones.
-- **`vulnerabilities/`**: Guías paso a paso para explotar cada fallo.
-
----
-
-> ⚠️ **Disclaimer:** Este software contiene fallos de seguridad graves deliberados. Úsalo únicamente en entornos controlados y aislados con fines educativos.
