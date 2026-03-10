@@ -30,7 +30,7 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
 
 * API RESTful
 * Autenticación con JWT
-* Middleware para:
+* Middleware usando la libreria 'morgan' de npm para:
   - Autenticación
   - Control de roles
   - Manejo de errores
