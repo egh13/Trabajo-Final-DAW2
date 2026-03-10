@@ -1,0 +1,8 @@
+/* Variables globales */
+
+:root {
+  --primary-color: #4f46e5;
+  --secondary-color: #f5f5f5;
+  --font-family: 'Inter', sans-serif;
+  --border-radius: 0.5rem;
+}
