@@ -37,6 +37,7 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
 * Encriptación de contraseñas (bcrypt)
 * Validación de datos
 * Base de Datos con SQLite3
+  -  Implementacion de seeders para poblar la DB
 
 ## Despliegue Final
 
