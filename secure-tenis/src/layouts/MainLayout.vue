@@ -1,9 +1,9 @@
 <template>
-  <div class="layout">
-      <Navbar />
-    <div class="content">
+  <div class="app-layout">
+    <Navbar />
+    <div class="app-content">
       <Sidebar />
-      <main class="main-view">
+      <main class="app-main p-3 p-md-4">
         <router-view />
       </main>
     </div>
@@ -17,18 +17,4 @@ import Sidebar from '@/shared/components/Sidebar.vue'
 import Footer from '@/shared/components/Footer.vue'
 </script>
 
-<style scoped>
-.layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-.content {
-  display: flex;
-  flex: 1;
-}
-.main-view {
-  flex: 1;
-  padding: 2rem;
-}
-</style>
+<style scoped></style>

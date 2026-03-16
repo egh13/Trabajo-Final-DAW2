@@ -1,0 +1,61 @@
+/* Variables de paleta de colores */
+:root {
+  --color-primary: #0d6efd;
+  --color-primary-dark: #0b5ed7;
+  --color-secondary: #6c757d;
+  --color-accent: #e94560;
+  --color-dark: #1a1a2e;
+  --color-dark-surface: #16213e;
+  --color-light-bg: #f8f9fa;
+  --color-border: #dee2e6;
+  --color-text: #212529;
+  --color-text-muted: #6c757d;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 56px;
+  --navbar-height: 60px;
+  --transition-speed: 0.3s;
+}
+
+/* Reset y base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-light-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* Layout principal */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--color-light-bg);
+  transition: all var(--transition-speed) ease;
+}
+
+/* Utilidades globales */
+.text-accent {
+  color: var(--color-accent);
+}
+
+.bg-dark-surface {
+  background-color: var(--color-dark-surface);
+}

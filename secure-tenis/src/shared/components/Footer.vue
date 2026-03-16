@@ -1,18 +1,19 @@
 <template>
-  <footer class="footer">
-    <p>© 2026 Secure Tenis. Todos los derechos reservados.</p>
+  <footer class="footer bg-dark text-white py-3 mt-auto">
+    <div class="container-fluid text-center">
+      <small class="text-secondary">
+        © {{ year }} <span class="text-accent fw-semibold">Secure Tenis</span>. Todos los derechos reservados.
+      </small>
+    </div>
   </footer>
 </template>
 
 <script setup lang="ts">
+const year = new Date().getFullYear()
 </script>
-    
+
 <style scoped>
 .footer {
-  background-color: #4f46e5;
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 </style>

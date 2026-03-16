@@ -3,12 +3,9 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-
-// Importar estilos globales
-import '@/assets/styles/main.css'
-import '@/assets/styles/variables.css'
-import '@/assets/styles/base/_buttons.css'
-import '@/assets/styles/base/_inputs.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
+import './assets/styles/global.css'
 
 // Inicializar la App 
 const app = createApp(App)
