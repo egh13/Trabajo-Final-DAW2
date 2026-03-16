@@ -14,7 +14,7 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
   - Estilos mediante la librería bootstrap
 * Backend: Express.js sobre el entorno Node.js
   - Comunicación mediante endpoints API REST.
-  - Base de datos relacional con MariaDB.
+  - Base de datos relacional con SQLite3.
  
 > Tanto frontend como backend utilizan TypeScript para asegurar un código más robusto y seguro.
 
@@ -36,7 +36,7 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
   - Manejo de errores
 * Encriptación de contraseñas (bcrypt)
 * Validación de datos
-* Conexión a MariaDB
+* Base de Datos con SQLite3
 
 ## Despliegue Final
 
