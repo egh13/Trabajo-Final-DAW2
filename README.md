@@ -36,6 +36,7 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
   - Manejo de errores
 * Encriptación de contraseñas (bcrypt)
 * Validación de datos
+  - Uso de la librería Zod para la validación de datos en typescript
 * Base de Datos con SQLite3
   -  Implementacion de seeders para poblar la DB
 
