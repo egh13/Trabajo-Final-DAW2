@@ -18,9 +18,15 @@
     <div v-else-if="!hasProducts" class="text-center text-muted py-5">
       No hay productos en esta sección.
     </div>    <div v-else class="row g-4">
-      <div v-for="product in products" :key="product.id" class="col-12 col-sm-6 col-lg-4">
+      <div
+        v-for="(product, index) in products"
+        :key="product.id"
+        class="col-12 col-sm-6 col-lg-4"
+        data-aos="fade-up"
+        :data-aos-delay="(index % 3) * 100"
+      >
         <div class="card h-100 shadow-sm border-0 product-card" @click="router.push(`/producto/${product.id}`)">
-          <div class="card-img-placeholder d-flex align-items-center justify-content-center bg-light">
+          <div class="card-img-placeholder d-flex align-items-center justify-content-center">
             <i class="bi bi-image text-secondary" style="font-size: 3rem;"></i>
           </div>
           <div class="card-body d-flex flex-column">
@@ -64,22 +70,19 @@ onMounted(() => load(props.categoryId))
 <style scoped>
 .product-card {
   transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
   overflow: hidden;
   cursor: pointer;
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg) !important;
 }
 
 .card-img-placeholder {
-  height: 180px;
+  height: 200px;
+  background: linear-gradient(145deg, #f0f0f5 0%, #e8e8f0 100%);
   border-bottom: 1px solid var(--color-border);
-}
-
-.text-accent {
-  color: var(--color-accent);
 }
 </style>

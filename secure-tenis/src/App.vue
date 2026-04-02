@@ -9,8 +9,11 @@ import { useAuthStore } from '@/stores/authStore'
 
 const authStore = useAuthStore()
 
-// Recuperar sesión del usuario si hay token almacenado
-onMounted(() => authStore.fetchMe())
+onMounted(() => {
+  authStore.fetchMe()
+  // Inicializar AOS (cargado vía CDN en index.html)
+  ;(window as any).AOS?.init({ duration: 650, once: true, easing: 'ease-out-cubic', offset: 60 })
+})
 </script>
 
 <style scoped>

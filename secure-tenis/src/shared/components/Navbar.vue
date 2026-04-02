@@ -124,21 +124,6 @@ onMounted(() => cartStore.load())
   letter-spacing: 0.03em;
 }
 
-.bg-accent {
-  background-color: var(--color-accent) !important;
-}
-
-.btn-accent {
-  background-color: var(--color-accent);
-  color: #fff;
-  border: none;
-}
-
-.btn-accent:hover {
-  filter: brightness(1.1);
-  color: #fff;
-}
-
 .cart-badge {
   position: absolute;
   top: 2px;

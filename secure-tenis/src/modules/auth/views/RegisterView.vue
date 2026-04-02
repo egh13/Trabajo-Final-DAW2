@@ -1,83 +1,89 @@
 <template>
-  <div class="row justify-content-center py-5">
-    <div class="col-md-6 col-lg-5">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-          <h3 class="fw-bold text-center mb-4">Crear Cuenta</h3>
+  <div class="auth-page">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5" data-aos="fade-up">
+          <div class="card border-0 shadow-lg">
+            <div class="card-body p-4 p-md-5">
+              <h3 class="fw-bold text-center mb-4">Crear Cuenta</h3>
 
-          <div v-if="authStore.error" class="alert alert-danger py-2 small">
-            {{ authStore.error }}
+              <div v-if="authStore.error" class="alert alert-danger py-2 small">
+                {{ authStore.error }}
+              </div>
+
+              <form @submit.prevent="handleRegister" novalidate>
+                <div class="mb-3">
+                  <label for="name" class="form-label">Nombre completo</label>
+                  <input
+                    id="name"
+                    v-model="form.name"
+                    type="text"
+                    class="form-control"
+                    :class="{ 'is-invalid': submitted && !form.name }"
+                    placeholder="Tu nombre"
+                    autocomplete="name"
+                  />
+                  <div class="invalid-feedback">El nombre es obligatorio.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input
+                    id="email"
+                    v-model="form.email"
+                    type="email"
+                    class="form-control"
+                    :class="{ 'is-invalid': submitted && !form.email }"
+                    placeholder="tu@email.com"
+                    autocomplete="email"
+                  />
+                  <div class="invalid-feedback">El email es obligatorio.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">Contraseña</label>
+                  <input
+                    id="password"
+                    v-model="form.password"
+                    type="password"
+                    class="form-control"
+                    :class="{ 'is-invalid': submitted && passwordError }"
+                    placeholder="Mínimo 6 caracteres"
+                    autocomplete="new-password"
+                  />
+                  <div class="invalid-feedback">{{ passwordError }}</div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+                  <input
+                    id="confirmPassword"
+                    v-model="confirmPassword"
+                    type="password"
+                    class="form-control"
+                    :class="{ 'is-invalid': submitted && confirmError }"
+                    placeholder="Repite la contraseña"
+                    autocomplete="new-password"
+                  />
+                  <div class="invalid-feedback">{{ confirmError }}</div>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn btn-dark w-100 mb-3"
+                  :disabled="authStore.loading"
+                >
+                  <span v-if="authStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Crear cuenta
+                </button>
+              </form>
+
+              <p class="text-center text-muted small mb-0">
+                ¿Ya tienes cuenta?
+                <router-link to="/login" class="text-accent fw-semibold">Inicia sesión</router-link>
+              </p>
+            </div>
           </div>
-
-          <form @submit.prevent="handleRegister" novalidate>
-            <div class="mb-3">
-              <label for="name" class="form-label">Nombre completo</label>
-              <input
-                id="name"
-                v-model="form.name"
-                type="text"
-                class="form-control"
-                :class="{ 'is-invalid': submitted && !form.name }"
-                placeholder="Tu nombre"
-                autocomplete="name"
-              />
-              <div class="invalid-feedback">El nombre es obligatorio.</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="email" class="form-label">Email</label>
-              <input
-                id="email"
-                v-model="form.email"
-                type="email"
-                class="form-control"
-                :class="{ 'is-invalid': submitted && !form.email }"
-                placeholder="tu@email.com"
-                autocomplete="email"
-              />
-              <div class="invalid-feedback">El email es obligatorio.</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="password" class="form-label">Contraseña</label>
-              <input
-                id="password"
-                v-model="form.password"
-                type="password"
-                class="form-control"
-                :class="{ 'is-invalid': submitted && passwordError }"
-                placeholder="Mínimo 6 caracteres"
-                autocomplete="new-password"
-              />
-              <div class="invalid-feedback">{{ passwordError }}</div>
-            </div>            <div class="mb-4">
-              <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
-              <input
-                id="confirmPassword"
-                v-model="confirmPassword"
-                type="password"
-                class="form-control"
-                :class="{ 'is-invalid': submitted && confirmError }"
-                placeholder="Repite la contraseña"
-                autocomplete="new-password"
-              />
-              <div class="invalid-feedback">{{ confirmError }}</div>
-            </div>
-
-            <button
-              type="submit"
-              class="btn btn-dark w-100 mb-3"
-              :disabled="authStore.loading"
-            >
-              <span v-if="authStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
-              Crear cuenta
-            </button>
-          </form>
-
-          <p class="text-center text-muted small mb-0">
-            ¿Ya tienes cuenta?
-            <router-link to="/login" class="text-accent fw-semibold">Inicia sesión</router-link>
-          </p>
         </div>
       </div>
     </div>
@@ -129,5 +135,9 @@ const handleRegister = async () => {
 <style scoped>
 .text-accent {
   color: var(--color-accent);
+}
+
+.card {
+  border-radius: 1rem;
 }
 </style>
