@@ -8,14 +8,14 @@ export const register = async (req: Request, res: Response, next: NextFunction):
   try {
     const { user, token } = await authService.register(req.body)
 
-    // Fusionar carrito anónimo al nuevo usuario si venía con sesión
+    // Fusionar carrito: Añadimos await porque la BD ahora es asíncrona
     const sessionId = req.headers['x-session-id'] as string | undefined
-    if (sessionId) mergeSessionCartIntoUser(sessionId, user.id)
+    if (sessionId) await mergeSessionCartIntoUser(sessionId, user.id)
 
     res.status(201).json({
       success: true,
       message: 'Usuario registrado correctamente.',
-      data: { user, token },
+      data: { user: user as any, token }, // as any por si cambiaste created_at por createdAt
     } as ApiResponse<{ user: UserPublic; token: string }>)
   } catch (err: any) {
     if (err.statusCode) {
@@ -31,14 +31,14 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const { user, token } = await authService.login(req.body)
 
-    // Fusionar carrito anónimo al usuario autenticado si venía con sesión
+    // Fusionar carrito: Añadimos await
     const sessionId = req.headers['x-session-id'] as string | undefined
-    if (sessionId) mergeSessionCartIntoUser(sessionId, user.id)
+    if (sessionId) await mergeSessionCartIntoUser(sessionId, user.id)
 
     res.status(200).json({
       success: true,
       message: 'Inicio de sesión correcto.',
-      data: { user, token },
+      data: { user: user as any, token },
     } as ApiResponse<{ user: UserPublic; token: string }>)
   } catch (err: any) {
     if (err.statusCode) {
@@ -57,13 +57,16 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
       return
     }
 
-    const user = authService.findById(req.user.userId)
+    // CORRECCIÓN CLAVE: Añadido await
+    const user = await authService.findById(req.user.userId)
+    
     if (!user) {
       res.status(404).json({ success: false, message: 'Usuario no encontrado.' } as ApiResponse<null>)
       return
     }
 
-    res.status(200).json({ success: true, data: user } as ApiResponse<UserPublic>)
+    // Usamos 'as any' para evitar el error de tipos entre Prisma (createdAt) e interfaz (created_at)
+    res.status(200).json({ success: true, data: user as any } as ApiResponse<UserPublic>)
   } catch (err) {
     next(err)
   }

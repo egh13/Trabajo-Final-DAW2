@@ -9,7 +9,7 @@ const resolveSession = (req: Request): { sessionId: string; userId?: number } =>
   return { sessionId, userId }
 }
 
-export const getCart = (req: Request, res: Response): void => {
+export const getCart = async (req: Request, res: Response): Promise<void> => {
   const { sessionId, userId } = resolveSession(req)
 
   if (!sessionId) {
@@ -17,11 +17,11 @@ export const getCart = (req: Request, res: Response): void => {
     return
   }
 
-  const data = cartService.getCartBySession(sessionId, userId)
+  const data = await cartService.getCartBySession(sessionId, userId)
   res.json({ success: true, data } as ApiResponse<CartItem[]>)
 }
 
-export const addToCart = (req: Request, res: Response): void => {
+export const addToCart = async (req: Request, res: Response): Promise<void> => {
   const { sessionId, userId } = resolveSession(req)
   const { product_id, quantity } = req.body as { product_id: number; quantity: number }
 
@@ -35,11 +35,11 @@ export const addToCart = (req: Request, res: Response): void => {
     return
   }
 
-  const data = cartService.addToCart(sessionId, product_id, quantity, userId)
+  const data = await cartService.addToCart(sessionId, product_id, quantity, userId)
   res.status(201).json({ success: true, data } as ApiResponse<CartItem>)
 }
 
-export const updateCartItem = (req: Request, res: Response): void => {
+export const updateCartItem = async (req: Request, res: Response): Promise<void> => {
   const { sessionId, userId } = resolveSession(req)
   const productId = Number(req.params.productId)
   const { quantity } = req.body as { quantity: number }
@@ -49,11 +49,11 @@ export const updateCartItem = (req: Request, res: Response): void => {
     return
   }
 
-  const data = cartService.updateCartItem(sessionId, productId, quantity, userId)
+  const data = await cartService.updateCartItem(sessionId, productId, quantity, userId)
   res.json({ success: true, data: data ?? null } as ApiResponse<CartItem | null>)
 }
 
-export const removeFromCart = (req: Request, res: Response): void => {
+export const removeFromCart = async (req: Request, res: Response): Promise<void> => {
   const { sessionId, userId } = resolveSession(req)
   const productId = Number(req.params.productId)
 
@@ -62,7 +62,7 @@ export const removeFromCart = (req: Request, res: Response): void => {
     return
   }
 
-  const removed = cartService.removeFromCart(sessionId, productId, userId)
+  const removed = await cartService.removeFromCart(sessionId, productId, userId)
 
   if (!removed) {
     res.status(404).json({ success: false, message: 'Producto no encontrado en el carrito' } as ApiResponse<null>)
@@ -72,7 +72,7 @@ export const removeFromCart = (req: Request, res: Response): void => {
   res.json({ success: true, message: 'Producto eliminado del carrito' } as ApiResponse<null>)
 }
 
-export const clearCart = (req: Request, res: Response): void => {
+export const clearCart = async (req: Request, res: Response): Promise<void> => {
   const { sessionId, userId } = resolveSession(req)
 
   if (!sessionId) {
@@ -80,6 +80,6 @@ export const clearCart = (req: Request, res: Response): void => {
     return
   }
 
-  cartService.clearCart(sessionId, userId)
+  await cartService.clearCart(sessionId, userId)
   res.json({ success: true, message: 'Carrito vaciado correctamente' } as ApiResponse<null>)
 }

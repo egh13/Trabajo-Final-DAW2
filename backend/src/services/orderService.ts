@@ -1,53 +1,64 @@
-import db from '../config/db'
+import { prisma } from '../config/prisma'
 import { getCartBySession, clearCart } from './cartService'
-import type { Order, OrderItem } from '../types'
 
-export const getOrdersBySession = (sessionId: string): Order[] => {
-  return db.prepare('SELECT * FROM orders WHERE session_id = ? ORDER BY created_at DESC').all(sessionId) as Order[]
+export const getOrdersBySession = async (sessionId: string) => {
+  return await prisma.order.findMany({
+    // Convertimos a número si tu DB usa IDs numéricos
+    where: { userId: parseInt(sessionId) || 0 }, 
+    orderBy: { createdAt: 'desc' },
+    include: { items: true }
+  })
 }
 
-export const getOrderById = (id: number): { order: Order; items: OrderItem[] } | undefined => {
-  const order = db.prepare('SELECT * FROM orders WHERE id = ?').get(id) as Order | undefined
-  if (!order) return undefined
-
-  const items = db.prepare(`
-    SELECT oi.*, p.name AS product_name
-    FROM order_items oi
-    JOIN products p ON oi.product_id = p.id
-    WHERE oi.order_id = ?
-  `).all(id) as OrderItem[]
-
-  return { order, items }
+export const getOrderById = async (id: number) => {
+  return await prisma.order.findUnique({
+    where: { id },
+    include: {
+      items: {
+        include: {
+          product: true
+        }
+      }
+    }
+  })
 }
 
-export const createOrderFromCart = (sessionId: string): Order | null => {
-  const cartItems = getCartBySession(sessionId)
-  if (cartItems.length === 0) return null
+export const createOrderFromCart = async (sessionId: string) => {
+  const cartItems = await getCartBySession(sessionId)
+  
+  if (!cartItems || cartItems.length === 0) return null
 
-  const total = cartItems.reduce((sum, item) => sum + (item.product_price ?? 0) * item.quantity, 0)
+  // Usamos los nombres de tu interfaz CartItem: product_price y quantity
+  const total = cartItems.reduce((sum, item) => 
+    sum + (item.product_price ?? 0) * item.quantity, 0
+  )
 
-  // Transacción para garantizar consistencia
-  const createOrder = db.transaction(() => {
-    const orderResult = db.prepare(
-      'INSERT INTO orders (session_id, total) VALUES (?, ?)'
-    ).run(sessionId, total)
-
-    const orderId = orderResult.lastInsertRowid as number
-
-    const insertItem = db.prepare(
-      'INSERT INTO order_items (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)'
-    )
+  return await prisma.$transaction(async (tx) => {
+    const order = await tx.order.create({
+      data: {
+        userId: parseInt(sessionId) || 0,
+        total: total,
+        status: 'pending',
+        items: {
+          create: cartItems.map((item) => ({
+            productId: item.product_id, // Cambiado de productId a product_id
+            quantity: item.quantity,
+            price: item.product_price ?? 0, // Usamos product_price directamente
+          })),
+        },
+      },
+    })
 
     for (const item of cartItems) {
-      insertItem.run(orderId, item.product_id, item.quantity, item.product_price ?? 0)
-      // Reducir el stock del producto
-      db.prepare('UPDATE products SET stock = stock - ? WHERE id = ?').run(item.quantity, item.product_id)
+      await tx.product.update({
+        where: { id: item.product_id }, // Cambiado de productId a product_id
+        data: {
+          stock: { decrement: item.quantity }
+        }
+      })
     }
 
-    clearCart(sessionId)
-
-    return db.prepare('SELECT * FROM orders WHERE id = ?').get(orderId) as Order
+    await clearCart(sessionId)
+    return order
   })
-
-  return createOrder()
 }

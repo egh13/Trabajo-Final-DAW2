@@ -1,16 +1,18 @@
-import db from '../config/db'
+import { prisma } from '../config/prisma'
 import type { Category } from '../types'
 
-export const getAllCategories = (): Category[] => {
-  return db.prepare('SELECT * FROM categories ORDER BY name').all() as Category[]
+export const getAllCategories = async (): Promise<Category[]> => {
+  const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } })
+  return categories.map(c => ({ id: c.id, name: c.name, description: c.description, created_at: new Date().toISOString() }))
 }
 
-export const getCategoryById = (id: number): Category | undefined => {
-  return db.prepare('SELECT * FROM categories WHERE id = ?').get(id) as Category | undefined
+export const getCategoryById = async (id: number): Promise<Category | undefined> => {
+  const category = await prisma.category.findUnique({ where: { id } })
+  if (!category) return undefined
+  return { id: category.id, name: category.name, description: category.description, created_at: new Date().toISOString() }
 }
 
-export const createCategory = (name: string, description: string | null): Category => {
-  const stmt = db.prepare('INSERT INTO categories (name, description) VALUES (?, ?)')
-  const result = stmt.run(name, description)
-  return getCategoryById(result.lastInsertRowid as number)!
+export const createCategory = async (name: string, description: string | null): Promise<Category> => {
+  const category = await prisma.category.create({ data: { name, description } })
+  return { id: category.id, name: category.name, description: category.description, created_at: new Date().toISOString() }
 }

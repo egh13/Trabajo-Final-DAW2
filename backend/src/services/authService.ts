@@ -1,52 +1,84 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import db from '../config/db'
+import { prisma } from '../config/prisma'
 import { jwtConfig } from '../config/jwt'
 import type { User, UserPublic, JwtPayload, RegisterBody, LoginBody } from '../types'
 
 const SALT_ROUNDS = 10
 
+const roleMapToDB = {
+  'cliente': 'CLIENT',
+  'admin': 'ADMIN',
+  'analista': 'ANALYST'
+} as const
+
+const roleMapFromDB = {
+  'CLIENT': 'cliente',
+  'ADMIN': 'admin',
+  'ANALYST': 'analista'
+} as const
+
 // Buscar usuario por email
-const findByEmail = (email: string): User | undefined => {
-  return db.prepare('SELECT * FROM users WHERE email = ?').get(email) as User | undefined
+const findByEmail = async (email: string): Promise<User | undefined> => {
+  const user = await prisma.user.findUnique({ where: { email } })
+  if (!user) return undefined
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    password: user.password,
+    role: roleMapFromDB[user.role],
+    created_at: user.createdAt.toISOString()
+  }
 }
 
 // Buscar usuario por id (datos públicos)
-const findById = (id: number): UserPublic | undefined => {
-  return db
-    .prepare('SELECT id, name, email, role, created_at FROM users WHERE id = ?')
-    .get(id) as UserPublic | undefined
+const findById = async (id: number): Promise<UserPublic | undefined> => {
+  const user = await prisma.user.findUnique({ where: { id } })
+  if (!user) return undefined
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: roleMapFromDB[user.role],
+    created_at: user.createdAt.toISOString()
+  }
 }
 
 // Registrar un nuevo usuario
 const register = async (data: RegisterBody): Promise<{ user: UserPublic; token: string }> => {
-  const existing = findByEmail(data.email)
+  const existing = await findByEmail(data.email)
   if (existing) {
     throw Object.assign(new Error('Ya existe una cuenta con ese email.'), { statusCode: 409 })
   }
 
   const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS)
 
-  const result = db
-    .prepare('INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)')
-    .run(data.name, data.email, hashedPassword, data.role ?? 'cliente')
+  const user = await prisma.user.create({
+    data: {
+      name: data.name,
+      email: data.email,
+      password: hashedPassword,
+      role: roleMapToDB[data.role ?? 'cliente']
+    }
+  })
 
-  const user: UserPublic = {
-    id: result.lastInsertRowid as number,
-    name: data.name,
-    email: data.email,
-    role: data.role ?? 'cliente',
-    created_at: new Date().toISOString(),
+  const userPublic: UserPublic = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: roleMapFromDB[user.role],
+    created_at: user.createdAt.toISOString()
   }
 
-  const token = generateToken(user)
+  const token = generateToken(userPublic)
 
-  return { user, token }
+  return { user: userPublic, token }
 }
 
 // Iniciar sesión
 const login = async (data: LoginBody): Promise<{ user: UserPublic; token: string }> => {
-  const user = findByEmail(data.email)
+  const user = await findByEmail(data.email)
   if (!user) {
     throw Object.assign(new Error('Credenciales incorrectas.'), { statusCode: 401 })
   }

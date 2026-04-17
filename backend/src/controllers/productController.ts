@@ -2,15 +2,15 @@ import { Request, Response } from 'express'
 import * as productService from '../services/productService'
 import type { ApiResponse, Product } from '../types'
 
-export const getProducts = (req: Request, res: Response): void => {
+export const getProducts = async (req: Request, res: Response): Promise<void> => {
   const categoryId = req.query.category ? Number(req.query.category) : undefined
-  const data = productService.getAllProducts(categoryId)
+  const data = await productService.getAllProducts(categoryId)
   res.json({ success: true, data } as ApiResponse<Product[]>)
 }
 
-export const getProductById = (req: Request, res: Response): void => {
+export const getProductById = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id)
-  const data = productService.getProductById(id)
+  const data = await productService.getProductById(id)
 
   if (!data) {
     res.status(404).json({ success: false, message: 'Producto no encontrado' } as ApiResponse<null>)
@@ -20,7 +20,7 @@ export const getProductById = (req: Request, res: Response): void => {
   res.json({ success: true, data } as ApiResponse<Product>)
 }
 
-export const createProduct = (req: Request, res: Response): void => {
+export const createProduct = async (req: Request, res: Response): Promise<void> => {
   const { name, description, price, stock, image_url, category_id } = req.body as Partial<Product>
 
   if (!name?.trim() || price === undefined || !category_id) {
@@ -28,7 +28,7 @@ export const createProduct = (req: Request, res: Response): void => {
     return
   }
 
-  const data = productService.createProduct({
+  const data = await productService.createProduct({
     name: name.trim(),
     description: description ?? null,
     price,
@@ -40,9 +40,9 @@ export const createProduct = (req: Request, res: Response): void => {
   res.status(201).json({ success: true, data } as ApiResponse<Product>)
 }
 
-export const updateProduct = (req: Request, res: Response): void => {
+export const updateProduct = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id)
-  const data = productService.updateProduct(id, req.body as Partial<Product>)
+  const data = await productService.updateProduct(id, req.body as Partial<Product>)
 
   if (!data) {
     res.status(404).json({ success: false, message: 'Producto no encontrado' } as ApiResponse<null>)
@@ -52,9 +52,9 @@ export const updateProduct = (req: Request, res: Response): void => {
   res.json({ success: true, data } as ApiResponse<Product>)
 }
 
-export const deleteProduct = (req: Request, res: Response): void => {
+export const deleteProduct = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id)
-  const deleted = productService.deleteProduct(id)
+  const deleted = await productService.deleteProduct(id)
 
   if (!deleted) {
     res.status(404).json({ success: false, message: 'Producto no encontrado' } as ApiResponse<null>)
