@@ -8,14 +8,13 @@ export const register = async (req: Request, res: Response, next: NextFunction):
   try {
     const { user, token } = await authService.register(req.body)
 
-    // Fusionar carrito: Añadimos await porque la BD ahora es asíncrona
     const sessionId = req.headers['x-session-id'] as string | undefined
     if (sessionId) await mergeSessionCartIntoUser(sessionId, user.id)
 
     res.status(201).json({
       success: true,
       message: 'Usuario registrado correctamente.',
-      data: { user: user as any, token }, // as any por si cambiaste created_at por createdAt
+      data: { user: user as any, token }, 
     } as ApiResponse<{ user: UserPublic; token: string }>)
   } catch (err: any) {
     if (err.statusCode) {
@@ -31,7 +30,6 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const { user, token } = await authService.login(req.body)
 
-    // Fusionar carrito: Añadimos await
     const sessionId = req.headers['x-session-id'] as string | undefined
     if (sessionId) await mergeSessionCartIntoUser(sessionId, user.id)
 
@@ -57,7 +55,6 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
       return
     }
 
-    // CORRECCIÓN CLAVE: Añadido await
     const user = await authService.findById(req.user.userId)
     
     if (!user) {
@@ -65,7 +62,7 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
       return
     }
 
-    // Usamos 'as any' para evitar el error de tipos entre Prisma (createdAt) e interfaz (created_at)
+    // Usamos 'as any' para evitar el error de tipos entre Prisma e interfaz
     res.status(200).json({ success: true, data: user as any } as ApiResponse<UserPublic>)
   } catch (err) {
     next(err)

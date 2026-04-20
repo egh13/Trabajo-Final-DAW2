@@ -2,7 +2,7 @@ export interface Category {
   id: number
   name: string
   description: string | null
-  created_at: string
+  createdAt: string
 }
 
 export interface Product {
@@ -14,7 +14,7 @@ export interface Product {
   image_url: string | null
   category_id: number
   category_name?: string
-  created_at: string
+  createdAt: string
 }
 
 export interface CartItem {
@@ -32,8 +32,8 @@ export interface Order {
   id: number;
   userId: number;    // Antes era session_id
   total: number;
-  status: string;
-  createdAt: Date;   // Antes era created_at
+  status: string;  
+  createdAt: Date;
   items?: OrderItem[];
 }
 
@@ -55,7 +55,7 @@ export interface User {
   email: string
   password: string
   role: UserRole
-  created_at: string
+  createdAt: string
 }
 
 // Datos públicos del usuario (sin contraseña)

@@ -26,9 +26,16 @@
         data-aos="fade-up"
         :data-aos-delay="(index % 3) * 100"
       >
-        <div class="card h-100 shadow-sm border-0 product-card" @click="router.push(`/producto/${product.id}`)">
-          <div class="card-img-placeholder d-flex align-items-center justify-content-center">
-            <i class="bi bi-image text-secondary" style="font-size: 3rem;"></i>
+        <div class="card h-100 shadow-sm border-0 product-card" @click="router.push(`/producto/${product.id}`)">          <div class="card-img-wrapper">
+            <img              
+              v-if="product.image_url"
+              :src="product.image_url"
+              :alt="product.name"
+              class="card-img-top"
+            />
+            <div v-else class="card-img-placeholder d-flex align-items-center justify-content-center">
+              <i class="bi bi-image text-secondary" style="font-size: 3rem;"></i>
+            </div>
           </div>
           <div class="card-body d-flex flex-column">
             <span class="badge bg-secondary mb-2 align-self-start">{{ product.category_name }}</span>
@@ -73,6 +80,19 @@ onMounted(() => load())
 .product-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-lg) !important;
+}
+
+.card-img-wrapper {
+  height: 200px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f0f0f5 0%, #e8e8f0 100%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-img-wrapper .card-img-top {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .card-img-placeholder {

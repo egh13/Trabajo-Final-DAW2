@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -12,31 +13,31 @@ async function main() {
   const catZapatillas = await prisma.category.create({ data: { name: 'Zapatillas' } })
   const catAccesorios = await prisma.category.create({ data: { name: 'Accesorios' } })
   const catRopa = await prisma.category.create({ data: { name: 'Ropa' } })
-
+  
   console.log('Insertando Usuarios... 👥')
+  const salt = await bcrypt.genSalt(10)
   await prisma.user.createMany({
     data: [
-      { name: 'Administrador', email: 'admin@securetenis.com', password: 'admin123_hash', role: 'ADMIN' },
-      { name: 'Cliente Demo', email: 'cliente@securetenis.com', password: 'cliente123_hash', role: 'CLIENT' },
-      { name: 'Analista Seguridad', email: 'analista@securetenis.com', password: 'analista123_hash', role: 'ANALYST' }
+      { name: 'Administrador', email: 'admin@securetenis.com', password: await bcrypt.hash('admin123', salt), role: 'ADMIN' },
+      { name: 'Cliente Demo', email: 'cliente@securetenis.com', password: await bcrypt.hash('cliente123', salt), role: 'CLIENT' },
+      { name: 'Analista Seguridad', email: 'analista@securetenis.com', password: await bcrypt.hash('analista123', salt), role: 'ANALYST' }
     ]
   })
 
   console.log('Insertando Productos... 👟')
   await prisma.product.createMany({
-    data: [
-      { name: 'Air Phantom X1', description: 'Zapatilla de running con amortiguación reactiva.', price: 149.0, stock: 20, categoryId: catZapatillas.id },
-      { name: 'Urban Street Low', description: 'Zapatilla urbana de perfil bajo.', price: 89.0, stock: 35, categoryId: catZapatillas.id },
-      { name: 'Trail Blazer GTX', description: 'Zapatilla de trail impermeable.', price: 129.0, stock: 12, categoryId: catZapatillas.id },
-      { name: 'Velocity Sprint', description: 'Zapatilla de competición ultraligera.', price: 189.0, stock: 8, categoryId: catZapatillas.id },
-      { name: 'Cloud Walker Pro', description: 'Zapatilla de paseo con plantilla viscoelástica.', price: 99.0, stock: 25, categoryId: catZapatillas.id },
-      { name: 'Collar Runner Gold', description: 'Collar fino chapado en oro.', price: 39.0, stock: 60, categoryId: catAccesorios.id },
-      { name: 'Camiseta Sport Dry', description: 'Camiseta técnica de secado rápido.', price: 34.0, stock: 50, categoryId: catRopa.id }
-      // He resumido la lista, pero puedes añadir los 18 siguiendo este formato
+    data: [      
+      { name: 'Air Phantom X1', description: 'Zapatilla de running con amortiguación reactiva.', price: 149.0, stock: 20, image: 'https://res.cloudinary.com/dqezwrvov/image/upload/v1776687359/Premium-Authentic-Point-Shoe-VANS-Black-ALT1_ovxrdi.jpg', categoryId: catZapatillas.id },
+      { name: 'Urban Street Low', description: 'Zapatilla urbana de perfil bajo.', price: 89.0, stock: 35, image: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600', categoryId: catZapatillas.id },
+      { name: 'Trail Blazer GTX', description: 'Zapatilla de trail impermeable.', price: 129.0, stock: 12, image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=600', categoryId: catZapatillas.id },
+      { name: 'Velocity Sprint', description: 'Zapatilla de competición ultraligera.', price: 189.0, stock: 8, image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600', categoryId: catZapatillas.id },
+      { name: 'Cloud Walker Pro', description: 'Zapatilla de paseo con plantilla viscoelástica.', price: 99.0, stock: 25, image: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600', categoryId: catZapatillas.id },
+      { name: 'Collar Runner Gold', description: 'Collar fino chapado en oro.', price: 39.0, stock: 60, image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=600', categoryId: catAccesorios.id },
+      { name: 'Camiseta Sport Dry', description: 'Camiseta técnica de secado rápido.', price: 34.0, stock: 50, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600', categoryId: catRopa.id }
     ]
   })
 
-  console.log('¡Base de datos MariaDB poblada con tus datos originales! ✅')
+  console.log('¡Base de datos MariaDB poblada! ✅')
 }
 
 main()

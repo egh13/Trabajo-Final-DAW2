@@ -26,9 +26,9 @@
               v-for="item in items"
               :key="item.id"
               class="list-group-item d-flex align-items-center gap-3 py-3"
-            >
-              <div class="cart-img-placeholder bg-light rounded d-flex align-items-center justify-content-center flex-shrink-0">
-                <i class="bi bi-image text-secondary"></i>
+            >              <div class="cart-img-placeholder bg-light rounded d-flex align-items-center justify-content-center flex-shrink-0">
+                <img v-if="item.image_url" :src="item.image_url" :alt="item.product_name" class="cart-img rounded" />
+                <i v-else class="bi bi-image text-secondary"></i>
               </div>
 
               <div class="flex-grow-1">
@@ -128,6 +128,13 @@ onMounted(() => cartStore.load())
   width: 56px;
   height: 56px;
   font-size: 1.4rem;
+  overflow: hidden;
+}
+
+.cart-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .text-accent {

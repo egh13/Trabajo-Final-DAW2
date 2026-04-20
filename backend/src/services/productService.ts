@@ -17,7 +17,7 @@ const getAllProducts = async (categoryId?: number): Promise<Product[]> => {
     image_url: product.image,
     category_id: product.categoryId,
     category_name: product.category.name,
-    created_at: product.createdAt.toISOString()
+    createdAt: product.createdAt.toISOString()
   }))
 }
 
@@ -36,11 +36,11 @@ const getProductById = async (id: number): Promise<Product | undefined> => {
     image_url: product.image,
     category_id: product.categoryId,
     category_name: product.category.name,
-    created_at: product.createdAt.toISOString()
+    createdAt: product.createdAt.toISOString()
   }
 }
 
-const createProduct = async (data: Omit<Product, 'id' | 'created_at' | 'category_name'>): Promise<Product> => {
+const createProduct = async (data: Omit<Product, 'id' | 'createdAt' | 'category_name'>): Promise<Product> => {
   const product = await prisma.product.create({
     data: {
       name: data.name,
@@ -61,11 +61,11 @@ const createProduct = async (data: Omit<Product, 'id' | 'created_at' | 'category
     image_url: product.image,
     category_id: product.categoryId,
     category_name: product.category.name,
-    created_at: product.createdAt.toISOString()
+    createdAt: product.createdAt.toISOString()
   }
 }
 
-const updateProduct = async (id: number, data: Partial<Omit<Product, 'id' | 'created_at' | 'category_name'>>): Promise<Product | undefined> => {
+const updateProduct = async (id: number, data: Partial<Omit<Product, 'id' | 'createdAt' | 'category_name'>>): Promise<Product | undefined> => {
   try {
     const product = await prisma.product.update({
       where: { id },
@@ -88,7 +88,7 @@ const updateProduct = async (id: number, data: Partial<Omit<Product, 'id' | 'cre
       image_url: product.image,
       category_id: product.categoryId,
       category_name: product.category.name,
-      created_at: product.createdAt.toISOString()
+      createdAt: product.createdAt.toISOString()
     }
   } catch {
     return undefined

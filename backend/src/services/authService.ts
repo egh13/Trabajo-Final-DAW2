@@ -26,9 +26,9 @@ const findByEmail = async (email: string): Promise<User | undefined> => {
     id: user.id,
     name: user.name,
     email: user.email,
-    password: user.password,
+    password: user.password,    
     role: roleMapFromDB[user.role],
-    created_at: user.createdAt.toISOString()
+    createdAt: user.createdAt.toISOString()
   }
 }
 
@@ -41,7 +41,7 @@ const findById = async (id: number): Promise<UserPublic | undefined> => {
     name: user.name,
     email: user.email,
     role: roleMapFromDB[user.role],
-    created_at: user.createdAt.toISOString()
+    createdAt: user.createdAt.toISOString()
   }
 }
 
@@ -67,8 +67,8 @@ const register = async (data: RegisterBody): Promise<{ user: UserPublic; token: 
     id: user.id,
     name: user.name,
     email: user.email,
-    role: roleMapFromDB[user.role],
-    created_at: user.createdAt.toISOString()
+    role: roleMapFromDB[user.role],    
+    createdAt: user.createdAt.toISOString()
   }
 
   const token = generateToken(userPublic)
@@ -93,7 +93,7 @@ const login = async (data: LoginBody): Promise<{ user: UserPublic; token: string
     name: user.name,
     email: user.email,
     role: user.role,
-    created_at: user.created_at,
+    createdAt: user.createdAt,
   }
 
   const token = generateToken(publicUser)

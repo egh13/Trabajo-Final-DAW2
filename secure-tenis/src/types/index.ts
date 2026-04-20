@@ -2,7 +2,7 @@ export interface Category {
   id: number
   name: string
   description: string | null
-  created_at: string
+  createdAt: string
 }
 
 export interface Product {
@@ -14,7 +14,7 @@ export interface Product {
   image_url: string | null
   category_id: number
   category_name?: string
-  created_at: string
+  createdAt: string
 }
 
 export interface CartItem {
@@ -32,7 +32,7 @@ export interface Order {
   session_id: string
   total: number
   status: 'pending' | 'paid' | 'cancelled'
-  created_at: string
+  createdAt: string
 }
 
 export interface OrderItem {
@@ -53,7 +53,7 @@ export interface User {
   name: string
   email: string
   role: UserRole
-  created_at: string
+  createdAt: string
 }
 
 // Respuesta de login/register

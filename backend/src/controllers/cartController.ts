@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import * as cartService from '../services/cartService'
 import type { ApiResponse, CartItem } from '../types'
 
-// Obtiene session_id del header y user_id del token JWT si está autenticado
+// Obtiene sessionId del header y userId del token JWT si está autenticado
 const resolveSession = (req: Request): { sessionId: string; userId?: number } => {
   const sessionId = req.headers['x-session-id'] as string
   const userId = req.user?.userId
