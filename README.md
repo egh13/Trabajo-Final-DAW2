@@ -4,7 +4,7 @@ Proyecto desarrollado como Trabajo de Fin de Grado (TFG) para 2º de Desarrollo 
 ## Descripción del Proyecto
 
 * Aplicación ecommerce completamente funcional especializada en la venta de zapatillas.
-*  Especial hincapié en el uso de buenas prácticas en cuanto a la seguridad de la web.
+*  Especial hincapié en el uso de buenas prácticas y herramientas para mejorar la seguridad de la web.
 
 ## Arquitectura del Proyecto
 
@@ -15,6 +15,7 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
 * Backend: Express.js sobre el entorno Node.js
   - Comunicación mediante endpoints API REST.
   - Base de datos relacional con MariaDB.
+  - Prisma ORM para interacciones con la DB
  
 > Tanto frontend como backend utilizan TypeScript para asegurar un código más robusto y seguro.
 
@@ -46,24 +47,3 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
 * Vercel
 ### Backend (Servidor + Base de datos)
 * Render o Railway
-
-## Reparto de Tareas para Desarrollo
-
-> Poner una X cuando se complete la tarea.
-## Frontend
-### Paginas
-- [ ] Página de Inicio – listado de productos destacados, banner
-- [ ] Página de Productos (poder filtrar y paginacion)
-- [ ] Página para producto individual
-- [ ] Página carrito de compras
-- [ ] Página Checkout (Sin pasarela de pago)
-- [ ] Página panel de Usuario -> CRUD usuario usando API
-- [ ] Página panel de Administrador -> CRUD administrador
-
-## Backend
-- [ ] CRUD usuarios -> Register, Login, Eliminar y Actualizar
-- [ ] CRUD carrito
-- [ ] CRUD productos -> panel de administracion
-- [ ] Login y autenticación usando JWT (usando middleware)
-- [ ] Roles de cliente y administrador (usando middleware)
-
