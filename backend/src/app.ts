@@ -9,9 +9,6 @@ import orderRoutes from './routes/orderRoutes'
 import authRoutes from './routes/authRoutes'
 import { errorHandler, notFoundHandler } from './middlewares/errorMiddleware'
 
-// Inicializar la DB al arrancar la aplicación
-import './config/db'
-
 const app: Application = express()
 
 app.use(cors())

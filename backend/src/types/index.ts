@@ -29,11 +29,12 @@ export interface CartItem {
 }
 
 export interface Order {
-  id: number
-  session_id: string
-  total: number
-  status: 'pending' | 'paid' | 'cancelled'
-  created_at: string
+  id: number;
+  userId: number;    // Antes era session_id
+  total: number;
+  status: string;
+  createdAt: Date;   // Antes era created_at
+  items?: OrderItem[];
 }
 
 export interface OrderItem {
