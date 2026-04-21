@@ -18,19 +18,15 @@
       </button>
 
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto gap-1">
-          <li class="nav-item">
-            <router-link class="nav-link" to="/" active-class="" exact-active-class="active">Inicio</router-link>
+          <ul class="navbar-nav ms-auto gap-1">
+          <!-- Enlace al panel de admin (solo admin/analista) -->
+          <li v-if="showAdminLink" class="nav-item d-flex align-items-center">
+            <router-link class="nav-link admin-link d-flex align-items-center gap-2 py-1 px-3 fw-semibold" to="/admin">
+              <span class="admin-pulse">🛡️</span>
+              <span class="admin-text">Panel Admin</span>
+            </router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/zapatillas">Zapatillas</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/accesorios">Accesorios</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/ropa">Ropa</router-link>
-          </li>
+
           <li class="nav-item">
             <router-link class="nav-link position-relative" to="/cart">
               <i class="bi bi-cart3 me-1"></i>Carrito
@@ -106,6 +102,10 @@ const roleLabels: Record<string, string> = {
 
 const roleName = computed(() => roleLabels[user.value?.role ?? ''] ?? '')
 
+const showAdminLink = computed(() =>
+  !!user.value && ['admin', 'analista'].includes(user.value.role)
+)
+
 const handleLogout = () => {
   authStore.logout()
   router.push('/')
@@ -135,5 +135,43 @@ onMounted(() => cartStore.load())
   font-size: 0.55rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.admin-link {
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(0, 0, 0, 0.3));
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.admin-link:hover {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(0, 0, 0, 0.5));
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.5);
+}
+
+.admin-pulse {
+  display: inline-block;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.admin-text {
+  background: linear-gradient(90deg, #22c55e, #86efac, #22c55e);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px #22c55e); }
+  50% { transform: scale(1.25); filter: brightness(1.4) drop-shadow(0 0 6px #22c55e); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
 }
 </style>

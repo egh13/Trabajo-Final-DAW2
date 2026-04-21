@@ -7,6 +7,9 @@ import CartView from '@/modules/cart/views/CartView.vue'
 import ProductDetailView from '@/modules/products/views/ProductDetailView.vue'
 import LoginView from '@/modules/auth/views/LoginView.vue'
 import RegisterView from '@/modules/auth/views/RegisterView.vue'
+import AdminLayout from '@/modules/admin/layouts/AdminLayout.vue'
+import AdminDashboardView from '@/modules/admin/views/AdminDashboardView.vue'
+import AdminPlaceholderView from '@/modules/admin/views/AdminPlaceholderView.vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import type { UserRole } from '@/types'
 
@@ -37,13 +40,27 @@ const routes: RouteRecordRaw[] = [
         name: 'Login',
         component: LoginView,
         meta: { guestOnly: true },
-      },
-      {
+      },      {
         path: 'register',
         name: 'Register',
         component: RegisterView,
         meta: { guestOnly: true },
       },
+    ],
+  },
+  // Panel de administración / seguridad — solo admin y analista
+  {
+    path: '/admin',
+    component: AdminLayout,
+    meta: { requiresAuth: true, roles: ['admin', 'analista'] as UserRole[] },
+    children: [
+      { path: '', name: 'admin-dashboard', component: AdminDashboardView },
+      { path: 'audit-logs', name: 'admin-audit-logs', component: AdminPlaceholderView },
+      { path: 'users', name: 'admin-users', component: AdminPlaceholderView },
+      { path: 'products', name: 'admin-products', component: AdminPlaceholderView },
+      { path: 'orders', name: 'admin-orders', component: AdminPlaceholderView },
+      { path: 'analytics', name: 'admin-analytics', component: AdminPlaceholderView },
+      { path: 'settings', name: 'admin-settings', component: AdminPlaceholderView },
     ],
   },
 ]

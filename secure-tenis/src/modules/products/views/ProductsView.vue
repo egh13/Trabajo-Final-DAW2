@@ -17,7 +17,8 @@
 
     <div v-else-if="!hasProducts" class="text-center text-muted py-5">
       No hay productos en esta sección.
-    </div>    <div v-else class="row g-4">
+    </div>    
+    <div v-else class="row g-4">
       <div
         v-for="(product, index) in products"
         :key="product.id"
