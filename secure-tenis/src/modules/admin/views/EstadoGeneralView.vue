@@ -1,0 +1,173 @@
+<template>
+  <div class="container-fluid">
+    <h2 class="fw-bold mb-4">🖥️ Estado General del Sistema</h2>
+
+    <!-- Status cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <div class="status-indicator bg-success"></div>
+              <div>
+                <h6 class="mb-0 text-muted small text-uppercase">Backend</h6>
+                <span class="fw-bold fs-5 text-dark">Operativo</span>
+              </div>
+            </div>
+            <hr />
+            <div class="row text-center small text-muted">
+              <div class="col">
+                <div class="fw-semibold text-dark">99.9%</div>
+                Uptime
+              </div>
+              <div class="col">
+                <div class="fw-semibold text-dark">42ms</div>
+                Latencia
+              </div>
+              <div class="col">
+                <div class="fw-semibold text-dark">v1.0.0</div>
+                Versión
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <div class="status-indicator bg-success"></div>
+              <div>
+                <h6 class="mb-0 text-muted small text-uppercase">Base de Datos</h6>
+                <span class="fw-bold fs-5 text-dark">Conectada</span>
+              </div>
+            </div>
+            <hr />
+            <div class="row text-center small text-muted">
+              <div class="col">
+                <div class="fw-semibold text-dark">MariaDB</div>
+                Motor
+              </div>
+              <div class="col">
+                <div class="fw-semibold text-dark">156 MB</div>
+                Tamaño
+              </div>
+              <div class="col">
+                <div class="fw-semibold text-dark">12</div>
+                Tablas
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3">
+              <div class="status-indicator bg-warning"></div>
+              <div>
+                <h6 class="mb-0 text-muted small text-uppercase">Última Backup</h6>
+                <span class="fw-bold fs-5 text-dark">Hace 2 días</span>
+              </div>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between small text-muted">
+              <span>Tamaño: <strong class="text-dark">84 MB</strong></span>
+              <span>Estado: <strong class="text-warning">Pendiente</strong></span>
+            </div>
+            <button class="btn btn-sm btn-outline-success w-100 mt-3" disabled>
+              <i class="bi bi-download me-1"></i> Realizar backup ahora
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Last logs -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <span class="fw-semibold"><i class="bi bi-terminal me-2"></i>Últimos Logs del Sistema</span>
+        <span class="badge bg-success">Live</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="log-console">
+          <div class="log-line" v-for="(log, i) in sampleLogs" :key="i">
+            <span class="log-time text-muted">{{ log.time }}</span>
+            <span class="log-level" :class="'level-' + log.level">{{ log.level.toUpperCase() }}</span>
+            <span class="log-msg">{{ log.message }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+const sampleLogs = [
+  { time: '2026-04-21 10:32:01', level: 'info', message: 'Servidor iniciado en puerto 3000' },
+  { time: '2026-04-21 10:32:02', level: 'info', message: 'Conexión a MariaDB establecida correctamente' },
+  { time: '2026-04-21 10:33:15', level: 'info', message: 'GET /api/products — 200 OK (23ms)' },
+  { time: '2026-04-21 10:34:08', level: 'warn', message: 'Intento de acceso sin token a /api/orders' },
+  { time: '2026-04-21 10:35:42', level: 'info', message: 'POST /api/auth/login — 200 OK (145ms)' },
+  { time: '2026-04-21 10:36:01', level: 'error', message: 'POST /api/auth/login — 401 Credenciales inválidas' },
+  { time: '2026-04-21 10:37:55', level: 'info', message: 'GET /api/categories — 200 OK (8ms)' },
+  { time: '2026-04-21 10:38:20', level: 'info', message: 'Backup automático completado — 84 MB' },
+]
+</script>
+
+<style scoped>
+.status-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+}
+
+.log-console {
+  background: #0a0a0a;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  padding: 1rem;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.log-line {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.log-time {
+  color: #666;
+  flex-shrink: 0;
+}
+
+.log-level {
+  font-weight: 700;
+  flex-shrink: 0;
+  width: 50px;
+  text-align: center;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 0.7rem;
+  line-height: 1.6;
+}
+
+.level-info { color: #22c55e; }
+.level-warn { color: #f59e0b; }
+.level-error { color: #ef4444; }
+
+.log-msg {
+  color: #d4d4d4;
+}
+</style>

@@ -1,71 +1,92 @@
 <template>
-  <div class="admin-dashboard">
-    <div class="module-grid">
-      <router-link
-        v-for="card in cards"
-        :key="card.to"
-        :to="card.to"
-        class="module-card"
-      >
-        <span class="module-icon">{{ card.icon }}</span>
-        <h3>{{ card.label }}</h3>
-        <p>{{ card.description }}</p>
-      </router-link>
+  <div class="container-fluid">
+    <h2 class="fw-bold mb-4">Bienvenido al Panel de Seguridad</h2>
+    <div class="row g-4">
+      <div class="col-md-4" v-for="card in cards" :key="card.to">
+        <router-link :to="card.to" class="text-decoration-none">
+          <div class="card h-100 module-card border-0">
+            <div class="card-body d-flex flex-column">
+              <div class="module-icon-wrapper mb-3" :style="{ background: card.bg }">
+                <span class="module-icon">{{ card.icon }}</span>
+              </div>
+              <h5 class="card-title fw-bold text-dark">{{ card.label }}</h5>
+              <p class="card-text text-muted small mb-3">{{ card.description }}</p>
+              <div class="mb-3">
+                <span class="badge bg-dark bg-opacity-75 me-1" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
+              </div>
+              <div class="mt-auto">
+                <span class="module-enter text-success fw-semibold small">Acceder →</span>
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 const cards = [
-  { to: '/admin/audit-logs', icon: '📋', label: 'Registros de auditoría', description: 'Visualiza todas las acciones realizadas en la plataforma.' },
-  { to: '/admin/users', icon: '👥', label: 'Gestión de usuarios', description: 'Administra cuentas y roles de usuario.' },
-  { to: '/admin/products', icon: '📦', label: 'Gestión de productos', description: 'Controla el catálogo de productos.' },
-  { to: '/admin/orders', icon: '🧾', label: 'Pedidos', description: 'Revisa y gestiona los pedidos realizados.' },
-  { to: '/admin/analytics', icon: '📈', label: 'Analíticas', description: 'Estadísticas y métricas de la tienda.' },
-  { to: '/admin/settings', icon: '⚙️', label: 'Configuración', description: 'Ajustes generales del sistema.' },
+  {
+    to: '/admin/estado',
+    icon: '🖥️',
+    label: 'Estado General',
+    description: 'Monitoriza el estado del backend, la última copia de seguridad de la base de datos y los últimos logs del sistema.',
+    bg: 'linear-gradient(135deg, #22c55e33, #0a0a0a22)',
+    tags: ['Backend', 'Base de datos', 'Logs'],
+  },
+  {
+    to: '/admin/autenticacion',
+    icon: '🔐',
+    label: 'Autenticación y Accesos',
+    description: 'Visualiza inicios de sesión, intentos fallidos y actividad de acceso con gráficos en tiempo real.',
+    bg: 'linear-gradient(135deg, #3b82f633, #0a0a0a22)',
+    tags: ['Sesiones', 'Intentos fallidos', 'Gráficos'],
+  },
+  {
+    to: '/admin/auditoria',
+    icon: '📋',
+    label: 'Auditoría de Actividad',
+    description: 'Consulta la tabla completa de logs de actividad del sistema con opción de descarga.',
+    bg: 'linear-gradient(135deg, #f59e0b33, #0a0a0a22)',
+    tags: ['Logs', 'Tabla', 'Exportar'],
+  },
 ]
 </script>
 
 <style scoped>
-.admin-dashboard {
-  max-width: 900px;
-}
-
-.module-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-
 .module-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-decoration: none;
-  color: #1a1a2e;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #e8e8e8;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  border: 1px solid #e5e7eb !important;
 }
 
 .module-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.4) !important;
+}
+
+.module-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .module-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
-.module-card h3 {
-  margin: 0.75rem 0 0.5rem;
-  font-size: 1.1rem;
+.module-enter {
+  opacity: 0;
+  transition: opacity 0.2s;
 }
 
-.module-card p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #777;
-  line-height: 1.4;
+.module-card:hover .module-enter {
+  opacity: 1;
 }
 </style>

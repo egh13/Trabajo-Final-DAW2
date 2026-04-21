@@ -51,12 +51,9 @@ const userRole = computed(() => authStore.userRole)
 
 const menuItems = [
   { to: '/admin', icon: '📊', label: 'Dashboard' },
-  { to: '/admin/audit-logs', icon: '📋', label: 'Registros de auditoría' },
-  { to: '/admin/users', icon: '👥', label: 'Gestión de usuarios' },
-  { to: '/admin/products', icon: '📦', label: 'Gestión de productos' },
-  { to: '/admin/orders', icon: '🧾', label: 'Pedidos' },
-  { to: '/admin/analytics', icon: '📈', label: 'Analíticas' },
-  { to: '/admin/settings', icon: '⚙️', label: 'Configuración' },
+  { to: '/admin/estado', icon: '🖥️', label: 'Estado General' },
+  { to: '/admin/autenticacion', icon: '🔐', label: 'Autenticación y Accesos' },
+  { to: '/admin/auditoria', icon: '📋', label: 'Auditoría de Actividad' },
 ]
 
 const currentTitle = computed(() => {
