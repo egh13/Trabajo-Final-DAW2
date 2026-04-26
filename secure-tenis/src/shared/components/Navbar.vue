@@ -1,99 +1,98 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm px-3">
-    <div class="container-fluid">
-      <router-link class="navbar-brand fw-bold" to="/">
-        <span class="text-accent">Secure</span> Tenis
-      </router-link>
+  <nav class="app-navbar">
+    <div class="nav-inner">
 
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#mainNav"
-        aria-controls="mainNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="nav-left">
+        <button
+          class="hamburger"
+          :class="{ 'is-open': sidebar.isOpen.value }"
+          @click="sidebar.toggle()"
+          :aria-expanded="sidebar.isOpen.value"
+          aria-label="Abrir o cerrar menú lateral"
+        >
+          <span class="bar bar-1" />
+          <span class="bar bar-2" />
+          <span class="bar bar-3" />
+        </button>
 
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto gap-1">
-          <!-- Enlace al panel de admin (solo admin/analista) -->
-          <li v-if="showAdminLink" class="nav-item d-flex align-items-center">
-            <router-link class="nav-link admin-link d-flex align-items-center gap-2 py-1 px-3 fw-semibold" to="/admin">
-              <span class="admin-pulse">🛡️</span>
-              <span class="admin-text">Panel Admin</span>
-            </router-link>
-          </li>
+        <router-link class="nav-brand" to="/" @click="sidebar.close()">
+          <span class="brand-mark">ST</span>
+          <span class="brand-divider" />
+          <span class="brand-text">
+            <span class="brand-light">Secure</span><span class="brand-bold">Tenis</span>
+          </span>
+        </router-link>
+      </div>
 
-          <li class="nav-item">
-            <router-link class="nav-link position-relative" to="/cart">
-              <i class="bi bi-cart3 me-1"></i>Carrito
-              <span
-                v-if="itemCount > 0"
-                class="badge rounded-pill bg-accent cart-badge"
-              >{{ itemCount }}</span>
-            </router-link>
-          </li>
+      <div class="nav-right">
 
-          <!-- Usuario autenticado -->
-          <li v-if="isAuthenticated" class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center gap-1"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="bi bi-person-circle"></i>
-              <span class="d-none d-md-inline">{{ userName }}</span>
-              <span class="badge bg-accent ms-1 role-badge">{{ roleName }}</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-              <li class="dropdown-item-text small text-muted">
-                {{ user?.email }}
-              </li>
-              <li><hr class="dropdown-divider" /></li>
-              <li>
-                <button class="dropdown-item" @click="handleLogout">
-                  <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+        <router-link v-if="showAdminLink" class="admin-chip" to="/admin">
+          <i class="bi bi-shield-fill-check" />
+          <span>Admin</span>
+        </router-link>
+
+        <router-link class="icon-btn" to="/cart" aria-label="Carrito">
+          <i class="bi bi-bag" />
+          <Transition name="badge-pop">
+            <span v-if="itemCount > 0" class="cart-badge">{{ itemCount }}</span>
+          </Transition>
+        </router-link>
+
+        <div v-if="isAuthenticated" class="user-menu" ref="userMenuRef">
+          <button class="user-pill" @click="menuOpen = !menuOpen" :aria-expanded="menuOpen">
+            <span class="pill-avatar">{{ userInitial }}</span>
+            <span class="pill-name">{{ userName }}</span>
+            <i class="bi bi-chevron-down pill-chevron" :class="{ rotated: menuOpen }" />
+          </button>
+
+          <Transition name="dd-pop">
+            <div v-if="menuOpen" class="user-dropdown">
+              <div class="dd-head">
+                <div class="dd-avatar">{{ userInitial }}</div>
+                <div class="dd-info">
+                  <span class="dd-name">{{ userName }}</span>
+                  <span class="dd-email">{{ user?.email }}</span>
+                </div>
+                <span class="dd-role">{{ roleName }}</span>
+              </div>
+              <div class="dd-body">
+                <button class="dd-item dd-logout" @click="handleLogout">
+                  <i class="bi bi-box-arrow-right" />
+                  Cerrar sesión
                 </button>
-              </li>
-            </ul>
-          </li>
+              </div>
+            </div>
+          </Transition>
+        </div>
 
-          <!-- Usuario no autenticado -->
-          <li v-else class="nav-item d-flex align-items-center gap-2 ms-md-2">
-            <router-link class="nav-link btn btn-outline-light btn-sm px-3" to="/login">
-              Entrar
-            </router-link>
-            <router-link class="nav-link btn btn-accent btn-sm px-3" to="/register">
-              Registro
-            </router-link>
-          </li>
-        </ul>
+        <template v-else>
+          <router-link class="btn-ghost" to="/login">Entrar</router-link>
+          <router-link class="btn-fill" to="/register">Registro</router-link>
+        </template>
+
       </div>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cartStore'
 import { useAuthStore } from '@/stores/authStore'
+import { useSidebar } from '@/shared/composables/useSidebar'
 
 const router = useRouter()
-
 const cartStore = useCartStore()
 const { itemCount } = storeToRefs(cartStore)
-
 const authStore = useAuthStore()
 const { isAuthenticated, userName, user } = storeToRefs(authStore)
+const sidebar = useSidebar()
 
-// Mapa de nombres legibles para los roles
+const menuOpen = ref(false)
+const userMenuRef = ref<HTMLElement | null>(null)
+
 const roleLabels: Record<string, string> = {
   admin: 'Admin',
   cliente: 'Cliente',
@@ -101,77 +100,372 @@ const roleLabels: Record<string, string> = {
 }
 
 const roleName = computed(() => roleLabels[user.value?.role ?? ''] ?? '')
-
+const userInitial = computed(() => userName.value?.charAt(0).toUpperCase() ?? '?')
 const showAdminLink = computed(() =>
   !!user.value && ['admin', 'analista'].includes(user.value.role)
 )
 
-const handleLogout = () => {
-  authStore.logout()
+const handleLogout = async () => {
+  menuOpen.value = false
+  await authStore.logout()
   router.push('/')
 }
 
-onMounted(() => cartStore.load())
+const onClickOutside = (e: MouseEvent) => {
+  if (userMenuRef.value && !userMenuRef.value.contains(e.target as Node)) {
+    menuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  cartStore.load()
+  document.addEventListener('click', onClickOutside)
+})
+onUnmounted(() => document.removeEventListener('click', onClickOutside))
 </script>
 
 <style scoped>
-.navbar {
-  min-height: var(--navbar-height);
+/* ── Barra ── */
+.app-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  height: var(--navbar-height, 60px);
+  background: #0f1b34;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 rgba(233, 69, 96, 0.2), 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.navbar-brand {
-  font-size: 1.25rem;
-  letter-spacing: 0.03em;
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 1.25rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+/* ── Izquierda ── */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.hamburger:hover { background: rgba(255, 255, 255, 0.06); }
+
+.bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #c0c0d8;
+  border-radius: 2px;
+  margin: 0 auto;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.2s ease,
+              background 0.2s ease;
+  transform-origin: center;
+}
+.hamburger:hover .bar { background: #fff; }
+
+.hamburger.is-open .bar-1 { transform: translateY(7px) rotate(45deg); }
+.hamburger.is-open .bar-2 { opacity: 0; transform: scaleX(0); }
+.hamburger.is-open .bar-3 { transform: translateY(-7px) rotate(-45deg); }
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-brand:hover { opacity: 0.82; }
+
+.brand-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e94560, #c73652);
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
+  flex-shrink: 0;
+}
+
+.brand-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.brand-text {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.brand-light { color: #8888aa; font-weight: 400; }
+.brand-bold  { color: #fff;    font-weight: 800; }
+
+/* ── Derecha ── */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.admin-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.28rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid rgba(240, 192, 64, 0.35);
+  background: rgba(240, 192, 64, 0.07);
+  color: #f0c040;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.admin-chip:hover {
+  background: rgba(240, 192, 64, 0.16);
+  box-shadow: 0 0 12px rgba(240, 192, 64, 0.3);
+  color: #ffd966;
+}
+
+.icon-btn {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8888aa;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
 }
 
 .cart-badge {
   position: absolute;
-  top: 2px;
-  right: -4px;
-  font-size: 0.6rem;
-}
-
-.role-badge {
-  font-size: 0.55rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.admin-link {
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(0, 0, 0, 0.3));
-  font-size: 0.85rem;
+  top: 5px;
+  right: 5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: #e94560;
+  color: #fff;
+  font-size: 0.56rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
-  transition: background 0.3s, box-shadow 0.3s;
 }
 
-.admin-link:hover {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(0, 0, 0, 0.5));
-  box-shadow: 0 0 14px rgba(34, 197, 94, 0.5);
+.badge-pop-enter-active { transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s; }
+.badge-pop-leave-active { transition: transform 0.15s ease, opacity 0.15s; }
+.badge-pop-enter-from, .badge-pop-leave-to { transform: scale(0); opacity: 0; }
+
+/* ── Usuario ── */
+.user-menu { position: relative; }
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0.7rem 0.28rem 0.28rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  color: #b0b0cc;
+  font-size: 0.83rem;
+  font-weight: 500;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.user-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(233, 69, 96, 0.35);
+  color: #fff;
 }
 
-.admin-pulse {
-  display: inline-block;
-  animation: pulse-glow 2s ease-in-out infinite;
+.pill-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e94560, #c73652);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.76rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.admin-text {
-  background: linear-gradient(90deg, #22c55e, #86efac, #22c55e);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 3s linear infinite;
+.pill-name {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 560px) { .pill-name { display: none; } }
+
+.pill-chevron {
+  font-size: 0.65rem;
+  transition: transform 0.25s ease;
+}
+.pill-chevron.rotated { transform: rotate(180deg); }
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 220px;
+  background: #131325;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  z-index: 400;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px #22c55e); }
-  50% { transform: scale(1.25); filter: brightness(1.4) drop-shadow(0 0 6px #22c55e); }
+.dd-pop-enter-active {
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.18s ease;
+}
+.dd-pop-leave-active {
+  transition: transform 0.16s ease, opacity 0.14s ease;
+}
+.dd-pop-enter-from, .dd-pop-leave-to {
+  transform: translateY(-6px) scale(0.97);
+  opacity: 0;
 }
 
-@keyframes shimmer {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+.dd-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 0.9rem;
+  background: rgba(255, 255, 255, 0.025);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
+.dd-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e94560, #c73652);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dd-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+}
+.dd-name {
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dd-email {
+  color: rgba(192, 192, 216, 0.45);
+  font-size: 0.66rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dd-role {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  background: rgba(233, 69, 96, 0.18);
+  color: #ff6b80;
+  border: 1px solid rgba(233, 69, 96, 0.28);
+  border-radius: 8px;
+  padding: 0.12em 0.45em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dd-body { padding: 0.4rem; }
+.dd-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.7rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.83rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.dd-logout { color: #ff6b80; }
+.dd-logout:hover { background: rgba(233, 69, 96, 0.12); color: #ff8fa3; }
+
+/* ── Invitado ── */
+.btn-ghost, .btn-fill {
+  padding: 0.38rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+.btn-ghost:hover, .btn-fill:hover { transform: translateY(-1px); }
+
+.btn-ghost {
+  color: #a0a0c0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+
+.btn-fill {
+  background: linear-gradient(135deg, #e94560, #c73652);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(233, 69, 96, 0.3);
+}
+.btn-fill:hover { box-shadow: 0 5px 18px rgba(233, 69, 96, 0.5); filter: brightness(1.08); }
 </style>

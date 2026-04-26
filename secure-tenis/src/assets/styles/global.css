@@ -42,12 +42,11 @@ body {
 .app-content {
   display: flex;
   flex: 1;
-  overflow: hidden;
 }
 
 .app-main {
   flex: 1;
-  overflow-y: auto;
+  min-width: 0;
   background-color: var(--color-light-bg);
   transition: all var(--transition-speed) ease;
 }
