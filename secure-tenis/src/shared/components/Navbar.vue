@@ -18,7 +18,7 @@
       </button>
 
       <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav ms-auto gap-1">
+        <ul class="navbar-nav ms-auto gap-1">
           <!-- Enlace al panel de admin (solo admin/analista) -->
           <li v-if="showAdminLink" class="nav-item d-flex align-items-center">
             <router-link class="nav-link admin-link d-flex align-items-center gap-2 py-1 px-3 fw-semibold" to="/admin">

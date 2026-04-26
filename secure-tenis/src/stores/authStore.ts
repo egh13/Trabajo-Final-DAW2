@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import type { User, UserRole, LoginPayload, RegisterPayload } from '@/types'
 import { loginRequest, registerRequest, getMeRequest } from '@/modules/auth/services/authService'
 
-const TOKEN_KEY = ''
+const TOKEN_KEY = 'auth_token'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)

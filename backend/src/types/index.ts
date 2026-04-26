@@ -29,21 +29,20 @@ export interface CartItem {
 }
 
 export interface Order {
-  id: number;
-  userId: number;    // Antes era session_id
-  total: number;
-  status: string;  
-  createdAt: Date;
-  items?: OrderItem[];
+  id: number
+  userId: number
+  total: number
+  status: string
+  createdAt: Date
+  items?: OrderItem[]
 }
 
 export interface OrderItem {
   id: number
-  order_id: number
-  product_id: number
+  orderId: number
+  productId: number
   quantity: number
-  unit_price: number
-  product_name?: string
+  price: number
 }
 
 // Roles disponibles en la aplicación

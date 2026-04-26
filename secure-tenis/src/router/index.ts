@@ -42,7 +42,8 @@ const routes: RouteRecordRaw[] = [
         name: 'Login',
         component: LoginView,
         meta: { guestOnly: true },
-      },      {
+      },
+      {
         path: 'register',
         name: 'Register',
         component: RegisterView,
@@ -54,7 +55,8 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/admin',
     component: AdminLayout,
-    meta: { requiresAuth: true, roles: ['admin', 'analista'] as UserRole[] },    children: [
+    meta: { requiresAuth: true, roles: ['admin', 'analista'] as UserRole[] },
+    children: [
       { path: '', name: 'admin-dashboard', component: AdminDashboardView },
       { path: 'estado', name: 'admin-estado', component: EstadoGeneralView },
       { path: 'autenticacion', name: 'admin-autenticacion', component: AutenticacionView },

@@ -1,7 +1,7 @@
 <template>
   <section>
     <h2 class="fw-bold mb-4 text-dark">
-      <i class="text-warning me-2"></i>Productos Destacados
+      <i class="bi bi-star-fill text-warning me-2"></i>Productos Destacados
     </h2>
 
     <div v-if="loading" class="text-center py-5">
