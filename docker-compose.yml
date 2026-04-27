@@ -22,9 +22,12 @@ services:
     container_name: tfg-backend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3000:3000"    
     env_file:
       - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
     depends_on:
       mariadb:
         condition: service_healthy
