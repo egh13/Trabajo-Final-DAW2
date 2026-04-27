@@ -16,8 +16,9 @@ model User {
   name      String
   role      Role     @default(CLIENT)
   createdAt DateTime @default(now())
-  orders    Order[]
+    orders    Order[]
   cartItems CartItem[]
+  logs      UserLog[]
 }
 
 enum Role {
@@ -67,6 +68,25 @@ model OrderItem {
   price     Float
 }
 
+model UserLog {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  level     LogLevel @default(INFO)
+  module    String
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  ip        String?
+  detail    String?  @db.Text
+}
+
+enum LogLevel {
+  INFO
+  WARNING
+  ERROR
+  DEBUG
+}
+
 model CartItem {
   id        Int      @id @default(autoincrement())
   sessionId String
@@ -79,3 +99,4 @@ model CartItem {
 
   @@unique([sessionId, productId])
 }
+

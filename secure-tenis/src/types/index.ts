@@ -80,3 +80,38 @@ export interface ApiResponse<T> {
   data?: T
   message?: string
 }
+
+// Niveles de severidad de un log
+export type LogLevel = 'INFO' | 'WARNING' | 'ERROR' | 'DEBUG'
+
+// Registro individual de auditoría
+export interface UserLog {
+  id: number
+  createdAt: string
+  level: LogLevel
+  module: string
+  userId: number | null
+  userName: string | null
+  action: string
+  ip: string | null
+  detail: string | null
+}
+
+// Filtros aplicables a la consulta de logs
+export interface UserLogFilters {
+  search?: string
+  level?: LogLevel | ''
+  module?: string
+  from?: string
+  to?: string
+  page?: number
+  pageSize?: number
+}
+
+// Respuesta paginada del endpoint de logs
+export interface PaginatedLogs {
+  data: UserLog[]
+  total: number
+  page: number
+  pageSize: number
+}

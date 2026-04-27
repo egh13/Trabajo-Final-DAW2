@@ -7,6 +7,7 @@ import productRoutes from './routes/productRoutes'
 import cartRoutes from './routes/cartRoutes'
 import orderRoutes from './routes/orderRoutes'
 import authRoutes from './routes/authRoutes'
+import logRoutes from './routes/logRoutes'
 import { errorHandler, notFoundHandler } from './middlewares/errorMiddleware'
 
 const app: Application = express()
@@ -21,6 +22,7 @@ app.use('/api/categories', categoryRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/cart', cartRoutes)
 app.use('/api/orders', orderRoutes)
+app.use('/api/logs', logRoutes)
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'API Secure Tenis funcionando correctamente' })

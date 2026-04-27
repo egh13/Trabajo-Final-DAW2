@@ -81,6 +81,41 @@ export interface LoginBody {
   password: string
 }
 
+// Niveles de log disponibles
+export type LogLevel = 'INFO' | 'WARNING' | 'ERROR' | 'DEBUG'
+
+// Registro de auditoría de usuario
+export interface UserLog {
+  id: number
+  createdAt: string
+  level: LogLevel
+  module: string
+  userId: number | null
+  userName: string | null
+  action: string
+  ip: string | null
+  detail: string | null
+}
+
+// Parámetros de filtrado para los logs
+export interface UserLogFilters {
+  search?: string
+  level?: LogLevel
+  module?: string
+  from?: string
+  to?: string
+  page?: number
+  pageSize?: number
+}
+
+// Respuesta paginada de logs
+export interface PaginatedLogs {
+  data: UserLog[]
+  total: number
+  page: number
+  pageSize: number
+}
+
 export interface ApiResponse<T> {
   success: boolean
   data?: T

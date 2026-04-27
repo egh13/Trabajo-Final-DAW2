@@ -10,59 +10,56 @@
           <i class="bi bi-filetype-pdf me-1"></i> Exportar PDF
         </button>
       </div>
-    </div>
-
-    <!-- Filters -->
+    </div>    <!-- Filtros de búsqueda -->
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-body">
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
             <label class="form-label small fw-semibold text-muted">Buscar</label>
-            <input type="text" class="form-control form-control-sm" placeholder="Usuario, acción, IP..." disabled />
+            <input v-model="filters.search" type="text" class="form-control form-control-sm" placeholder="Usuario, acción, IP..." />
           </div>
           <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Nivel</label>
-            <select class="form-select form-select-sm" disabled>
-              <option>Todos</option>
-              <option>INFO</option>
-              <option>WARN</option>
-              <option>ERROR</option>
+            <select v-model="filters.level" class="form-select form-select-sm">
+              <option value="">Todos</option>
+              <option value="INFO">INFO</option>
+              <option value="WARNING">WARNING</option>
+              <option value="ERROR">ERROR</option>
+              <option value="DEBUG">DEBUG</option>
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Módulo</label>
-            <select class="form-select form-select-sm" disabled>
-              <option>Todos</option>
-              <option>Auth</option>
-              <option>Productos</option>
-              <option>Pedidos</option>
-              <option>Sistema</option>
+            <select v-model="filters.module" class="form-select form-select-sm">
+              <option value="">Todos</option>
+              <option value="Auth">Auth</option>
+              <option value="Productos">Productos</option>
+              <option value="Pedidos">Pedidos</option>
+              <option value="Sistema">Sistema</option>
             </select>
           </div>
           <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Desde</label>
-            <input type="date" class="form-control form-control-sm" disabled />
+            <input v-model="filters.from" type="date" class="form-control form-control-sm" />
           </div>
           <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Hasta</label>
-            <input type="date" class="form-control form-control-sm" disabled />
+            <input v-model="filters.to" type="date" class="form-control form-control-sm" />
           </div>
           <div class="col-md-1 d-grid">
-            <button class="btn btn-success btn-sm" disabled>
+            <button class="btn btn-success btn-sm" @click="applyFilters">
               <i class="bi bi-funnel"></i>
             </button>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Logs table -->
+    </div>    <!-- Tabla de logs -->
     <div class="card border-0 shadow-sm">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle">
           <thead class="table-dark">
             <tr>
-              <th style="width: 40px">#</th>
+              <th style="width: 60px">#</th>
               <th>Fecha/Hora</th>
               <th>Nivel</th>
               <th>Módulo</th>
@@ -73,68 +70,143 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="log in sampleLogs" :key="log.id">
+            <tr v-if="loading">
+              <td colspan="8" class="text-center py-4 text-muted">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Cargando registros...
+              </td>
+            </tr>
+            <tr v-else-if="error">
+              <td colspan="8" class="text-center py-4 text-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+              </td>
+            </tr>
+            <tr v-else-if="logs.length === 0">
+              <td colspan="8" class="text-center py-4 text-muted">No se encontraron registros.</td>
+            </tr>
+            <tr v-else v-for="log in logs" :key="log.id">
               <td class="small text-muted">{{ log.id }}</td>
-              <td class="small font-monospace">{{ log.time }}</td>
+              <td class="small font-monospace">{{ formatDate(log.createdAt) }}</td>
               <td>
                 <span class="badge" :class="levelClass(log.level)">{{ log.level }}</span>
               </td>
               <td class="small">{{ log.module }}</td>
-              <td class="small fw-semibold">{{ log.user }}</td>
+              <td class="small fw-semibold">{{ log.userName ?? 'Anónimo' }}</td>
               <td class="small">{{ log.action }}</td>
-              <td class="small font-monospace">{{ log.ip }}</td>
+              <td class="small font-monospace">{{ log.ip ?? '—' }}</td>
               <td>
-                <button class="btn btn-sm btn-outline-secondary py-0 px-2" disabled>
+                <button
+                  v-if="log.detail"
+                  class="btn btn-sm btn-outline-secondary py-0 px-2"
+                  :title="log.detail"
+                  @click="selectedDetail = log.detail"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailModal"
+                >
                   <i class="bi bi-eye"></i>
                 </button>
+                <span v-else class="text-muted small">—</span>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <!-- Pagination -->
+
+      <!-- Paginación -->
       <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-        <span class="small text-muted">Mostrando 1-10 de 2.483 registros</span>
+        <span class="small text-muted">
+          Mostrando {{ rangeStart }}-{{ rangeEnd }} de {{ total }} registros
+        </span>
         <nav>
           <ul class="pagination pagination-sm mb-0">
-            <li class="page-item disabled"><a class="page-link" href="#">←</a></li>
-            <li class="page-item active"><a class="page-link bg-success border-success" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">...</a></li>
-            <li class="page-item"><a class="page-link" href="#">249</a></li>
-            <li class="page-item"><a class="page-link" href="#">→</a></li>
+            <li class="page-item" :class="{ disabled: filters.page === 1 }">
+              <a class="page-link" href="#" @click.prevent="goToPage((filters.page ?? 1) - 1)">←</a>
+            </li>
+            <li
+              v-for="p in visiblePages"
+              :key="p"
+              class="page-item"
+              :class="{ active: p === filters.page }"
+            >
+              <a
+                class="page-link"
+                :class="{ 'bg-success border-success text-white': p === filters.page }"
+                href="#"
+                @click.prevent="goToPage(p)"
+              >{{ p }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: filters.page === totalPages() }">
+              <a class="page-link" href="#" @click.prevent="goToPage((filters.page ?? 1) + 1)">→</a>
+            </li>
           </ul>
         </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de detalle del log -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalle del registro</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <pre class="small mb-0">{{ selectedDetail }}</pre>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const sampleLogs = [
-  { id: 2483, time: '2026-04-21 10:38:20', level: 'INFO', module: 'Sistema', user: 'sistema', action: 'Backup automático completado', ip: '127.0.0.1' },
-  { id: 2482, time: '2026-04-21 10:37:55', level: 'INFO', module: 'Productos', user: 'ana.lopez@gmail.com', action: 'GET /api/categories', ip: '192.168.1.42' },
-  { id: 2481, time: '2026-04-21 10:36:01', level: 'ERROR', module: 'Auth', user: 'desconocido@test.com', action: 'Login fallido — contraseña incorrecta', ip: '192.168.1.105' },
-  { id: 2480, time: '2026-04-21 10:35:42', level: 'INFO', module: 'Auth', user: 'admin@securetenis.com', action: 'Login exitoso', ip: '192.168.1.10' },
-  { id: 2479, time: '2026-04-21 10:34:08', level: 'WARN', module: 'Auth', user: 'anónimo', action: 'Acceso sin token a /api/orders', ip: '45.33.32.156' },
-  { id: 2478, time: '2026-04-21 10:33:15', level: 'INFO', module: 'Productos', user: 'carlos.m@hotmail.com', action: 'GET /api/products', ip: '192.168.1.88' },
-  { id: 2477, time: '2026-04-21 10:30:05', level: 'INFO', module: 'Pedidos', user: 'ana.lopez@gmail.com', action: 'Nuevo pedido #412 creado', ip: '192.168.1.42' },
-  { id: 2476, time: '2026-04-21 10:28:33', level: 'WARN', module: 'Sistema', user: 'sistema', action: 'Uso de memoria > 80%', ip: '127.0.0.1' },
-  { id: 2475, time: '2026-04-21 10:25:11', level: 'INFO', module: 'Auth', user: 'carlos.m@hotmail.com', action: 'Login exitoso', ip: '192.168.1.88' },
-  { id: 2474, time: '2026-04-21 10:20:00', level: 'ERROR', module: 'Auth', user: 'hacker@evil.com', action: 'Login fallido — usuario no encontrado', ip: '103.21.244.0' },
-]
+import { ref, computed, onMounted } from 'vue'
+import { useLogs } from '@/modules/admin/composables/useLogs'
+import type { LogLevel } from '@/types'
 
-const levelClass = (level: string) => {
+const { logs, total, loading, error, filters, loadLogs, applyFilters, goToPage, totalPages } = useLogs()
+
+// Detalle seleccionado para el modal
+const selectedDetail = ref<string | null>(null)
+
+// Rango de registros visibles en el pie de la tabla
+const rangeStart = computed(() => ((filters.page ?? 1) - 1) * (filters.pageSize ?? 10) + 1)
+const rangeEnd = computed(() => Math.min((filters.page ?? 1) * (filters.pageSize ?? 10), total.value))
+
+// Páginas visibles en el paginador (máximo 5 alrededor de la actual)
+const visiblePages = computed(() => {
+  const current = filters.page ?? 1
+  const max = totalPages()
+  const pages: number[] = []
+  const start = Math.max(1, current - 2)
+  const end = Math.min(max, start + 4)
+  for (let i = start; i <= end; i++) pages.push(i)
+  return pages
+})
+
+// Clase CSS del badge según el nivel del log
+const levelClass = (level: LogLevel): string => {
   switch (level) {
     case 'INFO': return 'bg-success'
-    case 'WARN': return 'bg-warning text-dark'
+    case 'WARNING': return 'bg-warning text-dark'
     case 'ERROR': return 'bg-danger'
+    case 'DEBUG': return 'bg-secondary'
     default: return 'bg-secondary'
   }
 }
+
+// Formatea fecha ISO a formato local legible
+const formatDate = (iso: string): string =>
+  new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'medium' })
+
+onMounted(loadLogs)
 </script>
 
 <style scoped>
-/* Bootstrap handles most styling, minimal custom CSS needed */
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 </style>
+
