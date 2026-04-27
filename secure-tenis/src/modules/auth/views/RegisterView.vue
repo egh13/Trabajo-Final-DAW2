@@ -3,87 +3,108 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5" data-aos="fade-up">
-          <div class="card border-0 shadow-lg">
-            <div class="card-body p-4 p-md-5">
-              <h3 class="fw-bold text-center mb-4">Crear Cuenta</h3>
 
-              <div v-if="authStore.error" class="alert alert-danger py-2 small">
-                {{ authStore.error }}
-              </div>
+          <div class="text-center mb-4">
+            <i class="bi bi-person-plus-fill auth-brand-icon"></i>
+            <p class="text-white fw-bold fs-4 mb-0 mt-2">
+              <span class="text-accent">Secure</span> Tenis
+            </p>
+          </div>
 
-              <form @submit.prevent="handleRegister" novalidate>
-                <div class="mb-3">
-                  <label for="name" class="form-label">Nombre completo</label>
+          <div class="auth-card">
+            <h3 class="fw-bold text-white text-center mb-1">Crear Cuenta</h3>
+            <p class="auth-subtitle text-center mb-4">Únete a nuestra comunidad</p>
+
+            <div v-if="authStore.error" class="alert alert-danger border-0 py-2 small">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ authStore.error }}
+            </div>
+
+            <form @submit.prevent="handleRegister" novalidate>
+              <div class="mb-3">
+                <label for="name" class="auth-label">Nombre completo</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text auth-addon"><i class="bi bi-person"></i></span>
                   <input
                     id="name"
                     v-model="form.name"
                     type="text"
-                    class="form-control"
+                    class="form-control auth-input"
                     :class="{ 'is-invalid': submitted && !form.name }"
                     placeholder="Tu nombre"
                     autocomplete="name"
                   />
                   <div class="invalid-feedback">El nombre es obligatorio.</div>
                 </div>
+              </div>
 
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
+              <div class="mb-3">
+                <label for="email" class="auth-label">Email</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text auth-addon"><i class="bi bi-envelope"></i></span>
                   <input
                     id="email"
                     v-model="form.email"
                     type="email"
-                    class="form-control"
+                    class="form-control auth-input"
                     :class="{ 'is-invalid': submitted && !form.email }"
                     placeholder="tu@email.com"
                     autocomplete="email"
                   />
                   <div class="invalid-feedback">El email es obligatorio.</div>
                 </div>
+              </div>
 
-                <div class="mb-3">
-                  <label for="password" class="form-label">Contraseña</label>
+              <div class="mb-3">
+                <label for="password" class="auth-label">Contraseña</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text auth-addon"><i class="bi bi-lock"></i></span>
                   <input
                     id="password"
                     v-model="form.password"
                     type="password"
-                    class="form-control"
+                    class="form-control auth-input"
                     :class="{ 'is-invalid': submitted && passwordError }"
                     placeholder="Mínimo 6 caracteres"
                     autocomplete="new-password"
                   />
                   <div class="invalid-feedback">{{ passwordError }}</div>
                 </div>
+              </div>
 
-                <div class="mb-4">
-                  <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
+              <div class="mb-4">
+                <label for="confirmPassword" class="auth-label">Confirmar contraseña</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text auth-addon"><i class="bi bi-lock-fill"></i></span>
                   <input
                     id="confirmPassword"
                     v-model="confirmPassword"
                     type="password"
-                    class="form-control"
+                    class="form-control auth-input"
                     :class="{ 'is-invalid': submitted && confirmError }"
                     placeholder="Repite la contraseña"
                     autocomplete="new-password"
                   />
                   <div class="invalid-feedback">{{ confirmError }}</div>
                 </div>
+              </div>
 
-                <button
-                  type="submit"
-                  class="btn btn-dark w-100 mb-3"
-                  :disabled="authStore.loading"
-                >
-                  <span v-if="authStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
-                  Crear cuenta
-                </button>
-              </form>
+              <button
+                type="submit"
+                class="btn btn-accent w-100 mb-3"
+                :disabled="authStore.loading"
+              >
+                <span v-if="authStore.loading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <i v-else class="bi bi-person-check me-2"></i>
+                Crear cuenta
+              </button>
+            </form>
 
-              <p class="text-center text-muted small mb-0">
-                ¿Ya tienes cuenta?
-                <router-link to="/login" class="text-accent fw-semibold">Inicia sesión</router-link>
-              </p>
-            </div>
+            <p class="text-center small mb-0 auth-footer">
+              ¿Ya tienes cuenta?
+              <router-link to="/login" class="text-accent fw-semibold">Inicia sesión</router-link>
+            </p>
           </div>
+
         </div>
       </div>
     </div>
@@ -133,11 +154,69 @@ const handleRegister = async () => {
 </script>
 
 <style scoped>
-.text-accent {
+.auth-brand-icon {
+  font-size: 2.75rem;
   color: var(--color-accent);
+  filter: drop-shadow(0 0 14px rgba(233, 69, 96, 0.55));
 }
 
-.card {
-  border-radius: 1rem;
+.auth-card {
+  background: rgba(22, 33, 62, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.25rem;
+  padding: 2rem 2.25rem;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(233, 69, 96, 0.08);
+}
+
+.auth-subtitle {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+}
+
+.auth-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.auth-addon {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.auth-input:focus {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.25);
+}
+
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.input-group:has(.is-invalid) .auth-addon {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  color: #ff6b81;
+}
+
+.auth-footer {
+  color: rgba(255, 255, 255, 0.4);
 }
 </style>

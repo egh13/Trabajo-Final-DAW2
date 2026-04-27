@@ -62,7 +62,6 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
       return
     }
 
-    // Usamos 'as any' para evitar el error de tipos entre Prisma e interfaz
     res.status(200).json({ success: true, data: user as any } as ApiResponse<UserPublic>)
   } catch (err) {
     next(err)

@@ -1,3 +1,62 @@
+# ========================
+# Dependencias
+# ========================
+node_modules/
 backend/node_modules/
-backend/.env
 secure-tenis/node_modules/
+
+# ========================
+# Variables de entorno
+# ========================
+.env
+.env.local
+.env.*.local
+backend/.env
+secure-tenis/.env
+secure-tenis/.env.local
+secure-tenis/.env.*.local
+
+# ========================
+# Build / compilación
+# ========================
+backend/dist/
+secure-tenis/dist/
+
+# ========================
+# Prisma
+# ========================
+backend/prisma/migrations/dev.db
+backend/prisma/*.db
+backend/prisma/*.db-journal
+
+# ========================
+# Logs
+# ========================
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========================
+# Sistema operativo
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ========================
+# Editores / IDEs
+# ========================
+.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ========================
+# Docker (volúmenes locales)
+# ========================
+docker/data/

@@ -1,8 +1,4 @@
-/* Variables de paleta de colores */
 :root {
-  --color-primary: #0d6efd;
-  --color-primary-dark: #0b5ed7;
-  --color-secondary: #6c757d;
   --color-accent: #e94560;
   --color-accent-dark: #c73652;
   --color-dark: #1a1a2e;
@@ -10,21 +6,22 @@
   --color-light-bg: #f8f9fa;
   --color-border: #dee2e6;
   --color-text: #212529;
-  --color-text-muted: #6c757d;
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 56px;
   --navbar-height: 60px;
   --transition-speed: 0.3s;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
   --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.18);
 }
 
-/* Reset y base */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -36,7 +33,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Layout principal */
 .app-layout {
   display: flex;
   flex-direction: column;
@@ -46,39 +42,31 @@ body {
 .app-content {
   display: flex;
   flex: 1;
-  overflow: hidden;
 }
 
 .app-main {
   flex: 1;
-  overflow-y: auto;
+  min-width: 0;
   background-color: var(--color-light-bg);
   transition: all var(--transition-speed) ease;
 }
 
-/* -----------------------------------------------
-   Utilidades globales
------------------------------------------------ */
-
 .text-accent {
   color: var(--color-accent);
-}
-
-.bg-dark-surface {
-  background-color: var(--color-dark-surface);
 }
 
 .bg-accent {
   background-color: var(--color-accent) !important;
 }
 
-/* Botón de acento reutilizable en toda la app */
 .btn-accent {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
   color: #fff;
   font-weight: 600;
-  transition: background var(--transition-speed), transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.02em;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), transform 0.15s, box-shadow 0.15s;
+  will-change: transform;
 }
 
 .btn-accent:hover,
@@ -90,24 +78,9 @@ body {
   box-shadow: 0 4px 14px rgba(233, 69, 96, 0.4);
 }
 
-/* Tarjetas con sombra propia */
-.card-elevated {
-  border: 0;
-  box-shadow: var(--shadow-md);
-  border-radius: 0.875rem;
-  overflow: hidden;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.card-elevated:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Página de autenticación (login / registro) */
 .auth-page {
   min-height: calc(100vh - var(--navbar-height));
-  background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-surface) 60%, #0f3460 100%);
+  background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-surface) 55%, #0f3460 100%);
   display: flex;
   align-items: center;
   padding: 2rem 0;

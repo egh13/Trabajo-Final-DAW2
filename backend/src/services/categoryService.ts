@@ -3,7 +3,7 @@ import type { Category } from '../types'
 
 export const getAllCategories = async (): Promise<Category[]> => {
   const categories = await prisma.category.findMany({ orderBy: { name: 'asc' } })
-  return categories.map(c => ({ id: c.id, name: c.name, description: c.description, createdAt: new Date().toISOString() }))
+  return categories.map((c: (typeof categories)[0]) => ({ id: c.id, name: c.name, description: c.description, createdAt: new Date().toISOString() }))
 }
 
 export const getCategoryById = async (id: number): Promise<Category | undefined> => {
