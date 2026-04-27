@@ -1,5 +1,6 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 import HomeView from '@/modules/home/views/HomeView.vue'
+import ProductsView from '@/modules/products/views/ProductsView.vue'
 import ZapatillasView from '@/modules/products/views/ZapatillasView.vue'
 import AccesoriosView from '@/modules/products/views/AccesoriosView.vue'
 import RopaView from '@/modules/products/views/RopaView.vue'
@@ -28,8 +29,8 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: MainLayout,
-    children: [
-      { path: '', name: 'Home', component: HomeView },
+    children: [      { path: '', name: 'Home', component: HomeView },
+      { path: 'productos', name: 'Products', component: ProductsView },
       { path: 'zapatillas', name: 'Zapatillas', component: ZapatillasView },
       { path: 'accesorios', name: 'Accesorios', component: AccesoriosView },
       { path: 'ropa', name: 'Ropa', component: RopaView },

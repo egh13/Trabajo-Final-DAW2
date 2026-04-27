@@ -4,7 +4,6 @@ import { authenticate, authorize } from '../middlewares/authMiddleware'
 
 const router = Router()
 
-// Solo administradores pueden consultar los logs de auditoría
-router.get('/', authenticate, authorize('admin'), getLogs)
+router.get('/', authenticate, authorize('admin', 'analista'), getLogs)
 
 export default router
