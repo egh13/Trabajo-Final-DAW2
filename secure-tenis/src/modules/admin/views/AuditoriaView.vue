@@ -1,16 +1,16 @@
 <template>
   <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="fw-bold mb-0">📋 Auditoría de Actividad</h2>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-success btn-sm" disabled>
+      <h2 class="fw-bold mb-0">Auditoría de Actividad</h2>      <div class="d-flex gap-2">
+        <button class="btn btn-outline-success btn-sm" :disabled="exporting" @click="exportFile('csv')">
           <i class="bi bi-download me-1"></i> Exportar CSV
         </button>
-        <button class="btn btn-outline-dark btn-sm" disabled>
+        <button class="btn btn-outline-dark btn-sm" :disabled="exporting" @click="exportFile('pdf')">
           <i class="bi bi-filetype-pdf me-1"></i> Exportar PDF
         </button>
       </div>
-    </div>    <!-- Filtros de búsqueda -->
+    </div>    
+    <!-- Filtros de búsqueda -->
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-body">
         <div class="row g-3 align-items-end">
@@ -163,12 +163,26 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useLogs } from '@/modules/admin/composables/useLogs'
+import { downloadExport } from '@/modules/admin/services/logService'
 import type { LogLevel } from '@/types'
 
 const { logs, total, loading, error, filters, loadLogs, applyFilters, goToPage, totalPages } = useLogs()
 
 // Detalle seleccionado para el modal
 const selectedDetail = ref<string | null>(null)
+const exporting = ref(false)
+
+// Descarga los logs en el formato solicitado aplicando los filtros actuales
+const exportFile = async (format: 'csv' | 'pdf') => {
+  exporting.value = true
+  try {
+    await downloadExport(format, { ...filters })
+  } catch {
+    error.value = 'Error al exportar'
+  } finally {
+    exporting.value = false
+  }
+}
 
 // Rango de registros visibles en el pie de la tabla
 const rangeStart = computed(() => ((filters.page ?? 1) - 1) * (filters.pageSize ?? 10) + 1)

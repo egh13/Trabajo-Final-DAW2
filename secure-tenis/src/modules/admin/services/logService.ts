@@ -20,3 +20,24 @@ export const fetchLogs = async (filters: UserLogFilters): Promise<PaginatedLogs>
   if (!res.data) throw new Error('Respuesta inesperada del servidor')
   return res.data
 }
+
+// Descarga un archivo de exportación (CSV o PDF) con los filtros actuales
+export const downloadExport = async (format: 'csv' | 'pdf', filters: UserLogFilters): Promise<void> => {
+  const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
+  const token = localStorage.getItem('auth_token')
+  const query = buildQuery(filters)
+
+  const res = await fetch(`${BASE_URL}/logs/export/${format}${query}`, {
+    headers: { Authorization: token ? `Bearer ${token}` : '' },
+  })
+
+  if (!res.ok) throw new Error('Error al exportar')
+
+  const blob = await res.blob()
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `auditoria.${format}`
+  a.click()
+  URL.revokeObjectURL(url)
+}
