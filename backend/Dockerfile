@@ -7,6 +7,8 @@ RUN npm install
 
 COPY . .
 
+ENV DATABASE_URL="mysql://placeholder:placeholder@localhost:3306/placeholder"
+
 RUN npx prisma generate
 
 EXPOSE 3000
