@@ -67,3 +67,18 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
     next(err)
   }
 }
+
+// GET /api/auth/users — solo para administradores
+export const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    if (!req.user || req.user.role !== 'admin') {
+      res.status(403).json({ success: false, message: 'Acceso denegado. Solo administradores.' } as ApiResponse<null>)
+      return
+    }
+
+    const users = await authService.findAll()
+    res.status(200).json({ success: true, data: users } as ApiResponse<UserPublic[]>)
+  } catch (err) {
+    next(err)
+  }
+}

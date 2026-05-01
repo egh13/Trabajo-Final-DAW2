@@ -114,4 +114,19 @@ const generateToken = (user: UserPublic): string => {
   })
 }
 
-export default { findByEmail, findById, register, login }
+// Listar todos los usuarios (solo para admin)
+const findAll = async (): Promise<UserPublic[]> => {
+  const users = await prisma.user.findMany({
+    orderBy: { createdAt: 'desc' }
+  })
+  
+  return users.map(user => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: roleMapFromDB[user.role],
+    createdAt: user.createdAt.toISOString()
+  }))
+}
+
+export default { findByEmail, findById, findAll, register, login }

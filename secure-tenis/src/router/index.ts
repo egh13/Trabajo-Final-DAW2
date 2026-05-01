@@ -13,6 +13,7 @@ import AdminDashboardView from '@/modules/admin/views/AdminDashboardView.vue'
 import EstadoGeneralView from '@/modules/admin/views/EstadoGeneralView.vue'
 import AutenticacionView from '@/modules/admin/views/AutenticacionView.vue'
 import AuditoriaView from '@/modules/admin/views/AuditoriaView.vue'
+import AdminUsersView from '@/modules/admin/views/AdminUsersView.vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import type { UserRole } from '@/types'
 
@@ -62,6 +63,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'estado', name: 'admin-estado', component: EstadoGeneralView },
       { path: 'autenticacion', name: 'admin-autenticacion', component: AutenticacionView },
       { path: 'auditoria', name: 'admin-auditoria', component: AuditoriaView },
+      { path: 'usuarios', name: 'admin-usuarios', component: AdminUsersView },
     ],
   },
 ]

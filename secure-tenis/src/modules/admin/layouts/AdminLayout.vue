@@ -54,6 +54,7 @@ const menuItems = [
   { to: '/admin/estado', icon: '🖥️', label: 'Estado General' },
   { to: '/admin/autenticacion', icon: '🔐', label: 'Autenticación y Accesos' },
   { to: '/admin/auditoria', icon: '📋', label: 'Auditoría de Actividad' },
+  { to: '/admin/usuarios', icon: '👥', label: 'Gestión de Usuarios' },
 ]
 
 const currentTitle = computed(() => {
