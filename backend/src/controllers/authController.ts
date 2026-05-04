@@ -60,9 +60,7 @@ export const getMe = async (req: Request, res: Response, next: NextFunction): Pr
     if (!user) {
       res.status(404).json({ success: false, message: 'Usuario no encontrado.' } as ApiResponse<null>)
       return
-    }
-
-    res.status(200).json({ success: true, data: user as any } as ApiResponse<UserPublic>)
+    }    res.status(200).json({ success: true, data: user as any } as ApiResponse<UserPublic>)
   } catch (err) {
     next(err)
   }

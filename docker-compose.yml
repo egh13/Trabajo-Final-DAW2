@@ -18,11 +18,13 @@ services:
       timeout: 5s
       retries: 10
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.development
     container_name: tfg-backend
     restart: unless-stopped
     ports:
-      - "3000:3000"    
+      - "3000:3000"
     env_file:
       - ./backend/.env
     volumes:

@@ -49,15 +49,22 @@ const authStore = useAuthStore()
 const userName = computed(() => authStore.userName)
 const userRole = computed(() => authStore.userRole)
 
-const menuItems = [
-  { to: '/admin', icon: '📊', label: 'Dashboard' },
-  { to: '/admin/estado', icon: '🖥️', label: 'Estado General' },
-  { to: '/admin/autenticacion', icon: '🔐', label: 'Autenticación y Accesos' },
-  { to: '/admin/auditoria', icon: '📋', label: 'Auditoría de Actividad' },
+// Ítems base accesibles para admin y analista
+const allMenuItems = [
+  { to: '/admin', icon: '📊', label: 'Dashboard', adminOnly: false },
+  { to: '/admin/estado', icon: '🖥️', label: 'Estado General', adminOnly: false },
+  { to: '/admin/autenticacion', icon: '🔐', label: 'Autenticación y Accesos', adminOnly: false },
+  { to: '/admin/auditoria', icon: '📋', label: 'Auditoría de Actividad', adminOnly: false },
+  { to: '/admin/usuarios', icon: '👥', label: 'Gestión de Usuarios', adminOnly: true },
 ]
 
+// Filtra los ítems según el rol del usuario autenticado
+const menuItems = computed(() =>
+  allMenuItems.filter(item => !item.adminOnly || authStore.hasAnyRole('admin'))
+)
+
 const currentTitle = computed(() => {
-  const match = menuItems.find((item) => item.to === route.path)
+  const match = menuItems.value.find((item) => item.to === route.path)
   return match?.label ?? 'Panel de Seguridad'
 })
 </script>
