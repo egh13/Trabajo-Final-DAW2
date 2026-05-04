@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import userService from '../services/userService'
 import { createLog, getClientIp } from '../services/logService'
+import { sendWelcomeEmail } from '../services/mailService'
 import type { ApiResponse, UserPublic } from '../types'
 
 // Devuelve la lista completa de usuarios
@@ -21,7 +22,13 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
     if (!name?.trim() || !email?.trim() || !password?.trim()) {
       res.status(400).json({ success: false, message: 'Faltan campos obligatorios: name, email, password.' } as ApiResponse<null>)
       return
-    }    const user = await userService.createUser({ name, email, password, role })
+    }
+    const user = await userService.createUser({ name, email, password, role })
+
+    // Enviar correo de bienvenida de forma asíncrona (no bloquea la respuesta)
+    sendWelcomeEmail(user.email, user.name).catch(err =>
+      console.error('Error al enviar correo de bienvenida:', err)
+    )
 
     await createLog({ level: 'INFO', module: 'Usuarios', action: `Usuario creado: ${user.email}`, userId: req.user?.userId, ip: getClientIp(req) })
 
