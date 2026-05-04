@@ -7,6 +7,7 @@ import productRoutes from './routes/productRoutes'
 import cartRoutes from './routes/cartRoutes'
 import orderRoutes from './routes/orderRoutes'
 import authRoutes from './routes/authRoutes'
+import userRoutes from './routes/userRoutes'
 import logRoutes from './routes/logRoutes'
 import { errorHandler, notFoundHandler } from './middlewares/errorMiddleware'
 
@@ -18,6 +19,7 @@ app.use(morgan('dev'))
 
 // Rutas de la API
 app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/cart', cartRoutes)

@@ -317,7 +317,7 @@ const loadUsers = async () => {
   error.value = null
   
   try {
-    const response = await api.get<User[]>('/auth/users')
+    const response = await api.get<User[]>('/users')
     users.value = response.data || []
   } catch (err: any) {
     error.value = err.message || 'Error al cargar usuarios'
@@ -353,7 +353,7 @@ const createNewUser = async () => {
   creatingUser.value = true
   
   try {
-    const response = await api.post<User>('/auth/users', {
+    const response = await api.post<User>('/users', {
       name: newUserForm.value.name,
       email: newUserForm.value.email,
       password: newUserForm.value.password,
@@ -440,7 +440,7 @@ const updateUser = async () => {
       updateData.password = editUserForm.value.password
     }
 
-    const response = await api.put<User>(`/auth/users/${editingUser.value?.id}`, updateData)
+    const response = await api.put<User>(`/users/${editingUser.value?.id}`, updateData)
     
     if (response.data) {
       const index = users.value.findIndex(u => u.id === editingUser.value?.id)
@@ -468,7 +468,7 @@ const confirmDeleteUser = async () => {
   if (!user) return
 
   try {
-    await api.delete(`/auth/users/${deletingUserId.value}`)
+    await api.delete(`/users/${deletingUserId.value}`)
     users.value = users.value.filter(u => u.id !== deletingUserId.value)
     deletingUserId.value = null
     alert(`Usuario ${user.name} eliminado correctamente`)

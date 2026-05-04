@@ -61,9 +61,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', name: 'admin-dashboard', component: AdminDashboardView },
       { path: 'estado', name: 'admin-estado', component: EstadoGeneralView },
-      { path: 'autenticacion', name: 'admin-autenticacion', component: AutenticacionView },
-      { path: 'auditoria', name: 'admin-auditoria', component: AuditoriaView },
-      { path: 'usuarios', name: 'admin-usuarios', component: AdminUsersView },
+      { path: 'autenticacion', name: 'admin-autenticacion', component: AutenticacionView },      { path: 'auditoria', name: 'admin-auditoria', component: AuditoriaView },
+      { path: 'usuarios', name: 'admin-usuarios', component: AdminUsersView, meta: { requiresAuth: true, roles: ['admin'] as UserRole[] } },
     ],
   },
 ]
