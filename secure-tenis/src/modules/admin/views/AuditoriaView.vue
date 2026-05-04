@@ -16,7 +16,7 @@
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
             <label class="form-label small fw-semibold text-muted">Buscar</label>
-            <input v-model="filters.search" type="text" class="form-control form-control-sm" placeholder="Usuario, acción, IP..." />
+            <input v-model="filters.search" type="text" class="form-control form-control-sm" placeholder="Usuario, acción, IP..." @keyup.enter="applyFilters" />
           </div>
           <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Nivel</label>
@@ -93,7 +93,7 @@
               <td class="small">{{ log.module }}</td>
               <td class="small fw-semibold">{{ log.userName ?? 'Anónimo' }}</td>
               <td class="small">{{ log.action }}</td>
-              <td class="small font-monospace">{{ log.ip ?? '—' }}</td>
+              <td class="small font-monospace">{{ normalizeIp(log.ip ?? '') }}</td>
               <td>
                 <button
                   v-if="log.detail"
@@ -198,6 +198,10 @@ const visiblePages = computed(() => {
   for (let i = start; i <= end; i++) pages.push(i)
   return pages
 })
+
+// Normaliza IPs IPv4-mapped IPv6 a formato IPv4 puro
+const normalizeIp = (ip: string): string =>
+  ip.startsWith('::ffff:') ? ip.slice(7) : (ip || '—')
 
 // Clase CSS del badge según el nivel del log
 const levelClass = (level: LogLevel): string => {

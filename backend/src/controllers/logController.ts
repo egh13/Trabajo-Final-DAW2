@@ -12,6 +12,16 @@ const extractFilters = (req: Request): UserLogFilters => ({
   to: req.query.to as string | undefined,
 })
 
+// Devuelve estadísticas de autenticación calculadas desde los logs
+export const getAuthStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const stats = await logService.getAuthStats()
+    res.json({ success: true, data: stats } as ApiResponse<typeof stats>)
+  } catch (error) {
+    next(error)
+  }
+}
+
 // Devuelve el listado paginado de logs de auditoría con filtros opcionales
 export const getLogs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

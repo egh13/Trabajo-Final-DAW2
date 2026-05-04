@@ -1,161 +1,263 @@
 <template>
   <div class="container-fluid">
-    <h2 class="fw-bold mb-4">🔐 Autenticación y Accesos</h2>
-
-    <!-- KPI cards -->
-    <div class="row g-3 mb-4">
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center py-3">
-          <div class="card-body">
-            <div class="kpi-value text-success">1.284</div>
-            <div class="small text-muted">Inicios de sesión (30d)</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center py-3">
-          <div class="card-body">
-            <div class="kpi-value text-danger">37</div>
-            <div class="small text-muted">Intentos fallidos (30d)</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center py-3">
-          <div class="card-body">
-            <div class="kpi-value text-primary">89</div>
-            <div class="small text-muted">Usuarios activos hoy</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center py-3">
-          <div class="card-body">
-            <div class="kpi-value text-warning">3</div>
-            <div class="small text-muted">Cuentas bloqueadas</div>
-          </div>
-        </div>
-      </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold mb-0">Autenticación y Accesos</h2>
     </div>
 
-    <div class="row g-4 mb-4">
-      <!-- Login chart placeholder -->
-      <div class="col-md-8">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">Inicios de sesión vs Intentos fallidos</span>
-            <div class="btn-group btn-group-sm">
-              <button class="btn btn-outline-secondary active">7d</button>
-              <button class="btn btn-outline-secondary">30d</button>
-              <button class="btn btn-outline-secondary">90d</button>
+    <!-- Loading -->
+    <div v-if="loading" class="text-center py-5">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-muted">Cargando estadísticas...</p>
+    </div>
+
+    <!-- Error -->
+    <div v-else-if="error" class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    </div>
+
+    <!-- Contenido con datos reales -->
+    <template v-else-if="stats">      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm text-center py-3">
+            <div class="card-body">
+              <div class="kpi-value text-success">{{ stats.totalLogins30d.toLocaleString('es-ES') }}</div>
+              <div class="small text-muted">Inicios de sesión (30d)</div>
             </div>
           </div>
-          <div class="card-body d-flex align-items-center justify-content-center">
-            <div class="chart-placeholder">
-              <div class="chart-bars">
-                <div v-for="(bar, i) in chartBars" :key="i" class="chart-bar-group">
-                  <div class="chart-bar bar-success" :style="{ height: bar.ok + 'px' }"></div>
-                  <div class="chart-bar bar-danger" :style="{ height: bar.fail + 'px' }"></div>
-                  <span class="chart-label small text-muted">{{ bar.day }}</span>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm text-center py-3">
+            <div class="card-body">
+              <div class="kpi-value text-danger">{{ stats.failedAttempts30d }}</div>
+              <div class="small text-muted">Intentos fallidos (30d)</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm text-center py-3">
+            <div class="card-body">
+              <div class="kpi-value text-success">{{ stats.uniqueUsersToday }}</div>
+              <div class="small text-muted">Usuarios activos hoy</div>
+            </div>
+          </div>
+        </div>
+      </div><div class="row g-3 mb-3">
+        <!-- Gráfico de logins vs fallidos -->
+        <div class="col-md-8">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header border-bottom py-2">
+              <span class="fw-semibold small">Inicios de sesión vs Intentos fallidos (últimos 7 días)</span>
+            </div>
+            <div class="card-body d-flex align-items-center justify-content-center">
+              <div class="chart-placeholder">
+                <div class="chart-bars">
+                  <div v-for="(bar, i) in stats.chartData" :key="i" class="chart-bar-group">
+                    <div class="chart-bar-wrapper">
+                      <span class="bar-tooltip tooltip-success">{{ bar.ok }}</span>
+                      <div class="chart-bar bar-success" :style="{ height: barHeight(bar.ok) + 'px' }"></div>
+                    </div>
+                    <div class="chart-bar-wrapper">
+                      <span class="bar-tooltip tooltip-danger">{{ bar.fail }}</span>
+                      <div class="chart-bar bar-danger" :style="{ height: barHeight(bar.fail) + 'px' }"></div>
+                    </div>
+                    <span class="chart-label small text-muted">{{ bar.day }}</span>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center gap-4 mt-2">
+                  <span class="small"><span class="legend-dot bg-success"></span> Exitosos</span>
+                  <span class="small"><span class="legend-dot bg-danger"></span> Fallidos</span>
                 </div>
               </div>
-              <p class="text-muted small mt-3 mb-0 text-center">
-                <i class="bi bi-info-circle me-1"></i>Gráfico de ejemplo — los datos reales se cargarán desde la API
-              </p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Recent sessions -->
-      <div class="col-md-4">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-header bg-white border-bottom">
-            <span class="fw-semibold">Últimas sesiones</span>
+        <!-- Últimas sesiones -->
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-header border-bottom py-2">
+              <span class="fw-semibold small">Últimas sesiones</span>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li
+                v-for="(s, i) in stats.recentSessions.slice(0, 5)"
+                :key="i"
+                class="list-group-item list-group-item-sm d-flex justify-content-between align-items-center py-1 px-3"
+              >
+                <div>
+                  <div class="fw-semibold" style="font-size:0.8rem">{{ s.user }}</div>
+                  <div class="text-muted" style="font-size: 0.72rem">{{ formatRelative(s.time) }}</div>
+                </div>
+                <span class="badge rounded-pill" :class="s.ok ? 'bg-success' : 'bg-danger'">
+                  {{ s.ok ? 'OK' : 'Fallido' }}
+                </span>
+              </li>
+              <li v-if="stats.recentSessions.length === 0" class="list-group-item text-center text-muted small py-3">
+                Sin sesiones recientes
+              </li>
+            </ul>
           </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between align-items-center" v-for="(s, i) in recentSessions" :key="i">
-              <div>
-                <div class="fw-semibold small">{{ s.user }}</div>
-                <div class="text-muted" style="font-size: 0.75rem">{{ s.time }}</div>
-              </div>
-              <span class="badge rounded-pill" :class="s.ok ? 'bg-success' : 'bg-danger'">
-                {{ s.ok ? 'OK' : 'Fallido' }}
-              </span>
-            </li>
-          </ul>
+        </div>
+      </div>      <!-- Tabla de intentos fallidos con filtros y paginación -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center py-2">
+          <span class="fw-semibold small">
+            <i class="bi bi-shield-exclamation me-2 text-danger"></i>Últimos intentos fallidos
+          </span>
+          <span class="badge bg-danger">{{ attemptsTotal }}</span>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card-body py-2 border-bottom">
+          <div class="row g-2 align-items-end">
+            <div class="col-md-5">
+              <input
+                v-model="attemptsFilters.search"
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Email, IP, motivo..."
+                @keyup.enter="applyFilters"
+              />
+            </div>
+            <div class="col-md-3">
+              <input v-model="attemptsFilters.from" type="date" class="form-control form-control-sm" />
+            </div>
+            <div class="col-md-3">
+              <input v-model="attemptsFilters.to" type="date" class="form-control form-control-sm" />
+            </div>
+            <div class="col-md-1 d-grid">
+              <button class="btn btn-success btn-sm" @click="applyFilters">
+                <i class="bi bi-funnel"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0 align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Fecha/Hora</th>
+                <th>Email</th>
+                <th>IP</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="attemptsLoading">
+                <td colspan="4" class="text-center py-3 text-muted">
+                  <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                  Cargando...
+                </td>
+              </tr>
+              <tr v-else-if="attempts.length === 0">
+                <td colspan="4" class="text-center text-muted py-3">Sin intentos fallidos registrados</td>
+              </tr>
+              <tr v-else v-for="(a, i) in attempts" :key="i">
+                <td class="small font-monospace">{{ formatDate(a.createdAt) }}</td>
+                <td class="small fw-semibold">{{ formatDetail(a.detail ?? '') }}</td>
+                <td class="small font-monospace">{{ normalizeIp(a.ip ?? '') }}</td>
+                <td><span class="badge bg-danger">{{ a.action }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center py-2">
+          <span class="small text-muted">
+            {{ attemptsTotal }} registro{{ attemptsTotal !== 1 ? 's' : '' }}
+          </span>
+          <nav v-if="totalPages() > 1">
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item" :class="{ disabled: attemptsFilters.page === 1 }">
+                <a class="page-link" href="#" @click.prevent="goToPage((attemptsFilters.page ?? 1) - 1)">←</a>
+              </li>
+              <li
+                v-for="p in visiblePages"
+                :key="p"
+                class="page-item"
+                :class="{ active: p === attemptsFilters.page }"
+              >
+                <a
+                  class="page-link"
+                  :class="{ 'bg-success border-success text-white': p === attemptsFilters.page }"
+                  href="#"
+                  @click.prevent="goToPage(p)"
+                >{{ p }}</a>
+              </li>
+              <li class="page-item" :class="{ disabled: attemptsFilters.page === totalPages() }">
+                <a class="page-link" href="#" @click.prevent="goToPage((attemptsFilters.page ?? 1) + 1)">→</a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
-    </div>
-
-    <!-- Failed attempts detail -->
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-        <span class="fw-semibold text-danger"><i class="bi bi-shield-exclamation me-2"></i>Últimos intentos fallidos</span>
-        <span class="badge bg-danger">{{ failedAttempts.length }}</span>
-      </div>
-      <div class="table-responsive">
-        <table class="table table-hover mb-0 align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Fecha/Hora</th>
-              <th>Email</th>
-              <th>IP</th>
-              <th>Motivo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(a, i) in failedAttempts" :key="i">
-              <td class="small">{{ a.time }}</td>
-              <td class="small fw-semibold">{{ a.email }}</td>
-              <td class="small font-monospace">{{ a.ip }}</td>
-              <td><span class="badge bg-danger bg-opacity-10 text-danger">{{ a.reason }}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-const chartBars = [
-  { day: 'Lun', ok: 90, fail: 12 },
-  { day: 'Mar', ok: 110, fail: 8 },
-  { day: 'Mié', ok: 85, fail: 15 },
-  { day: 'Jue', ok: 120, fail: 5 },
-  { day: 'Vie', ok: 140, fail: 20 },
-  { day: 'Sáb', ok: 60, fail: 3 },
-  { day: 'Dom', ok: 45, fail: 2 },
-]
+import { onMounted, computed } from 'vue'
+import { useAuthStats } from '@/modules/admin/composables/useAuthStats'
+import { useFailedAttempts } from '@/modules/admin/composables/useFailedAttempts'
 
-const recentSessions = [
-  { user: 'admin@securetenis.com', time: 'Hace 5 min', ok: true },
-  { user: 'ana.lopez@gmail.com', time: 'Hace 12 min', ok: true },
-  { user: 'desconocido@test.com', time: 'Hace 18 min', ok: false },
-  { user: 'carlos.m@hotmail.com', time: 'Hace 25 min', ok: true },
-  { user: 'hacker@evil.com', time: 'Hace 32 min', ok: false },
-]
+const { stats, loading, error, load } = useAuthStats()
+const { attempts, total: attemptsTotal, loading: attemptsLoading, filters: attemptsFilters, applyFilters, goToPage, totalPages, visiblePages } = useFailedAttempts()
 
-const failedAttempts = [
-  { time: '2026-04-21 10:36:01', email: 'desconocido@test.com', ip: '192.168.1.105', reason: 'Contraseña incorrecta' },
-  { time: '2026-04-21 10:32:44', email: 'hacker@evil.com', ip: '45.33.32.156', reason: 'Usuario no encontrado' },
-  { time: '2026-04-21 09:58:12', email: 'admin@securetenis.com', ip: '192.168.1.10', reason: 'Contraseña incorrecta' },
-  { time: '2026-04-20 22:15:03', email: 'test@test.com', ip: '103.21.244.0', reason: 'Usuario no encontrado' },
-  { time: '2026-04-20 20:44:30', email: 'admin@securetenis.com', ip: '185.220.101.1', reason: 'Token expirado' },
-]
+// Calcula la altura máxima para escalar las barras del gráfico
+const maxChartValue = computed(() => {
+  if (!stats.value) return 1
+  const values = stats.value.chartData.flatMap(d => [d.ok, d.fail])
+  return Math.max(...values, 1)
+})
+
+// Escala la altura de cada barra proporcionalmente
+const barHeight = (value: number): number => {
+  return Math.max((value / maxChartValue.value) * 115, value > 0 ? 4 : 0)
+}
+
+// Formatea una fecha ISO a formato legible
+const formatDate = (iso: string): string => {
+  return new Date(iso).toLocaleString('es-ES', {
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit',
+  })
+}
+
+// Formatea una fecha ISO a fecha y hora exacta en formato local
+const formatRelative = (iso: string): string =>
+  new Date(iso).toLocaleString('es-ES', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  })
+
+// Normaliza IPs IPv4-mapped IPv6 a formato IPv4 puro
+const normalizeIp = (ip: string): string =>
+  ip.startsWith('::ffff:') ? ip.slice(7) : (ip || '—')
+
+// Extrae el valor del campo detail eliminando el prefijo "email: "
+const formatDetail = (detail: string): string =>
+  detail.startsWith('email: ') ? detail.slice(7) : (detail || '—')
+
+onMounted(() => {
+  load()
+  applyFilters()
+})
 </script>
 
 <style scoped>
 .kpi-value {
-  font-size: 2rem;
+  font-size: 1.9rem;
   font-weight: 800;
   line-height: 1.2;
 }
 
 .chart-placeholder {
   width: 100%;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
 }
 
 .chart-bars {
@@ -163,7 +265,7 @@ const failedAttempts = [
   align-items: flex-end;
   justify-content: center;
   gap: 1.5rem;
-  height: 160px;
+  height: 200px;
 }
 
 .chart-bar-group {
@@ -173,16 +275,72 @@ const failedAttempts = [
   gap: 2px;
 }
 
+.chart-bar-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chart-bar-wrapper:hover .bar-tooltip {
+  opacity: 1;
+  transform: translateY(-4px);
+}
+
+.bar-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  margin-bottom: 4px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 10;
+}
+
+.tooltip-success {
+  background: #16a34a;
+  color: #fff;
+}
+
+.tooltip-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
 .chart-bar {
   width: 22px;
   border-radius: 4px 4px 0 0;
-  transition: height 0.4s ease;
 }
 
-.bar-success { background: #22c55e; }
-.bar-danger { background: #ef4444; }
+.bar-success {
+  background: #86efac;
+  transition: background 0.2s ease, height 0.4s ease;
+}
+.bar-success:hover { background: #22c55e; }
+
+.bar-danger {
+  background: #fca5a5;
+  transition: background 0.2s ease, height 0.4s ease;
+}
+.bar-danger:hover { background: #ef4444; }
 
 .chart-label {
   margin-top: 6px;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
 }
 </style>

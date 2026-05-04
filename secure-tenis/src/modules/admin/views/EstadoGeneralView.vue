@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <h2 class="fw-bold mb-4">🖥️ Estado General del Sistema</h2>
+    <h2 class="fw-bold mb-4">Estado General del Sistema</h2>
 
     <!-- Status cards -->
     <div class="row g-3 mb-4">

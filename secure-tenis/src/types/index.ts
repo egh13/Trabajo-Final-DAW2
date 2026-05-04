@@ -115,3 +115,13 @@ export interface PaginatedLogs {
   page: number
   pageSize: number
 }
+
+// Estadísticas de autenticación del panel de seguridad
+export interface AuthStats {
+  totalLogins30d: number
+  failedAttempts30d: number
+  uniqueUsersToday: number
+  recentSessions: { user: string; time: string; ok: boolean }[]
+  failedAttempts: { time: string; email: string; ip: string; reason: string }[]
+  chartData: { day: string; ok: number; fail: number }[]
+}

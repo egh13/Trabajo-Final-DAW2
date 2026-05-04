@@ -1,281 +1,196 @@
 <template>
-  <div class="container-fluid py-4">
-    <div class="row">
-      <div class="col-12">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">
-              <i class="bi bi-people-fill me-2"></i>
-              Gestión de Usuarios
-            </h4>
-            <div class="d-flex gap-2">
-              <button class="btn btn-success btn-sm" @click="openModal">
-                <i class="bi bi-plus-circle me-1"></i>
-                Agregar Usuario
-              </button>
-              <button class="btn btn-light btn-sm" @click="loadUsers">
-                <i class="bi bi-arrow-clockwise me-1"></i>
-                Actualizar
-              </button>
-            </div>
-          </div>
-          <div class="card-body">
-            <!-- Loading -->
-            <div v-if="loading" class="text-center py-4">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-              </div>
-              <p class="mt-2 text-muted">Cargando usuarios...</p>
-            </div>
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold mb-0">Gestión de Usuarios</h2>
+      <div class="d-flex gap-2">
+        <button class="btn btn-success btn-sm" @click="openModal">
+          <i class="bi bi-plus-circle me-1"></i> Agregar Usuario
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" @click="loadUsers">
+          <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+        </button>
+      </div>
+    </div>
 
-            <!-- Error -->
-            <div v-else-if="error" class="alert alert-danger">
-              <i class="bi bi-exclamation-triangle me-2"></i>
-              {{ error }}
-            </div>
-
-            <!-- Lista de usuarios -->
-            <div v-else-if="users.length > 0">
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead class="table-dark">
-                    <tr>
-                      <th>ID</th>
-                      <th>Nombre</th>
-                      <th>Email</th>
-                      <th>Rol</th>
-                      <th>Fecha de registro</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="user in users" :key="user.id">
-                      <td>{{ user.id }}</td>
-                      <td>{{ user.name }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>
-                        <span 
-                          class="badge"
-                          :class="getRoleBadgeClass(user.role)"
-                        >
-                          {{ getRoleLabel(user.role) }}
-                        </span>
-                      </td>
-                      <td>{{ formatDate(user.createdAt) }}</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1" @click="editUser(user)">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" @click="deleteUser(user)">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Sin usuarios -->
-            <div v-else class="text-center py-4">
-              <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
-              <p class="mt-3 text-muted">No hay usuarios registrados.</p>
-            </div>
-          </div>
-        </div>
+    <!-- Tabla de usuarios -->
+    <div class="card border-0 shadow-sm">
+      <div class="table-responsive">
+        <table class="table table-hover table-striped mb-0 align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th style="width: 60px">#</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Fecha de registro</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-if="loading">
+              <td colspan="6" class="text-center py-4 text-muted">
+                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                Cargando usuarios...
+              </td>
+            </tr>
+            <tr v-else-if="error">
+              <td colspan="6" class="text-center py-4 text-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+              </td>
+            </tr>
+            <tr v-else-if="users.length === 0">
+              <td colspan="6" class="text-center py-4 text-muted">No hay usuarios registrados.</td>
+            </tr>
+            <tr v-else v-for="user in users" :key="user.id">
+              <td class="small text-muted">{{ user.id }}</td>
+              <td class="small fw-semibold">{{ user.name }}</td>
+              <td class="small">{{ user.email }}</td>
+              <td>
+                <span class="badge" :class="getRoleBadgeClass(user.role)">
+                  {{ getRoleLabel(user.role) }}
+                </span>
+              </td>
+              <td class="small font-monospace">{{ formatDate(user.createdAt) }}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-1" @click="editUser(user)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" @click="deleteUser(user)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <!-- Modal para agregar usuario -->
-    <div v-if="showCreateModal" class="modal d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
-      <div class="modal-dialog" role="document">
+    <div v-if="showCreateModal" class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-success text-white">
             <h5 class="modal-title">
-              <i class="bi bi-person-plus me-2"></i>
-              Agregar Nuevo Usuario
+              <i class="bi bi-person-plus me-2"></i> Agregar Nuevo Usuario
             </h5>
-            <button type="button" class="btn-close btn-close-white" @click="closeModal" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" @click="closeModal"></button>
           </div>
           <div class="modal-body">
-            <!-- Error en el formulario -->
             <div v-if="formError" class="alert alert-danger alert-dismissible fade show" role="alert">
-              <i class="bi bi-exclamation-triangle me-2"></i>
-              {{ formError }}
+              <i class="bi bi-exclamation-triangle me-2"></i>{{ formError }}
               <button type="button" class="btn-close" @click="formError = null"></button>
             </div>
 
             <form @submit.prevent="createNewUser">
               <div class="mb-3">
-                <label for="name" class="form-label">Nombre completo *</label>
-                <input 
-                  v-model="newUserForm.name" 
-                  type="text" 
-                  class="form-control" 
-                  id="name"
-                  placeholder="Ej: Juan Pérez"
-                  required
-                >
+                <label for="name" class="form-label small fw-semibold text-muted">Nombre completo *</label>
+                <input v-model="newUserForm.name" type="text" class="form-control form-control-sm" id="name" placeholder="Ej: Juan Pérez" required>
               </div>
-
               <div class="mb-3">
-                <label for="email" class="form-label">Email *</label>
-                <input 
-                  v-model="newUserForm.email" 
-                  type="email" 
-                  class="form-control" 
-                  id="email"
-                  placeholder="Ej: usuario@example.com"
-                  required
-                >
+                <label for="email" class="form-label small fw-semibold text-muted">Email *</label>
+                <input v-model="newUserForm.email" type="email" class="form-control form-control-sm" id="email" placeholder="Ej: usuario@example.com" required>
               </div>
-
               <div class="mb-3">
-                <label for="password" class="form-label">Contraseña *</label>
-                <input 
-                  v-model="newUserForm.password" 
-                  type="password" 
-                  class="form-control" 
-                  id="password"
-                  placeholder="Mínimo 6 caracteres"
-                  required
-                >
+                <label for="password" class="form-label small fw-semibold text-muted">Contraseña *</label>
+                <input v-model="newUserForm.password" type="password" class="form-control form-control-sm" id="password" placeholder="Mínimo 6 caracteres" required>
               </div>
-
               <div class="mb-3">
-                <label for="role" class="form-label">Rol *</label>
-                <select v-model="newUserForm.role" class="form-select" id="role" required>
+                <label for="role" class="form-label small fw-semibold text-muted">Rol *</label>
+                <select v-model="newUserForm.role" class="form-select form-select-sm" id="role" required>
                   <option value="">Seleccionar rol...</option>
                   <option value="cliente">Cliente</option>
                   <option value="admin">Administrador</option>
                   <option value="analista">Analista</option>
                 </select>
               </div>
-
               <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success" :disabled="creatingUser">
-                  <i v-if="!creatingUser" class="bi bi-check-circle me-1"></i>
-                  <i v-else class="bi bi-hourglass-split me-1"></i>
+                <button type="submit" class="btn btn-success btn-sm" :disabled="creatingUser">
+                  <i class="bi me-1" :class="creatingUser ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
                   {{ creatingUser ? 'Creando...' : 'Crear Usuario' }}
                 </button>
-                <button type="button" class="btn btn-secondary" @click="closeModal" :disabled="creatingUser">
-                  Cancelar
-                </button>
+                <button type="button" class="btn btn-secondary btn-sm" @click="closeModal" :disabled="creatingUser">Cancelar</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal para editar usuario -->
-  <div v-if="showEditModal" class="modal d-block" style="background: rgba(0, 0, 0, 0.5);">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">
-            <i class="bi bi-pencil-square me-2"></i>
-            Editar Usuario
-          </h5>
-          <button type="button" class="btn-close btn-close-white" @click="closeEditModal" :disabled="updatingUser"></button>
-        </div>
-        <div class="modal-body">
-          <!-- Error en el formulario -->
-          <div v-if="formError" class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            {{ formError }}
-            <button type="button" class="btn-close" @click="formError = null" :disabled="updatingUser"></button>
+    <!-- Modal para editar usuario -->
+    <div v-if="showEditModal" class="modal d-block" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-pencil-square me-2"></i> Editar Usuario
+            </h5>
+            <button type="button" class="btn-close btn-close-white" @click="closeEditModal" :disabled="updatingUser"></button>
           </div>
-
-          <form @submit.prevent="updateUser">
-            <div class="mb-3">
-              <label for="edit-name" class="form-label">Nombre completo *</label>
-              <input 
-                v-model="editUserForm.name" 
-                type="text" 
-                class="form-control" 
-                id="edit-name"
-                placeholder="Ej: Juan Pérez"
-                required
-              >
+          <div class="modal-body">
+            <div v-if="formError" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-triangle me-2"></i>{{ formError }}
+              <button type="button" class="btn-close" @click="formError = null" :disabled="updatingUser"></button>
             </div>
 
-            <div class="mb-3">
-              <label for="edit-email" class="form-label">Email *</label>
-              <input 
-                v-model="editUserForm.email" 
-                type="email" 
-                class="form-control" 
-                id="edit-email"
-                placeholder="Ej: usuario@example.com"
-                required
-              >
-            </div>
-
-            <div class="mb-3">
-              <label for="edit-password" class="form-label">Contraseña (dejar en blanco para no cambiar)</label>
-              <input 
-                v-model="editUserForm.password" 
-                type="password" 
-                class="form-control" 
-                id="edit-password"
-                placeholder="Mínimo 6 caracteres si se especifica"
-              >
-              <small class="text-muted">Si dejas este campo vacío, la contraseña no será modificada</small>
-            </div>
-
-            <div class="mb-3">
-              <label for="edit-role" class="form-label">Rol *</label>
-              <select v-model="editUserForm.role" class="form-select" id="edit-role" required>
-                <option value="">Seleccionar rol...</option>
-                <option value="cliente">Cliente</option>
-                <option value="admin">Administrador</option>
-                <option value="analista">Analista</option>
-              </select>
-            </div>
-
-            <div class="d-flex gap-2">
-              <button type="submit" class="btn btn-primary" :disabled="updatingUser">
-                <i v-if="!updatingUser" class="bi bi-check-circle me-1"></i>
-                <i v-else class="bi bi-hourglass-split me-1"></i>
-                {{ updatingUser ? 'Actualizando...' : 'Guardar Cambios' }}
-              </button>
-              <button type="button" class="btn btn-secondary" @click="closeEditModal" :disabled="updatingUser">
-                Cancelar
-              </button>
-            </div>
-          </form>
+            <form @submit.prevent="updateUser">
+              <div class="mb-3">
+                <label for="edit-name" class="form-label small fw-semibold text-muted">Nombre completo *</label>
+                <input v-model="editUserForm.name" type="text" class="form-control form-control-sm" id="edit-name" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-email" class="form-label small fw-semibold text-muted">Email *</label>
+                <input v-model="editUserForm.email" type="email" class="form-control form-control-sm" id="edit-email" required>
+              </div>
+              <div class="mb-3">
+                <label for="edit-password" class="form-label small fw-semibold text-muted">Contraseña</label>
+                <input v-model="editUserForm.password" type="password" class="form-control form-control-sm" id="edit-password" placeholder="Dejar vacío para no cambiar">
+                <small class="text-muted">Si dejas este campo vacío, la contraseña no será modificada</small>
+              </div>
+              <div class="mb-3">
+                <label for="edit-role" class="form-label small fw-semibold text-muted">Rol *</label>
+                <select v-model="editUserForm.role" class="form-select form-select-sm" id="edit-role" required>
+                  <option value="">Seleccionar rol...</option>
+                  <option value="cliente">Cliente</option>
+                  <option value="admin">Administrador</option>
+                  <option value="analista">Analista</option>
+                </select>
+              </div>
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success btn-sm" :disabled="updatingUser">
+                  <i class="bi me-1" :class="updatingUser ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
+                  {{ updatingUser ? 'Actualizando...' : 'Guardar Cambios' }}
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" @click="closeEditModal" :disabled="updatingUser">Cancelar</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modal de confirmación de eliminación -->
-  <div v-if="deletingUserId" class="modal d-block" style="background: rgba(0, 0, 0, 0.5);">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-      <div class="modal-content border-danger">
-        <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            Confirmar eliminación
-          </h5>
-          <button type="button" class="btn-close btn-close-white" @click="cancelDeleteUser"></button>
-        </div>
-        <div class="modal-body">
-          <p class="mb-0">
-            ¿Estás seguro de que deseas eliminar al usuario <strong>{{ users.find(u => u.id === deletingUserId)?.name }}</strong>? 
-            Esta acción no se puede deshacer.
-          </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="cancelDeleteUser">
-            Cancelar
-          </button>
-          <button type="button" class="btn btn-danger" @click="confirmDeleteUser">
-            <i class="bi bi-trash me-1"></i>
-            Eliminar
-          </button>
+    <!-- Modal de confirmación de eliminación -->
+    <div v-if="deletingUserId" class="modal d-block" style="background: rgba(0,0,0,0.5);">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-danger">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i> Confirmar eliminación
+            </h5>
+            <button type="button" class="btn-close btn-close-white" @click="cancelDeleteUser"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-0">
+              ¿Estás seguro de que deseas eliminar al usuario
+              <strong>{{ users.find(u => u.id === deletingUserId)?.name }}</strong>?
+              Esta acción no se puede deshacer.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" @click="cancelDeleteUser">Cancelar</button>
+            <button type="button" class="btn btn-danger btn-sm" @click="confirmDeleteUser">
+              <i class="bi bi-trash me-1"></i> Eliminar
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -374,7 +289,7 @@ const createNewUser = async () => {
 
 const getRoleBadgeClass = (role: string) => {
   switch (role) {
-    case 'admin': return 'bg-danger'
+    case 'admin': return 'bg-success'
     case 'analista': return 'bg-warning text-dark'
     default: return 'bg-secondary'
   }
@@ -488,44 +403,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.card {
-  border: none;
-  border-radius: 10px;
-}
-
-.card-header {
-  border-radius: 10px 10px 0 0 !important;
-}
-
-.table th {
-  border-top: none;
-  font-weight: 600;
-}
-
-.badge {
-  font-size: 0.75rem;
-}
-
-.modal {
-  display: block;
-}
-
-.modal-dialog {
-  position: relative;
-  width: auto;
-  pointer-events: none;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 500px;
-}
-
 .modal-content {
-  pointer-events: auto;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.gap-2 {
-  gap: 0.5rem;
 }
 </style>
