@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { jwtConfig } from '../config/jwt'
+import { createLog, getClientIp } from '../services/logService'
 import type { JwtPayload, UserRole, ApiResponse } from '../types'
 
 // Extiende Request para incluir el usuario autenticado
@@ -13,9 +14,10 @@ declare global {
 }
 
 // Verifica que el token JWT sea válido
-export const authenticate = (req: Request, res: Response, next: NextFunction): void => {
+export const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const header = req.headers.authorization
   if (!header || !header.startsWith('Bearer ')) {
+    await createLog({ level: 'WARNING', module: 'Auth', action: `Acceso sin token a ${req.originalUrl}`, ip: getClientIp(req) })
     res.status(401).json({
       success: false,
       message: 'No autorizado. Token no proporcionado.',
@@ -30,6 +32,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
     req.user = decoded
     next()
   } catch {
+    await createLog({ level: 'WARNING', module: 'Auth', action: `Token inválido o expirado en ${req.originalUrl}`, ip: getClientIp(req) })
     res.status(401).json({
       success: false,
       message: 'Token inválido o expirado.',
@@ -39,7 +42,7 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
 
 // Verifica que el usuario tenga uno de los roles permitidos
 export const authorize = (...roles: UserRole[]) => {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     if (!req.user) {
       res.status(401).json({
         success: false,
@@ -49,6 +52,7 @@ export const authorize = (...roles: UserRole[]) => {
     }
 
     if (!roles.includes(req.user.role)) {
+      await createLog({ level: 'WARNING', module: 'Auth', action: `Acceso denegado a ${req.originalUrl} — rol insuficiente`, userId: req.user.userId, ip: getClientIp(req), detail: `rol: ${req.user.role}, requerido: ${roles.join(', ')}` })
       res.status(403).json({
         success: false,
         message: 'No tienes permisos para acceder a este recurso.',

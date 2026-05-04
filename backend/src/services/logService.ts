@@ -1,5 +1,13 @@
+import type { Request } from 'express'
 import { prisma } from '../config/prisma'
 import type { LogLevel, PaginatedLogs, UserLog, UserLogFilters } from '../types'
+
+// Extrae la IP real del cliente considerando proxies
+const getClientIp = (req: Request): string => {
+  const forwarded = req.headers['x-forwarded-for']
+  if (typeof forwarded === 'string') return forwarded.split(',')[0].trim()
+  return req.ip ?? req.socket.remoteAddress ?? '0.0.0.0'
+}
 
 // Construye el objeto where de Prisma a partir de los filtros comunes
 const buildWhere = (filters: UserLogFilters): Record<string, unknown> => {
@@ -102,5 +110,5 @@ const getAllLogs = async (filters: UserLogFilters): Promise<UserLog[]> => {
   return rows.map(mapRow)
 }
 
-export { createLog, getLogs, getAllLogs }
+export { createLog, getLogs, getAllLogs, getClientIp }
 

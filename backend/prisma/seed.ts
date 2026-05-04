@@ -53,15 +53,13 @@ async function main() {
       { level: 'INFO',    module: 'Productos', action: 'GET /api/products',                      userId: cliente?.id, ip: '192.168.1.42',  createdAt: new Date('2026-04-27T08:20:00') },
       { level: 'INFO',    module: 'Productos', action: 'GET /api/categories',                    userId: cliente?.id, ip: '192.168.1.42',  createdAt: new Date('2026-04-27T08:25:00') },
       { level: 'INFO',    module: 'Pedidos',   action: 'Nuevo pedido #1 creado',                 userId: cliente?.id, ip: '192.168.1.42',  createdAt: new Date('2026-04-27T08:30:00') },
-      { level: 'WARNING', module: 'Sistema',   action: 'Uso de memoria > 80%',                   userId: null,        ip: '127.0.0.1',     createdAt: new Date('2026-04-27T08:35:00'), detail: 'heap: 820MB / 1024MB' },
-      { level: 'INFO',    module: 'Sistema',   action: 'Backup automático completado',           userId: null,        ip: '127.0.0.1',     createdAt: new Date('2026-04-27T08:40:00') },
       { level: 'ERROR',   module: 'Auth',      action: 'Login fallido — usuario no encontrado',  userId: null,        ip: '103.21.244.0',  createdAt: new Date('2026-04-27T08:45:00'), detail: 'email: hacker@evil.com' },
       { level: 'INFO',    module: 'Auth',      action: 'Registro de nuevo usuario',              userId: cliente?.id, ip: '192.168.1.88',  createdAt: new Date('2026-04-27T09:00:00') },
       { level: 'DEBUG',   module: 'Sistema',   action: 'Healthcheck DB OK',                      userId: null,        ip: '127.0.0.1',     createdAt: new Date('2026-04-27T09:05:00') },
     ]
   })
 
-  console.log('¡Base de datos MariaDB poblada! ✅')
+  console.log('¡Base de datos poblada! ✅')
 }
 
 main()
