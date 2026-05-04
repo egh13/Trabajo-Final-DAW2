@@ -50,7 +50,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="product in products" :key="product.id">
+                    <tr v-for="product in products" :key="product.id" @click="goToProduct(product)" class="clickable-row">
                       <td>{{ product.id }}</td>
                       <td>
                         <img v-if="product.image_url" :src="product.image_url" :alt="product.name" class="product-thumb" />
@@ -60,11 +60,11 @@
                       <td>${{ product.price.toFixed(2) }}</td>
                       <td>{{ product.stock }}</td>
                       <td>{{ product.category_name || 'Sin categoría' }}</td>
-                      <td>
-                        <button class="btn btn-sm btn-outline-primary me-1" @click="editProduct(product)">
+                      <td @click.stop>
+                        <button class="btn btn-sm btn-outline-primary me-1" @click.stop="editProduct(product)">
                           <i class="bi bi-pencil"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" @click="handleDeleteProduct(product)">
+                        <button class="btn btn-sm btn-outline-danger" @click.stop="handleDeleteProduct(product)">
                           <i class="bi bi-trash"></i>
                         </button>
                       </td>
@@ -243,9 +243,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import type { Product, Category } from '@/types'
 import { fetchProducts, createProduct, updateProduct as updateProductApi, deleteProduct as deleteProductApi } from '@/modules/products/services/productService'
 import { fetchCategories } from '@/modules/products/services/categoryService'
+
+const router = useRouter()
 
 // Estado
 const products = ref<Product[]>([])
@@ -410,6 +413,10 @@ const cancelDeleteProduct = () => {
   deletingProductId.value = null
 }
 
+const goToProduct = (product: Product) => {
+  router.push(`/producto/${product.id}`)
+}
+
 onMounted(() => {
   loadProducts()
   loadCategories()
@@ -422,5 +429,14 @@ onMounted(() => {
   height: 40px;
   object-fit: cover;
   border-radius: 4px;
+}
+
+.clickable-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 123, 255, 0.1);
 }
 </style>
