@@ -1,67 +1,85 @@
 <template>
-  <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="fw-bold mb-0">Gestión de Usuarios</h2>
-      <div class="d-flex gap-2">
-        <button class="btn btn-success btn-sm" @click="openModal">
-          <i class="bi bi-plus-circle me-1"></i> Agregar Usuario
-        </button>
-        <button class="btn btn-outline-secondary btn-sm" @click="loadUsers">
-          <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
-        </button>
-      </div>
-    </div>
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+              <i class="bi bi-people me-2"></i>
+              Gestión de Usuarios
+            </h4>
+            <div class="d-flex gap-2">
+              <button class="btn btn-success btn-sm" @click="openModal">
+                <i class="bi bi-plus-circle me-1"></i>
+                Agregar Usuario
+              </button>
+              <button class="btn btn-light btn-sm" @click="loadUsers">
+                <i class="bi bi-arrow-clockwise me-1"></i>
+                Actualizar
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Loading -->
+            <div v-if="loading" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-2 text-muted">Cargando usuarios...</p>
+            </div>
 
-    <!-- Tabla de usuarios -->
-    <div class="card border-0 shadow-sm">
-      <div class="table-responsive">
-        <table class="table table-hover table-striped mb-0 align-middle">
-          <thead class="table-dark">
-            <tr>
-              <th style="width: 60px">#</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Rol</th>
-              <th>Fecha de registro</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-if="loading">
-              <td colspan="6" class="text-center py-4 text-muted">
-                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                Cargando usuarios...
-              </td>
-            </tr>
-            <tr v-else-if="error">
-              <td colspan="6" class="text-center py-4 text-danger">
-                <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
-              </td>
-            </tr>
-            <tr v-else-if="users.length === 0">
-              <td colspan="6" class="text-center py-4 text-muted">No hay usuarios registrados.</td>
-            </tr>
-            <tr v-else v-for="user in users" :key="user.id">
-              <td class="small text-muted">{{ user.id }}</td>
-              <td class="small fw-semibold">{{ user.name }}</td>
-              <td class="small">{{ user.email }}</td>
-              <td>
-                <span class="badge" :class="getRoleBadgeClass(user.role)">
-                  {{ getRoleLabel(user.role) }}
-                </span>
-              </td>
-              <td class="small font-monospace">{{ formatDate(user.createdAt) }}</td>
-              <td>
-                <button class="btn btn-sm btn-outline-primary me-1" @click="editUser(user)">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" @click="deleteUser(user)">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            <!-- Error -->
+            <div v-else-if="error" class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ error }}
+            </div>
+
+            <!-- Lista de usuarios -->
+            <div v-else-if="users.length > 0">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-dark">
+                    <tr>
+                      <th style="width: 60px">#</th>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Rol</th>
+                      <th>Fecha de registro</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="user in users" :key="user.id">
+                      <td class="small text-muted">{{ user.id }}</td>
+                      <td class="small fw-semibold">{{ user.name }}</td>
+                      <td class="small">{{ user.email }}</td>
+                      <td>
+                        <span class="badge" :class="getRoleBadgeClass(user.role)">
+                          {{ getRoleLabel(user.role) }}
+                        </span>
+                      </td>
+                      <td class="small font-monospace">{{ formatDate(user.createdAt) }}</td>
+                      <td>
+                        <button class="btn btn-sm btn-outline-primary me-1" @click="editUser(user)">
+                          <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" @click="deleteUser(user)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Sin usuarios -->
+            <div v-else class="text-center py-4">
+              <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+              <p class="mt-3 text-muted">No hay usuarios registrados.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -120,7 +138,7 @@
     <div v-if="showEditModal" class="modal d-block" style="background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header bg-success text-white">
+          <div class="modal-header bg-primary text-white">
             <h5 class="modal-title">
               <i class="bi bi-pencil-square me-2"></i> Editar Usuario
             </h5>
@@ -170,7 +188,7 @@
 
     <!-- Modal de confirmación de eliminación -->
     <div v-if="deletingUserId" class="modal d-block" style="background: rgba(0,0,0,0.5);">
-      <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-danger">
           <div class="modal-header bg-danger text-white">
             <h5 class="modal-title">

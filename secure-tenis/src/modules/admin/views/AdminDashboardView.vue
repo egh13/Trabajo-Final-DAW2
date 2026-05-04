@@ -51,6 +51,22 @@ const cards = [
     bg: 'linear-gradient(135deg, #f59e0b33, #0a0a0a22)',
     tags: ['Logs', 'Tabla', 'Exportar'],
   },
+  {
+    to: '/admin/usuarios',
+    icon: '👥',
+    label: 'Gestión de Usuarios',
+    description: 'Administra usuarios, roles y permisos del sistema. Crea, edita y elimina cuentas de usuario.',
+    bg: 'linear-gradient(135deg, #8b5cf633, #0a0a0a22)',
+    tags: ['Usuarios', 'Roles', 'Permisos'],
+  },
+  {
+    to: '/admin/productos',
+    icon: '📦',
+    label: 'Gestión de Productos',
+    description: 'Administra el catálogo de productos, precios, stock y categorías.',
+    bg: 'linear-gradient(135deg, #06b6d433, #0a0a0a22)',
+    tags: ['Productos', 'Precios', 'Stock'],
+  },
 ]
 </script>
 
