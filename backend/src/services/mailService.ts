@@ -139,14 +139,15 @@ export const sendWelcomeEmail = async (to: string, userName: string): Promise<vo
 
               <p>Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos. Nuestro equipo de soporte está aquí para ayudarte.</p>
 
-              <div style="text-align: center;">
-                <a href="${'https://www.youtube.com/watch?v=dQw4w9WgXcQ'}" 
+              // Reemplaza el bloque del botón por este:
+
+            <div style="text-align: center;">
+                <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}"
                     class="cta-button" 
-                    style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0;">
-                    <!-- Usamos un span con color heredado y !important para forzar el negro -->
-                    <span style="color: white !important; text-decoration: none;">¡Comienza a comprar!</span>
+                    style="display: inline-block; background-color: #2563eb; color: #000000; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin: 20px 0;">
+                    <span style="color: #000000 !important; text-decoration: none;">¡Comienza a comprar!</span>
                 </a>
-              </div>
+            </div>
             </div>
 
             <div class="footer">
