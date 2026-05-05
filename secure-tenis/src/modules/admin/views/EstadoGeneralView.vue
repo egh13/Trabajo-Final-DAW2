@@ -1,17 +1,17 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid px-0">
     <h2 class="fw-bold mb-4">Estado General del Sistema</h2>
 
     <!-- Status cards -->
     <div class="row g-3 mb-4">
       <div class="col-md-4">
-        <div class="card border-0 shadow-sm">
+      <div class="card border-0 shadow-sm h-100">
           <div class="card-body">
             <div class="d-flex align-items-center gap-3">
               <div class="status-indicator bg-success"></div>
               <div>
-                <h6 class="mb-0 text-muted small text-uppercase">Backend</h6>
-                <span class="fw-bold fs-5 text-dark">Operativo</span>
+                <h6 class="mb-0 text-muted small text-uppercase" style="letter-spacing:.05em">Backend</h6>
+                <span class="fw-bold fs-5" style="color:var(--color-surface,#1E1E1E)">Operativo</span>
               </div>
             </div>
             <hr />
@@ -77,7 +77,7 @@
               <span>Tamaño: <strong class="text-dark">84 MB</strong></span>
               <span>Estado: <strong class="text-warning">Pendiente</strong></span>
             </div>
-            <button class="btn btn-sm btn-outline-success w-100 mt-3" disabled>
+            <button class="btn btn-sm btn-outline-admin w-100 mt-3" disabled>
               <i class="bi bi-download me-1"></i> Realizar backup ahora
             </button>
           </div>
@@ -87,7 +87,7 @@
 
     <!-- Last logs -->
     <div class="card border-0 shadow-sm">
-      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <div class="card-header card-header-console d-flex justify-content-between align-items-center">
         <span class="fw-semibold"><i class="bi bi-terminal me-2"></i>Últimos Logs del Sistema</span>
         <span class="badge bg-success">Live</span>
       </div>
@@ -118,17 +118,32 @@ const sampleLogs = [
 </script>
 
 <style scoped>
+.card-header-console {
+  background: var(--color-surface, #1E1E1E);
+  color: #fff;
+}
+
+.btn-outline-admin {
+  border-color: var(--color-garnet, #6B1E2E);
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.btn-outline-admin:hover {
+  background: var(--color-garnet, #6B1E2E);
+  color: #fff;
+}
+
 .status-indicator {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   flex-shrink: 0;
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
 @keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(107, 30, 46, 0.35); }
+  50% { box-shadow: 0 0 0 7px rgba(107, 30, 46, 0); }
 }
 
 .log-console {

@@ -6,7 +6,7 @@
 
     <!-- Loading -->
     <div v-if="loading" class="text-center py-5">
-      <div class="spinner-border text-success" role="status">
+      <div class="spinner-border spinner-admin" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-2 text-muted">Cargando estadísticas...</p>
@@ -22,7 +22,7 @@
         <div class="col-md-4">
           <div class="card border-0 shadow-sm text-center py-3">
             <div class="card-body">
-              <div class="kpi-value text-success">{{ stats.totalLogins30d.toLocaleString('es-ES') }}</div>
+              <div class="kpi-value kpi-admin">{{ stats.totalLogins30d.toLocaleString('es-ES') }}</div>
               <div class="small text-muted">Inicios de sesión (30d)</div>
             </div>
           </div>
@@ -38,7 +38,7 @@
         <div class="col-md-4">
           <div class="card border-0 shadow-sm text-center py-3">
             <div class="card-body">
-              <div class="kpi-value text-success">{{ stats.uniqueUsersToday }}</div>
+              <div class="kpi-value kpi-admin">{{ stats.uniqueUsersToday }}</div>
               <div class="small text-muted">Usuarios activos hoy</div>
             </div>
           </div>
@@ -128,7 +128,7 @@
               <input v-model="attemptsFilters.to" type="date" class="form-control form-control-sm" />
             </div>
             <div class="col-md-1 d-grid">
-              <button class="btn btn-success btn-sm" @click="applyFilters">
+              <button class="btn btn-admin btn-sm" @click="applyFilters">
                 <i class="bi bi-funnel"></i>
               </button>
             </div>
@@ -253,6 +253,33 @@ onMounted(() => {
   font-size: 1.9rem;
   font-weight: 800;
   line-height: 1.2;
+}
+
+.kpi-admin {
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.spinner-admin {
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.btn-admin {
+  background: var(--color-garnet, #6B1E2E);
+  border-color: var(--color-garnet, #6B1E2E);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-admin:hover {
+  background: var(--color-garnet-dark, #4E1420);
+  border-color: var(--color-garnet-dark, #4E1420);
+  color: #fff;
+}
+
+.page-link-active {
+  background: var(--color-garnet, #6B1E2E) !important;
+  border-color: var(--color-garnet, #6B1E2E) !important;
+  color: #fff !important;
 }
 
 .chart-placeholder {

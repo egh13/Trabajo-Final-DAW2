@@ -3,17 +3,17 @@
     <div class="row">
       <div class="col-12">
         <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">
+          <div class="card-header-admin d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-semibold">
               <i class="bi bi-box-seam me-2"></i>
               Gestión de Productos
             </h4>
             <div class="d-flex gap-2">
-              <button class="btn btn-success btn-sm" @click="openModal">
+              <button class="btn btn-admin-outline btn-sm" @click="openModal">
                 <i class="bi bi-plus-circle me-1"></i>
-                Agregar Producto
+                Nuevo producto
               </button>
-              <button class="btn btn-light btn-sm" @click="loadProducts">
+              <button class="btn btn-ghost-sm btn-sm" @click="loadProducts">
                 <i class="bi bi-arrow-clockwise me-1"></i>
                 Actualizar
               </button>
@@ -21,11 +21,11 @@
           </div>
           <div class="card-body">
             <!-- Loading -->
-            <div v-if="loading" class="text-center py-4">
-              <div class="spinner-border text-primary" role="status">
+            <div v-if="loading" class="text-center py-5">
+              <div class="spinner-border spinner-admin" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
-              <p class="mt-2 text-muted">Cargando productos...</p>
+              <p class="mt-2 text-muted small">Cargando productos...</p>
             </div>
 
             <!-- Error -->
@@ -61,7 +61,7 @@
                       <td>{{ product.stock }}</td>
                       <td>{{ product.category_name || 'Sin categoría' }}</td>
                       <td @click.stop>
-                        <button class="btn btn-sm btn-outline-primary me-1" @click.stop="editProduct(product)">
+                        <button class="btn btn-sm btn-outline-admin me-1" @click.stop="editProduct(product)">
                           <i class="bi bi-pencil"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-danger" @click.stop="handleDeleteProduct(product)">
@@ -88,9 +88,9 @@
     <div v-if="showCreateModal" class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered"> <!-- Cambiado a centrado y tamaño normal -->
         <div class="modal-content">
-          <div class="modal-header bg-success text-white">
+          <div class="modal-header modal-header-admin">
             <h5 class="modal-title">
-              <i class="bi bi-plus-circle me-2"></i> Agregar Nuevo Producto
+              <i class="bi bi-plus-circle me-2"></i> Nuevo Producto
             </h5>
             <button type="button" class="btn-close btn-close-white" @click="closeModal"></button>
           </div>
@@ -136,11 +136,11 @@
               </div>
 
               <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success btn-sm" :disabled="creatingProduct">
+                <button type="submit" class="btn btn-admin btn-sm" :disabled="creatingProduct">
                   <i class="bi me-1" :class="creatingProduct ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
                   {{ creatingProduct ? 'Creando...' : 'Crear Producto' }}
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" @click="closeModal" :disabled="creatingProduct">Cancelar</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @click="closeModal" :disabled="creatingProduct">Cancelar</button>
               </div>
             </form>
           </div>
@@ -152,7 +152,7 @@
     <div v-if="showEditModal" class="modal d-block" style="background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
+          <div class="modal-header modal-header-admin">
             <h5 class="modal-title">
               <i class="bi bi-pencil-square me-2"></i> Editar Producto
             </h5>
@@ -200,11 +200,11 @@
               </div>
 
               <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success btn-sm" :disabled="updatingProduct">
+                <button type="submit" class="btn btn-admin btn-sm" :disabled="updatingProduct">
                   <i class="bi me-1" :class="updatingProduct ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
                   {{ updatingProduct ? 'Actualizando...' : 'Guardar Cambios' }}
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" @click="closeEditModal" :disabled="updatingProduct">Cancelar</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @click="closeEditModal" :disabled="updatingProduct">Cancelar</button>
               </div>
             </form>
           </div>
@@ -424,19 +424,97 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.card-header-admin {
+  background: var(--color-surface, #1E1E1E);
+  color: #fff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 0;
+}
+
+.modal-header-admin {
+  background: var(--color-garnet, #6B1E2E);
+  color: #fff;
+}
+
+.modal-header-admin .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.btn-admin {
+  background: var(--color-garnet, #6B1E2E);
+  border-color: var(--color-garnet, #6B1E2E);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-admin:hover, .btn-admin:focus {
+  background: var(--color-garnet-dark, #4E1420);
+  border-color: var(--color-garnet-dark, #4E1420);
+  color: #fff;
+}
+
+.btn-admin:disabled {
+  background: var(--color-garnet, #6B1E2E);
+  opacity: 0.6;
+}
+
+.btn-admin-outline {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  background: transparent;
+  font-weight: 500;
+}
+
+.btn-admin-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-outline-admin {
+  border-color: var(--color-garnet, #6B1E2E);
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.btn-outline-admin:hover {
+  background: var(--color-garnet, #6B1E2E);
+  color: #fff;
+}
+
+.btn-ghost-sm {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.btn-ghost-sm:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.spinner-admin {
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.modal-content {
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
+  border: none;
+}
+
 .product-thumb {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border, #CECECE);
 }
 
 .clickable-row {
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.15s;
 }
 
 .clickable-row:hover {
-  background-color: rgba(0, 123, 255, 0.1);
+  background-color: rgba(107, 30, 46, 0.04) !important;
 }
 </style>
