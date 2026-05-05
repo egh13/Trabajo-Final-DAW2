@@ -6,7 +6,7 @@
       <div>
         <p class="section-overline">Nuestra selección</p>
         <h2 class="section-title fw-bold mb-0">
-          <i class="bi bi-star-fill text-accent me-2"></i>Productos Destacados
+          <i class="text-accent me-2"></i>Productos Destacados
         </h2>
       </div>
       <router-link to="/productos" class="btn btn-outline-dark btn-sm px-4 see-all-btn">
@@ -250,7 +250,7 @@ onMounted(async () => {
 /* ── Imagen ── */
 .product-img-wrap {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: linear-gradient(145deg, var(--color-cream-dark) 0%, #DDD4C4 100%);
 }

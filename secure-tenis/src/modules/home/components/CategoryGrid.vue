@@ -113,13 +113,12 @@ onMounted(async () => {
 /* ── Card ── */
 .category-card {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  align-items: center;
   gap: 0.75rem;
-  padding: 2rem 1.5rem;
-  border-radius: 1rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 0.85rem;
   text-decoration: none;
-  min-height: 180px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -139,19 +138,20 @@ onMounted(async () => {
 }
 
 .cat-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 9px;
   background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   color: #F4F4F2;
 }
 
 .cat-name {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #F4F4F2;
   flex: 1;
@@ -159,8 +159,8 @@ onMounted(async () => {
 
 .cat-arrow {
   color: rgba(240, 240, 240, 0.4);
-  font-size: 0.9rem;
-  align-self: flex-end;
+  font-size: 0.85rem;
+  flex-shrink: 0;
   transition: transform 0.2s, color 0.2s;
 }
 
