@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-down">
       <h2 class="fw-bold mb-0">Auditoría de Actividad</h2>      <div class="d-flex gap-2">
         <button class="btn btn-admin btn-sm" :disabled="exporting" @click="exportFile('csv')">
           <i class="bi bi-download me-1"></i> Exportar CSV
@@ -10,8 +10,7 @@
         </button>
       </div>
     </div>    
-    <!-- Filtros de búsqueda -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card border-0 shadow-sm mb-4" data-aos="fade-up" data-aos-delay="80">
       <div class="card-body">
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
@@ -53,8 +52,7 @@
           </div>
         </div>
       </div>
-    </div>    <!-- Tabla de logs -->
-    <div class="card border-0 shadow-sm">
+    </div>    <div class="card border-0 shadow-sm" data-aos="fade-up" data-aos-delay="160">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle">
           <thead class="table-dark">

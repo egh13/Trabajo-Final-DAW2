@@ -1,13 +1,19 @@
 <template>
   <div class="container-fluid px-0">
-    <div class="dashboard-hero mb-4">
+    <div class="dashboard-hero mb-4" data-aos="fade-down">
       <div>
         <h2 class="fw-bold mb-1">Bienvenido al Panel de Administración</h2>
         <p class="text-muted mb-0 small">Gestiona todos los aspectos de SecureTenis desde aquí.</p>
       </div>
     </div>
     <div class="row g-3">
-      <div class="col-lg-4 col-md-6" v-for="card in cards" :key="card.to">
+      <div
+        class="col-lg-4 col-md-6"
+        v-for="(card, index) in cards"
+        :key="card.to"
+        data-aos="fade-up"
+        :data-aos-delay="index * 80"
+      >
         <router-link :to="card.to" class="text-decoration-none">
           <div class="module-card h-100">
             <div class="card-body d-flex flex-column p-4">
