@@ -2,30 +2,41 @@
   <div class="admin-layout">
     <aside class="admin-sidebar">
       <div class="sidebar-header">
-        <h2>🛡️ Panel de Seguridad</h2>
-      </div>
-      <nav class="sidebar-nav">
+        <h2>Panel de Administración</h2>
+      </div>      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">General</div>
         <router-link
-          v-for="item in menuItems"
+          v-for="item in generalItems"
           :key="item.to"
           :to="item.to"
           class="sidebar-link"
           exact-active-class="active"
         >
-          <span class="sidebar-icon">{{ item.icon }}</span>
+          <i class="bi sidebar-icon" :class="item.icon"></i>
+          <span class="sidebar-label">{{ item.label }}</span>
+        </router-link>
+
+        <div class="sidebar-section-label mt-2">Seguridad</div>
+        <router-link
+          v-for="item in seguridadItems"
+          :key="item.to"
+          :to="item.to"
+          class="sidebar-link"
+          exact-active-class="active"
+        >
+          <i class="bi sidebar-icon" :class="item.icon"></i>
           <span class="sidebar-label">{{ item.label }}</span>
         </router-link>
       </nav>
-      <div class="sidebar-footer">
-        <router-link to="/" class="sidebar-link back-link">
-          <span class="sidebar-icon">🏠</span>
+      <div class="sidebar-footer">        <router-link to="/" class="sidebar-link back-link">
+          <i class="bi bi-house sidebar-icon"></i>
           <span class="sidebar-label">Volver a la tienda</span>
         </router-link>
       </div>
     </aside>
     <main class="admin-main">
       <header class="admin-topbar">
-        <h1>{{ currentTitle }}</h1>
+        <h1>SecureTenis Administración</h1>
         <div class="topbar-user">
           <span>{{ userName }}</span>
           <span class="role-badge">{{ userRole }}</span>
@@ -49,14 +60,14 @@ const authStore = useAuthStore()
 const userName = computed(() => authStore.userName)
 const userRole = computed(() => authStore.userRole)
 
-// Ítems base accesibles para admin y analista
+// Ítems del menú agrupados por sección
 const allMenuItems = [
-  { to: '/admin', icon: '📊', label: 'Dashboard', adminOnly: false },
-  { to: '/admin/estado', icon: '🖥️', label: 'Estado General', adminOnly: false },
-  { to: '/admin/autenticacion', icon: '🔐', label: 'Autenticación y Accesos', adminOnly: false },
-  { to: '/admin/auditoria', icon: '📋', label: 'Auditoría de Actividad', adminOnly: false },
-  { to: '/admin/usuarios', icon: '👥', label: 'Gestión de Usuarios', adminOnly: true },
-  { to: '/admin/productos', icon: '📦', label: 'Gestión de Productos', adminOnly: true },
+  { to: '/admin',              icon: 'bi-speedometer2', label: 'Dashboard',               section: 'general',   adminOnly: false },
+  { to: '/admin/usuarios',     icon: 'bi-people',       label: 'Gestión de Usuarios',      section: 'general',   adminOnly: true  },
+  { to: '/admin/productos',    icon: 'bi-box-seam',     label: 'Gestión de Productos',     section: 'general',   adminOnly: true  },
+  { to: '/admin/estado',       icon: 'bi-display',      label: 'Estado General',           section: 'seguridad', adminOnly: false },
+  { to: '/admin/autenticacion',icon: 'bi-shield-lock',  label: 'Autenticación y Accesos',  section: 'seguridad', adminOnly: false },
+  { to: '/admin/auditoria',    icon: 'bi-journal-text', label: 'Auditoría de Actividad',   section: 'seguridad', adminOnly: false },
 ]
 
 // Filtra los ítems según el rol del usuario autenticado
@@ -64,10 +75,9 @@ const menuItems = computed(() =>
   allMenuItems.filter(item => !item.adminOnly || authStore.hasAnyRole('admin'))
 )
 
-const currentTitle = computed(() => {
-  const match = menuItems.value.find((item) => item.to === route.path)
-  return match?.label ?? 'Panel de Seguridad'
-})
+// Agrupa los ítems visibles por sección
+const generalItems   = computed(() => menuItems.value.filter(i => i.section === 'general'))
+const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 'seguridad'))
 </script>
 
 <style scoped>
@@ -110,6 +120,15 @@ const currentTitle = computed(() => {
   flex: 1;
   padding: 0.75rem 0;
   overflow-y: auto;
+}
+
+.sidebar-section-label {
+  padding: 0.5rem 1.25rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .sidebar-link {
@@ -162,7 +181,7 @@ const currentTitle = computed(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: #fff;
+  background: #eeecec;
   border-bottom: 2px solid rgba(34, 197, 94, 0.2);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }

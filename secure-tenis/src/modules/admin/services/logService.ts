@@ -42,7 +42,7 @@ export const downloadExport = async (format: 'csv' | 'pdf', filters: UserLogFilt
   URL.revokeObjectURL(url)
 }
 
-// Obtiene las estadísticas de autenticación para el panel de seguridad
+// Obtiene las estadísticas de autenticación para el panel de administración
 export const fetchAuthStats = async (): Promise<AuthStats> => {
   const res = await api.get<AuthStats>('/logs/auth-stats')
   if (!res.data) throw new Error('Respuesta inesperada del servidor')

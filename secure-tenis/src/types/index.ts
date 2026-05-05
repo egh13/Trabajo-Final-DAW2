@@ -116,7 +116,7 @@ export interface PaginatedLogs {
   pageSize: number
 }
 
-// Estadísticas de autenticación del panel de seguridad
+// Estadísticas de autenticación del panel de administración
 export interface AuthStats {
   totalLogins30d: number
   failedAttempts30d: number
