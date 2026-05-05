@@ -4,13 +4,12 @@
       <div class="sidebar-header">
         <h2>🛡️ Panel de Seguridad</h2>
       </div>
-      <nav class="sidebar-nav">
-        <router-link
+      <nav class="sidebar-nav">        <router-link
           v-for="item in menuItems"
           :key="item.to"
           :to="item.to"
           class="sidebar-link"
-          active-class="active"
+          :class="{ active: route.path === item.to }"
         >
           <span class="sidebar-icon">{{ item.icon }}</span>
           <span class="sidebar-label">{{ item.label }}</span>
@@ -23,9 +22,9 @@
         </router-link>
       </div>
     </aside>
-    <main class="admin-main">
+    <main class="admin-main">      
       <header class="admin-topbar">
-        <h1>{{ currentTitle }}</h1>
+        <h1>Panel de Administración</h1>
         <div class="topbar-user">
           <span>{{ userName }}</span>
           <span class="role-badge">{{ userRole }}</span>
@@ -62,11 +61,6 @@ const allMenuItems = [
 const menuItems = computed(() =>
   allMenuItems.filter(item => !item.adminOnly || authStore.hasAnyRole('admin'))
 )
-
-const currentTitle = computed(() => {
-  const match = menuItems.value.find((item) => item.to === route.path)
-  return match?.label ?? 'Panel de Seguridad'
-})
 </script>
 
 <style scoped>
