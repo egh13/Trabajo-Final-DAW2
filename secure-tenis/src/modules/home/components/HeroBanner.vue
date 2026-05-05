@@ -9,8 +9,8 @@
         </div>
         <span class="hero-badge">Nueva Colección 2026</span>
         <h1 class="hero-title">
-          Viste con<br>
-          <span class="hero-title-accent">actitud propia</span>
+          Mejores productos<br>
+          <span class="hero-title-accent">a un mejor precio</span>
         </h1>
         <p class="hero-desc">
           Zapatillas, ropa y accesorios seleccionados para quienes no se conforman con lo ordinario.
@@ -45,7 +45,7 @@ const emit = defineEmits<{
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
 
-/* ── Logo hero ── */
+/* ── Logo ── */
 .hero-logo {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -55,12 +55,10 @@ const emit = defineEmits<{
   margin-bottom: 1.5rem;
   user-select: none;
 }
-.hero-logo-secure {
-  color: #F4F4F2;
-}
-.hero-logo-tenis {
-  color: var(--color-garnet);
-}
+.hero-logo-secure { color: #F4F4F2; }
+.hero-logo-tenis  { color: var(--color-garnet); }
+
+/* ── Banner ── */
 .hero-banner {
   position: relative;
   background-color: #1E1E1E;
@@ -75,7 +73,6 @@ const emit = defineEmits<{
   overflow: hidden;
 }
 
-/* Halo de granate en la esquina derecha (pseudo-elemento, no degradado de fondo) */
 .hero-banner::after {
   content: '';
   position: absolute;
@@ -89,7 +86,7 @@ const emit = defineEmits<{
   pointer-events: none;
 }
 
-/* ── Split ── */
+/* ── Grid ── */
 .hero-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -140,9 +137,7 @@ const emit = defineEmits<{
   letter-spacing: -0.02em;
 }
 
-.hero-title-accent {
-  color: #CECECE;
-}
+.hero-title-accent { color: #CECECE; }
 
 .hero-desc {
   font-size: 1.05rem;
@@ -193,11 +188,9 @@ const emit = defineEmits<{
   border-color: rgba(200, 200, 200, 0.55);
 }
 
-/* ── Derecha / Imagen ── */
+/* ── Derecha ── */
 .hero-right {
-  /* sale del padding del grid y llega al borde derecho del banner */
   margin-right: -3.5rem;
-  margin-bottom: 0;
   align-self: stretch;
   display: flex;
   align-items: flex-end;
@@ -206,11 +199,9 @@ const emit = defineEmits<{
 }
 
 .hero-image-wrap {
-  position: relative;
   width: 100%;
   height: 100%;
   min-height: 260px;
-  /* Máscara: disuelve solo por la izquierda y por abajo; derecha sin recorte */
   -webkit-mask-image:
     linear-gradient(to bottom, #000 55%, transparent 100%),
     linear-gradient(to right,  transparent 0%, #000 22%, #000 100%);
@@ -229,15 +220,5 @@ const emit = defineEmits<{
   display: block;
   mix-blend-mode: luminosity;
   filter: contrast(1.05) brightness(0.95);
-}
-
-/* ── (estilos del visual decorativo eliminados) ── */
-.visual-dot--1 { top: 14%;  right: 17%; animation: dot-pulse 3s ease-in-out infinite; }
-.visual-dot--2 { bottom: 19%; left: 13%; animation: dot-pulse 3s ease-in-out infinite 1s; }
-.visual-dot--3 { top: 54%; right: 7%; width: 6px; height: 6px; animation: dot-pulse 3s ease-in-out infinite 2s; }
-
-@keyframes dot-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50%       { transform: scale(1.45); opacity: 0.85; }
 }
 </style>

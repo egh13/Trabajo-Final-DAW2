@@ -3,11 +3,9 @@
     <div class="nav-inner">
 
       <router-link class="nav-brand" to="/">
-        <span class="brand-mark">ST</span>
-        <span class="brand-divider" />
-        <span class="brand-text">
-          <span class="brand-light">Secure</span><span class="brand-bold">Tenis</span>
-        </span>
+        <div class="brand-logo-circle">
+          <img :src="logoUrl" alt="SecureTenis" class="brand-logo" />
+        </div>
       </router-link>
 
       <nav class="nav-links" :class="{ 'mobile-open': mobileOpen }">
@@ -74,6 +72,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import logoUrl from '@/assets/images/Logo.png'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cartStore'
@@ -218,41 +217,31 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
   text-decoration: none;
   transition: opacity 0.2s;
   flex-shrink: 0;
 }
 .nav-brand:hover { opacity: 0.82; }
 
-.brand-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--color-garnet);
-  color: var(--color-cream);
-  font-weight: 900;
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+/*-Logo--*/ 
+.brand-logo-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(107, 30, 46, 0.4);
-  flex-shrink: 0;
 }
 
-.brand-divider {
-  width: 1px;
-  height: 18px;
-  background: rgba(200, 200, 200, 0.2);
+.brand-logo {
+  width: 115%;
+  height: 115%;
+  object-fit: cover;
+  object-position: 45% 65%;
+  display: block;
 }
-
-.brand-text {
-  font-size: 1.05rem;
-  line-height: 1;
-}
-.brand-light { color: rgba(200, 200, 200, 0.6); font-weight: 400; }
-.brand-bold  { color: #F4F4F2;                  font-weight: 800; }
 
 /* ── Derecha ── */
 .nav-right {
