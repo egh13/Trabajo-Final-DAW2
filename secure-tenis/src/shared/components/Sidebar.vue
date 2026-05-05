@@ -54,7 +54,7 @@
 
           <router-link
             v-if="authStore.hasAnyRole('admin', 'analista')"
-            class="nav-link nav-link--admin"
+            class="nav-link"
             to="/admin"
             active-class="nav-link--active"
             @click="closeOnMobile"

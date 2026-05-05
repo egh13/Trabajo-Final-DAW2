@@ -10,7 +10,7 @@
           :key="item.to"
           :to="item.to"
           class="sidebar-link"
-          active-class="active"
+          exact-active-class="active"
         >
           <span class="sidebar-icon">{{ item.icon }}</span>
           <span class="sidebar-label">{{ item.label }}</span>
@@ -56,6 +56,7 @@ const allMenuItems = [
   { to: '/admin/autenticacion', icon: '🔐', label: 'Autenticación y Accesos', adminOnly: false },
   { to: '/admin/auditoria', icon: '📋', label: 'Auditoría de Actividad', adminOnly: false },
   { to: '/admin/usuarios', icon: '👥', label: 'Gestión de Usuarios', adminOnly: true },
+  { to: '/admin/productos', icon: '📦', label: 'Gestión de Productos', adminOnly: true },
 ]
 
 // Filtra los ítems según el rol del usuario autenticado
