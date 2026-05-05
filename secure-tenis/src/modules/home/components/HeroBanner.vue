@@ -4,6 +4,9 @@
 
       <!-- Izquierda: texto -->
       <div class="hero-left" data-aos="fade-right">
+        <div class="hero-logo">
+          <span class="hero-logo-secure">Secure</span><span class="hero-logo-tenis">Tenis</span>
+        </div>
         <span class="hero-badge">Nueva Colección 2026</span>
         <h1 class="hero-title">
           Viste con<br>
@@ -22,17 +25,10 @@
         </div>
       </div>
 
-      <!-- Derecha: visual decorativo -->
+      <!-- Derecha: imagen de modelo -->
       <div class="hero-right" data-aos="fade-left" data-aos-delay="150">
-        <div class="hero-visual">
-          <div class="visual-ring visual-ring--outer" />
-          <div class="visual-ring visual-ring--inner" />
-          <div class="visual-center">
-            <span class="visual-monogram">ST</span>
-          </div>
-          <div class="visual-dot visual-dot--1" />
-          <div class="visual-dot visual-dot--2" />
-          <div class="visual-dot visual-dot--3" />
+        <div class="hero-image-wrap">
+          <img src="@/assets/images/PesonaConGafas.jpg" alt="Modelo con gafas" class="hero-model-img" />
         </div>
       </div>
 
@@ -47,22 +43,60 @@ const emit = defineEmits<{
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
+
+/* ── Logo hero ── */
+.hero-logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+.hero-logo-secure {
+  color: #F4F4F2;
+}
+.hero-logo-tenis {
+  color: var(--color-garnet);
+}
 .hero-banner {
-  background:
-    radial-gradient(ellipse at 70% 50%, rgba(107, 30, 46, 0.25) 0%, transparent 60%),
-    linear-gradient(135deg, #1E1E1E 0%, #282828 100%);
+  position: relative;
+  background-color: #1E1E1E;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 22px,
+    rgba(200, 200, 200, 0.035) 22px,
+    rgba(200, 200, 200, 0.035) 23px
+  );
   border: 1px solid rgba(200, 200, 200, 0.1);
   overflow: hidden;
+}
+
+/* Halo de granate en la esquina derecha (pseudo-elemento, no degradado de fondo) */
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 30, 46, 0.22) 0%, transparent 70%);
+  pointer-events: none;
 }
 
 /* ── Split ── */
 .hero-split {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
-  min-height: 460px;
-  padding: 3rem 3.5rem;
-  gap: 2rem;
+  align-items: end;
+  min-height: 260px;
+  padding: 0 0 0 3.5rem;
+  gap: 0;
 }
 
 @media (max-width: 900px) {
@@ -78,6 +112,11 @@ const emit = defineEmits<{
 }
 
 /* ── Izquierda ── */
+.hero-left {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
 .hero-badge {
   display: inline-block;
   padding: 0.3rem 1rem;
@@ -154,68 +193,45 @@ const emit = defineEmits<{
   border-color: rgba(200, 200, 200, 0.55);
 }
 
-/* ── Derecha / Visual ── */
+/* ── Derecha / Imagen ── */
 .hero-right {
+  /* sale del padding del grid y llega al borde derecho del banner */
+  margin-right: -3.5rem;
+  margin-bottom: 0;
+  align-self: stretch;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
 }
 
-.hero-visual {
+.hero-image-wrap {
   position: relative;
-  width: 300px;
-  height: 300px;
-}
-
-.visual-ring {
-  position: absolute;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.visual-ring--outer {
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(200, 200, 200, 0.25);
-}
-.visual-ring--inner {
-  width: 66%;
-  height: 66%;
-  border: 1px solid rgba(200, 200, 200, 0.12);
-  background: radial-gradient(circle, rgba(107, 30, 46, 0.12) 0%, transparent 70%);
-}
-
-.visual-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
-  border-radius: 18px;
-  background: var(--color-garnet);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 40px rgba(107, 30, 46, 0.45), 0 8px 32px rgba(0, 0, 0, 0.3);
+  min-height: 260px;
+  /* Máscara: disuelve solo por la izquierda y por abajo; derecha sin recorte */
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 55%, transparent 100%),
+    linear-gradient(to right,  transparent 0%, #000 22%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 55%, transparent 100%),
+    linear-gradient(to right,  transparent 0%, #000 22%, #000 100%);
+  mask-composite: intersect;
 }
 
-.visual-monogram {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--color-cream);
-  letter-spacing: 0.04em;
+.hero-model-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  mix-blend-mode: luminosity;
+  filter: contrast(1.05) brightness(0.95);
 }
 
-.visual-dot {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #CECECE;
-  opacity: 0.65;
-}
+/* ── (estilos del visual decorativo eliminados) ── */
 .visual-dot--1 { top: 14%;  right: 17%; animation: dot-pulse 3s ease-in-out infinite; }
 .visual-dot--2 { bottom: 19%; left: 13%; animation: dot-pulse 3s ease-in-out infinite 1s; }
 .visual-dot--3 { top: 54%; right: 7%; width: 6px; height: 6px; animation: dot-pulse 3s ease-in-out infinite 2s; }
