@@ -125,3 +125,12 @@ export interface AuthStats {
   failedAttempts: { time: string; email: string; ip: string; reason: string }[]
   chartData: { day: string; ok: number; fail: number }[]
 }
+
+// Estadísticas generales del sistema
+export interface SystemStats {
+  backend: { status: string; latencyMs: number; version: string }
+  database: { status: string; engine: string; tables: number }
+  counts: { users: number; products: number; orders: number; logs: number; categories: number }
+  logsByLevel: { level: string; count: number }[]
+  logsByModule: { module: string; count: number }[]
+}

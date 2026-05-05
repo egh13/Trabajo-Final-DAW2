@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import PDFDocument from 'pdfkit'
-import * as logService from '../services/logService'
-import type { ApiResponse, PaginatedLogs, UserLogFilters, LogLevel } from '../types'
+import * as logService from '../../services/admin/logService'
+import type { ApiResponse, PaginatedLogs, UserLogFilters, LogLevel } from '../../types'
 
 // Extrae los filtros de la query string de la petición
 const extractFilters = (req: Request): UserLogFilters => ({
@@ -11,16 +11,6 @@ const extractFilters = (req: Request): UserLogFilters => ({
   from: req.query.from as string | undefined,
   to: req.query.to as string | undefined,
 })
-
-// Devuelve estadísticas de autenticación calculadas desde los logs
-export const getAuthStats = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const stats = await logService.getAuthStats()
-    res.json({ success: true, data: stats } as ApiResponse<typeof stats>)
-  } catch (error) {
-    next(error)
-  }
-}
 
 // Devuelve el listado paginado de logs de auditoría con filtros opcionales
 export const getLogs = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import * as orderService from '../services/orderService'
-import { createLog, getClientIp } from '../services/logService'
+import { createLog, getClientIp } from '../services/admin/logService'
 import type { ApiResponse, Order } from '../types'
 
 export const getOrders = async (req: Request, res: Response): Promise<void> => {

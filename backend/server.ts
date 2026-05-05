@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import app from './src/app';
 import { prisma } from './src/config/prisma';
-import { createLog } from './src/services/logService';
+import { createLog } from './src/services/admin/logService';
 
 dotenv.config();
 

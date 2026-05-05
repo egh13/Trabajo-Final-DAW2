@@ -28,7 +28,8 @@
           <span class="sidebar-label">{{ item.label }}</span>
         </router-link>
       </nav>
-      <div class="sidebar-footer">        <router-link to="/" class="sidebar-link back-link">
+      <div class="sidebar-footer">        
+          <router-link to="/" class="sidebar-link back-link">
           <i class="bi bi-house sidebar-icon"></i>
           <span class="sidebar-label">Volver a la tienda</span>
         </router-link>
