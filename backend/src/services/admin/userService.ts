@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '../../config/prisma'
 import type { UserPublic } from '../../types'
 
-const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
 const roleMapToDB = {
   'cliente': 'CLIENT',

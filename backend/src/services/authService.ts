@@ -4,7 +4,7 @@ import { prisma } from '../config/prisma'
 import { jwtConfig } from '../config/jwt'
 import type { User, UserPublic, JwtPayload, RegisterBody, LoginBody } from '../types'
 
-const SALT_ROUNDS = process.env.SALT_ROUNDS || 10;
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS) || 10;
 
 const roleMapToDB = {
   'cliente': 'CLIENT',

@@ -1,4 +1,11 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import { prisma } from "../../config/prisma";
+
+// Versión de la aplicación leída desde package.json
+const { version } = JSON.parse(
+    readFileSync(join(__dirname, "../../../package.json"), "utf-8")
+) as { version: string };
 
 // Estadísticas de autenticación calculadas desde los logs reales
 interface AuthStats {
@@ -160,9 +167,18 @@ const getSystemStats = async (): Promise<SystemStats> => {
         prisma.order.count(),
         prisma.userLog.count(),
         prisma.category.count()
-    ]);
-
+    ]);   
+    
     const latencyMs = Date.now() - startTime;
+
+    // Numero de tablas de la db
+    // Consultar directamente haciendo una raw query
+    const tablesResult = await prisma.$queryRaw<{ total: bigint }[]>`
+        SELECT COUNT(*) AS total
+        FROM information_schema.TABLES
+        WHERE TABLE_SCHEMA = DATABASE()
+    `;
+    const tables = Number(tablesResult[0]?.total ?? 0);
 
     // Distribución de logs por nivel
     const levelGroups = await prisma.userLog.groupBy({
@@ -187,8 +203,8 @@ const getSystemStats = async (): Promise<SystemStats> => {
     }));
 
     return {
-        backend: { status: "Operativo", latencyMs, version: "1.0.0" },
-        database: { status: "Conectada", engine: "MySQL", tables: 7 },
+        backend: { status: "Operativo", latencyMs, version },
+        database: { status: "Conectada", engine: "MySQL", tables },
         counts: { users, products, orders, logs, categories },
         logsByLevel,
         logsByModule

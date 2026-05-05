@@ -1,4 +1,7 @@
 {
+    "name": "secure-tenis-back",
+    "version": "1.1.0",
+    "description": "",
     "scripts": {
         "dev": "npx nodemon --watch src --ext ts --legacy-watch --exec npx ts-node server.ts",
         "build": "npx prisma generate && tsc --outDir dist",

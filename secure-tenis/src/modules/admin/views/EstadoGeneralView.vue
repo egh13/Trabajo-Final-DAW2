@@ -136,10 +136,10 @@ const error = ref('')
 
 // Colores por nivel de log
 const levelColors: Record<string, string> = {
-  info: '#22c55e',
-  warn: '#f59e0b',
-  error: '#ef4444',
-  debug: '#3b82f6',
+  INFO: '#22c55e',
+  WARNING: '#f59e0b',
+  ERROR: '#ef4444',
+  DEBUG: '#3b82f6',
 }
 
 // Tarjetas de contadores
@@ -174,7 +174,7 @@ const levelChartData = computed(() => ({
   datasets: [
     {
       data: stats.value?.logsByLevel.map((l) => l.count) ?? [],
-      backgroundColor: stats.value?.logsByLevel.map((l) => levelColors[l.level] ?? '#6b7280') ?? [],
+      backgroundColor: stats.value?.logsByLevel.map((l) => levelColors[l.level.toUpperCase()] ?? '#6b7280') ?? [],
     },
   ],
 }))
