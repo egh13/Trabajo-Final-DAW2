@@ -50,8 +50,8 @@ const emit = defineEmits<{
 .hero-banner {
   background:
     radial-gradient(ellipse at 70% 50%, rgba(107, 30, 46, 0.25) 0%, transparent 60%),
-    linear-gradient(135deg, var(--color-espresso) 0%, #2A1810 100%);
-  border: 1px solid rgba(201, 170, 130, 0.1);
+    linear-gradient(135deg, #1E1E1E 0%, #282828 100%);
+  border: 1px solid rgba(200, 200, 200, 0.1);
   overflow: hidden;
 }
 
@@ -80,36 +80,36 @@ const emit = defineEmits<{
 /* ── Izquierda ── */
 .hero-badge {
   display: inline-block;
-  padding: 0.25rem 0.9rem;
+  padding: 0.3rem 1rem;
   border-radius: 50px;
-  border: 1px solid rgba(107, 30, 46, 0.45);
-  background: rgba(107, 30, 46, 0.16);
-  color: rgba(245, 240, 232, 0.8);
+  border: 1px solid rgba(200, 200, 200, 0.35);
+  background: rgba(200, 200, 200, 0.09);
+  color: #F4F4F2;
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.35rem;
 }
 
 .hero-title {
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   font-weight: 800;
   line-height: 1.1;
-  color: var(--color-cream);
-  margin-bottom: 1.2rem;
+  color: #F4F4F2;
+  margin-bottom: 1.25rem;
   letter-spacing: -0.02em;
 }
 
 .hero-title-accent {
-  color: var(--color-garnet);
+  color: #CECECE;
 }
 
 .hero-desc {
-  font-size: 1rem;
-  color: rgba(201, 170, 130, 0.65);
-  line-height: 1.65;
-  max-width: 400px;
+  font-size: 1.05rem;
+  color: rgba(210, 210, 210, 0.82);
+  line-height: 1.7;
+  max-width: 420px;
   margin-bottom: 2rem;
 }
 
@@ -140,8 +140,8 @@ const emit = defineEmits<{
 .btn-hero-ghost {
   padding: 0.7rem 1.75rem;
   border-radius: 50px;
-  border: 1px solid rgba(201, 170, 130, 0.22);
-  color: rgba(245, 240, 232, 0.65);
+  border: 1px solid rgba(200, 200, 200, 0.35);
+  color: rgba(240, 240, 240, 0.85);
   background: transparent;
   font-size: 0.9rem;
   font-weight: 500;
@@ -149,9 +149,9 @@ const emit = defineEmits<{
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .btn-hero-ghost:hover {
-  background: rgba(201, 170, 130, 0.08);
-  color: var(--color-cream);
-  border-color: rgba(201, 170, 130, 0.4);
+  background: rgba(255, 255, 255, 0.07);
+  color: #F4F4F2;
+  border-color: rgba(200, 200, 200, 0.55);
 }
 
 /* ── Derecha / Visual ── */
@@ -177,13 +177,13 @@ const emit = defineEmits<{
 .visual-ring--outer {
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(201, 170, 130, 0.15);
+  border: 1px solid rgba(200, 200, 200, 0.25);
 }
 .visual-ring--inner {
   width: 66%;
   height: 66%;
-  border: 1px solid rgba(107, 30, 46, 0.28);
-  background: radial-gradient(circle, rgba(107, 30, 46, 0.1) 0%, transparent 70%);
+  border: 1px solid rgba(200, 200, 200, 0.12);
+  background: radial-gradient(circle, rgba(107, 30, 46, 0.12) 0%, transparent 70%);
 }
 
 .visual-center {
@@ -213,8 +213,8 @@ const emit = defineEmits<{
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--color-sand);
-  opacity: 0.5;
+  background: #CECECE;
+  opacity: 0.65;
 }
 .visual-dot--1 { top: 14%;  right: 17%; animation: dot-pulse 3s ease-in-out infinite; }
 .visual-dot--2 { bottom: 19%; left: 13%; animation: dot-pulse 3s ease-in-out infinite 1s; }

@@ -114,10 +114,10 @@ const handleLogin = async () => {
 }
 
 .auth-card {
-  background: rgba(28, 16, 8, 0.92);
+  background: rgba(30, 30, 30, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(201, 170, 130, 0.12);
+  border: 1px solid rgba(200, 200, 200, 0.12);
   border-radius: 1.25rem;
   padding: 2rem 2.25rem;
   box-shadow:
@@ -126,39 +126,39 @@ const handleLogin = async () => {
 }
 
 .auth-subtitle {
-  color: rgba(201, 170, 130, 0.6);
+  color: rgba(200, 200, 200, 0.6);
   font-size: 0.875rem;
 }
 
 .auth-label {
   display: block;
-  color: rgba(245, 240, 232, 0.9);
+  color: rgba(240, 240, 240, 0.9);
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.4rem;
 }
 
 .auth-addon {
-  background: rgba(201, 170, 130, 0.08);
-  border-color: rgba(201, 170, 130, 0.22);
-  color: rgba(201, 170, 130, 0.8);
+  background: rgba(200, 200, 200, 0.07);
+  border-color: rgba(200, 200, 200, 0.22);
+  color: rgba(200, 200, 200, 0.8);
 }
 
 .auth-input {
-  background: rgba(201, 170, 130, 0.07);
-  border-color: rgba(201, 170, 130, 0.2);
-  color: var(--color-cream);
+  background: rgba(200, 200, 200, 0.06);
+  border-color: rgba(200, 200, 200, 0.2);
+  color: #F4F4F2;
 }
 
 .auth-input:focus {
-  background: rgba(201, 170, 130, 0.12);
+  background: rgba(200, 200, 200, 0.1);
   border-color: var(--color-garnet);
-  color: var(--color-cream);
+  color: #F4F4F2;
   box-shadow: 0 0 0 3px rgba(107, 30, 46, 0.25);
 }
 
 .auth-input::placeholder {
-  color: rgba(201, 170, 130, 0.4);
+  color: rgba(200, 200, 200, 0.4);
 }
 
 .input-group:has(.is-invalid) .auth-addon {
@@ -170,6 +170,6 @@ const handleLogin = async () => {
 }
 
 .auth-footer {
-  color: rgba(201, 170, 130, 0.5);
+  color: rgba(200, 200, 200, 0.5);
 }
 </style>

@@ -156,7 +156,7 @@ const logout = async () => {
   display: flex;
   flex-direction: column;
   background: var(--color-espresso);
-  border-right: 1px solid rgba(201, 170, 130, 0.1);
+  border-right: 1px solid rgba(200, 200, 200, 0.1);
   box-shadow: 6px 0 40px rgba(0, 0, 0, 0.45);
   overflow-y: auto;
   overflow-x: hidden;
@@ -180,7 +180,7 @@ const logout = async () => {
   padding: 0.9rem 1.2rem 0.35rem;
 }
 .nav-section-title span {
-  color: rgba(201, 170, 130, 0.45);
+  color: rgba(200, 200, 200, 0.45);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -190,7 +190,7 @@ const logout = async () => {
 .section-line {
   flex: 1;
   height: 1px;
-  background: rgba(201, 170, 130, 0.1);
+  background: rgba(200, 200, 200, 0.1);
 }
 
 .nav-link {
@@ -200,7 +200,7 @@ const logout = async () => {
   padding: 0.65rem 1rem;
   margin: 0 0.5rem;
   border-radius: 10px;
-  color: rgba(201, 170, 130, 0.55);
+  color: rgba(200, 200, 200, 0.55);
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 500;
@@ -208,12 +208,12 @@ const logout = async () => {
 }
 .nav-link:hover {
   background: rgba(107, 30, 46, 0.1);
-  color: rgba(245, 240, 232, 0.9);
+  color: rgba(240, 240, 240, 0.9);
   transform: translateX(3px);
 }
 .nav-link--active {
   background: rgba(107, 30, 46, 0.18) !important;
-  color: var(--color-cream) !important;
+  color: #F4F4F2 !important;
   box-shadow: inset 3px 0 0 var(--color-garnet);
 }
 
@@ -243,13 +243,13 @@ const logout = async () => {
 }
 .new-badge {
   background: var(--color-garnet);
-  color: var(--color-cream);
+  color: #F4F4F2;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 .cart-badge {
   background: var(--color-garnet);
-  color: var(--color-cream);
+  color: #F4F4F2;
   min-width: 18px;
   text-align: center;
 }
@@ -257,7 +257,7 @@ const logout = async () => {
 /* ── Footer ── */
 .sidebar-footer {
   padding: 0.75rem;
-  border-top: 1px solid rgba(201, 170, 130, 0.1);
+  border-top: 1px solid rgba(200, 200, 200, 0.1);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -268,9 +268,9 @@ const logout = async () => {
   align-items: center;
   gap: 0.6rem;
   padding: 0.55rem 0.7rem;
-  background: rgba(201, 170, 130, 0.05);
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 10px;
-  border: 1px solid rgba(201, 170, 130, 0.09);
+  border: 1px solid rgba(200, 200, 200, 0.09);
 }
 .user-avatar {
   width: 32px;
@@ -292,7 +292,7 @@ const logout = async () => {
   flex-direction: column;
 }
 .user-name {
-  color: var(--color-cream);
+  color: #F4F4F2;
   font-size: 0.8rem;
   font-weight: 600;
   white-space: nowrap;
@@ -300,21 +300,21 @@ const logout = async () => {
   text-overflow: ellipsis;
 }
 .user-role {
-  color: rgba(201, 170, 130, 0.5);
+  color: rgba(200, 200, 200, 0.5);
   font-size: 0.65rem;
   text-transform: capitalize;
 }
 .logout-btn {
   background: transparent;
   border: none;
-  color: rgba(201, 170, 130, 0.5);
+  color: rgba(200, 200, 200, 0.5);
   font-size: 0.95rem;
   cursor: pointer;
   padding: 0.3rem;
   border-radius: 7px;
   transition: color 0.2s, background 0.2s;
 }
-.logout-btn:hover { color: var(--color-cream); background: rgba(107, 30, 46, 0.15); }
+.logout-btn:hover { color: #F4F4F2; background: rgba(107, 30, 46, 0.15); }
 
 .footer-btn {
   display: flex;
@@ -332,15 +332,15 @@ const logout = async () => {
 
 .footer-btn--login {
   background: var(--color-garnet);
-  color: var(--color-cream);
+  color: #F4F4F2;
   box-shadow: 0 3px 12px rgba(107, 30, 46, 0.35);
 }
 .footer-btn--login:hover { box-shadow: 0 6px 20px rgba(107, 30, 46, 0.55); filter: brightness(1.1); }
 
 .footer-btn--register {
-  background: rgba(201, 170, 130, 0.07);
-  color: rgba(245, 240, 232, 0.6);
-  border: 1px solid rgba(201, 170, 130, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(240, 240, 240, 0.6);
+  border: 1px solid rgba(200, 200, 200, 0.12);
 }
-.footer-btn--register:hover { background: rgba(201, 170, 130, 0.12); color: var(--color-cream); }
+.footer-btn--register:hover { background: rgba(255, 255, 255, 0.09); color: #F4F4F2; }
 </style>

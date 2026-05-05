@@ -129,10 +129,10 @@ onMounted(async () => {
 }
 
 .category-card--0 {
-  background: linear-gradient(145deg, var(--color-espresso) 0%, #2A1810 100%);
+  background: linear-gradient(145deg, #1E1E1E 0%, #282828 100%);
 }
 .category-card--1 {
-  background: linear-gradient(145deg, var(--color-coffee) 0%, #4A2A1A 100%);
+  background: linear-gradient(145deg, #3A2820 0%, #4A3530 100%);
 }
 .category-card--2 {
   background: linear-gradient(145deg, var(--color-garnet) 0%, var(--color-garnet-dark) 100%);
@@ -142,23 +142,23 @@ onMounted(async () => {
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: rgba(245, 240, 232, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.3rem;
-  color: var(--color-cream);
+  color: #F4F4F2;
 }
 
 .cat-name {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--color-cream);
+  color: #F4F4F2;
   flex: 1;
 }
 
 .cat-arrow {
-  color: rgba(245, 240, 232, 0.4);
+  color: rgba(240, 240, 240, 0.4);
   font-size: 0.9rem;
   align-self: flex-end;
   transition: transform 0.2s, color 0.2s;
@@ -166,6 +166,6 @@ onMounted(async () => {
 
 .category-card:hover .cat-arrow {
   transform: translateX(5px);
-  color: var(--color-cream);
+  color: #F4F4F2;
 }
 </style>

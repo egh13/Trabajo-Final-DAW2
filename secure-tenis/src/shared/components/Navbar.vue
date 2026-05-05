@@ -127,7 +127,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   z-index: 300;
   height: var(--navbar-height, 60px);
   background: var(--color-espresso);
-  border-bottom: 1px solid rgba(201, 170, 130, 0.12);
+  border-bottom: 1px solid rgba(200, 200, 200, 0.12);
   box-shadow: 0 1px 0 rgba(107, 30, 46, 0.15), 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -157,17 +157,17 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   font-size: 0.85rem;
   font-weight: 500;
   text-decoration: none;
-  color: rgba(201, 170, 130, 0.65);
+  color: rgba(200, 200, 200, 0.65);
   letter-spacing: 0.02em;
   transition: background 0.2s, color 0.2s;
   white-space: nowrap;
 }
 .nav-link:hover {
-  background: rgba(201, 170, 130, 0.08);
-  color: var(--color-cream);
+  background: rgba(255, 255, 255, 0.07);
+  color: #F4F4F2;
 }
 .nav-link--active {
-  color: var(--color-cream);
+  color: #F4F4F2;
   background: rgba(107, 30, 46, 0.22);
 }
 
@@ -181,14 +181,14 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   background: transparent;
   border: none;
   border-radius: 8px;
-  color: rgba(201, 170, 130, 0.7);
+  color: rgba(200, 200, 200, 0.7);
   font-size: 1.15rem;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 .mobile-toggle:hover {
-  background: rgba(201, 170, 130, 0.08);
-  color: var(--color-cream);
+  background: rgba(255, 255, 255, 0.07);
+  color: #F4F4F2;
 }
 
 @media (max-width: 768px) {
@@ -200,7 +200,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
     left: 0;
     right: 0;
     background: var(--color-espresso);
-    border-bottom: 1px solid rgba(201, 170, 130, 0.1);
+    border-bottom: 1px solid rgba(200, 200, 200, 0.1);
     flex-direction: column;
     align-items: stretch;
     padding: 0.5rem 1rem 0.75rem;
@@ -244,15 +244,15 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .brand-divider {
   width: 1px;
   height: 18px;
-  background: rgba(201, 170, 130, 0.18);
+  background: rgba(200, 200, 200, 0.2);
 }
 
 .brand-text {
   font-size: 1.05rem;
   line-height: 1;
 }
-.brand-light { color: rgba(201, 170, 130, 0.65); font-weight: 400; }
-.brand-bold  { color: var(--color-cream);         font-weight: 800; }
+.brand-light { color: rgba(200, 200, 200, 0.6); font-weight: 400; }
+.brand-bold  { color: #F4F4F2;                  font-weight: 800; }
 
 /* ── Derecha ── */
 .nav-right {
@@ -291,14 +291,14 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(201, 170, 130, 0.6);
+  color: rgba(200, 200, 200, 0.6);
   font-size: 1.1rem;
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
 .icon-btn:hover {
-  background: rgba(201, 170, 130, 0.08);
-  color: var(--color-cream);
+  background: rgba(255, 255, 255, 0.07);
+  color: #F4F4F2;
 }
 
 .cart-badge {
@@ -332,18 +332,18 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   gap: 0.45rem;
   padding: 0.28rem 0.7rem 0.28rem 0.28rem;
   border-radius: 24px;
-  border: 1px solid rgba(201, 170, 130, 0.14);
-  background: rgba(201, 170, 130, 0.05);
+  border: 1px solid rgba(200, 200, 200, 0.14);
+  background: rgba(255, 255, 255, 0.05);
   cursor: pointer;
-  color: rgba(245, 240, 232, 0.65);
+  color: rgba(240, 240, 240, 0.65);
   font-size: 0.83rem;
   font-weight: 500;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 .user-pill:hover {
-  background: rgba(201, 170, 130, 0.1);
+  background: rgba(255, 255, 255, 0.09);
   border-color: rgba(107, 30, 46, 0.45);
-  color: var(--color-cream);
+  color: #F4F4F2;
 }
 
 .pill-avatar {
@@ -379,8 +379,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   top: calc(100% + 6px);
   right: 0;
   width: 220px;
-  background: #150D07;
-  border: 1px solid rgba(201, 170, 130, 0.12);
+  background: #1A1A1A;
+  border: 1px solid rgba(200, 200, 200, 0.12);
   border-radius: 12px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
   overflow: hidden;
@@ -403,8 +403,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   align-items: center;
   gap: 0.6rem;
   padding: 0.85rem 0.9rem;
-  background: rgba(201, 170, 130, 0.04);
-  border-bottom: 1px solid rgba(201, 170, 130, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(200, 200, 200, 0.1);
 }
 .dd-avatar {
   width: 34px;
@@ -427,7 +427,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   gap: 0.08rem;
 }
 .dd-name {
-  color: var(--color-cream);
+  color: #F4F4F2;
   font-size: 0.82rem;
   font-weight: 600;
   white-space: nowrap;
@@ -435,7 +435,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   text-overflow: ellipsis;
 }
 .dd-email {
-  color: rgba(201, 170, 130, 0.5);
+  color: rgba(200, 200, 200, 0.5);
   font-size: 0.66rem;
   white-space: nowrap;
   overflow: hidden;
@@ -447,7 +447,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   text-transform: uppercase;
   letter-spacing: 0.07em;
   background: rgba(107, 30, 46, 0.2);
-  color: rgba(201, 170, 130, 0.9);
+  color: rgba(220, 220, 220, 0.9);
   border: 1px solid rgba(107, 30, 46, 0.3);
   border-radius: 8px;
   padding: 0.12em 0.45em;
@@ -469,8 +469,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
 }
-.dd-logout { color: rgba(201, 170, 130, 0.8); }
-.dd-logout:hover { background: rgba(107, 30, 46, 0.15); color: var(--color-cream); }
+.dd-logout { color: rgba(200, 200, 200, 0.8); }
+.dd-logout:hover { background: rgba(107, 30, 46, 0.15); color: #F4F4F2; }
 
 /* ── Invitado ── */
 .btn-ghost, .btn-fill {
@@ -484,11 +484,11 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .btn-ghost:hover, .btn-fill:hover { transform: translateY(-1px); }
 
 .btn-ghost {
-  color: rgba(245, 240, 232, 0.6);
-  border: 1px solid rgba(201, 170, 130, 0.18);
+  color: rgba(240, 240, 240, 0.6);
+  border: 1px solid rgba(200, 200, 200, 0.18);
   background: transparent;
 }
-.btn-ghost:hover { background: rgba(201, 170, 130, 0.08); color: var(--color-cream); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.07); color: #F4F4F2; }
 
 .btn-fill {
   background: var(--color-garnet);

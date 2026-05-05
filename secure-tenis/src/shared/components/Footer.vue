@@ -15,10 +15,10 @@ const year = new Date().getFullYear()
 <style scoped>
 .app-footer {
   background: var(--color-espresso);
-  border-top: 1px solid rgba(201, 170, 130, 0.12);
+  border-top: 1px solid rgba(200, 200, 200, 0.1);
 }
 
 .footer-text {
-  color: rgba(201, 170, 130, 0.5);
+  color: rgba(200, 200, 200, 0.5);
 }
 </style>

@@ -58,21 +58,21 @@
 .editorial-card--dark {
   background: linear-gradient(
     160deg,
-    var(--color-espresso) 0%,
-    #2A1810 55%,
-    rgba(107, 30, 46, 0.35) 100%
+    #1E1E1E 0%,
+    #282828 55%,
+    rgba(107, 30, 46, 0.25) 100%
   );
-  border: 1px solid rgba(201, 170, 130, 0.08);
+  border: 1px solid rgba(200, 200, 200, 0.08);
 }
 
 .editorial-card--warm {
   background: linear-gradient(
     160deg,
-    var(--color-coffee) 0%,
-    #3D1F10 55%,
-    var(--color-espresso) 100%
+    #3A2820 0%,
+    #2E2020 55%,
+    #1E1E1E 100%
   );
-  border: 1px solid rgba(201, 170, 130, 0.06);
+  border: 1px solid rgba(200, 200, 200, 0.06);
 }
 
 .ed-content {
@@ -88,13 +88,13 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(201, 170, 130, 0.6);
+  color: rgba(200, 200, 200, 0.6);
 }
 
 .ed-title {
   font-size: 1.65rem;
   font-weight: 800;
-  color: var(--color-cream);
+  color: #F4F4F2;
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin: 0;
@@ -104,7 +104,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: var(--color-cream);
+  color: #F4F4F2;
   font-size: 0.85rem;
   font-weight: 600;
   margin-top: 0.85rem;

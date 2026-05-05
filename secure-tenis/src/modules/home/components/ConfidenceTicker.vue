@@ -41,7 +41,7 @@ const items = [
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  color: rgba(245, 240, 232, 0.92);
+  color: rgba(240, 240, 240, 0.92);
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.03em;
@@ -50,12 +50,12 @@ const items = [
 }
 
 .ticker-item i {
-  color: rgba(245, 240, 232, 0.65);
+  color: rgba(240, 240, 240, 0.65);
   font-size: 0.85rem;
 }
 
 .ticker-sep {
-  color: rgba(245, 240, 232, 0.28);
+  color: rgba(240, 240, 240, 0.28);
   font-size: 0.5rem;
   padding: 0 0.75rem;
   align-self: center;
