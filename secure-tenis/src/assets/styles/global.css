@@ -1,17 +1,29 @@
 :root {
-  --color-accent: #e94560;
-  --color-accent-dark: #c73652;
-  --color-dark: #1a1a2e;
-  --color-dark-surface: #16213e;
-  --color-light-bg: #f8f9fa;
-  --color-border: #dee2e6;
-  --color-text: #212529;
+  /* ── Paleta principal ── */
+  --color-cream:        #F5F0E8;
+  --color-cream-dark:   #EDE6D6;
+  --color-espresso:     #1C1008;
+  --color-coffee:       #6B3F2A;
+  --color-garnet:       #6B1E2E;
+  --color-garnet-dark:  #4E1420;
+  --color-sand:         #C9AA82;
+
+  /* ── Aliases (compatibilidad con Bootstrap y código existente) ── */
+  --color-accent:       var(--color-garnet);
+  --color-accent-dark:  var(--color-garnet-dark);
+  --color-dark:         var(--color-espresso);
+  --color-dark-surface: #2A1810;
+  --color-light-bg:     var(--color-cream);
+  --color-border:       var(--color-sand);
+  --color-text:         var(--color-espresso);
+
+  /* ── Layout ── */
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 56px;
   --navbar-height: 60px;
   --transition-speed: 0.3s;
-  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.18);
+  --shadow-md: 0 6px 20px rgba(28, 16, 8, 0.12);
+  --shadow-lg: 0 12px 36px rgba(28, 16, 8, 0.22);
 }
 
 *,
@@ -75,12 +87,12 @@ body {
   border-color: var(--color-accent-dark);
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 4px 14px rgba(107, 30, 46, 0.45);
 }
 
 .auth-page {
   min-height: calc(100vh - var(--navbar-height));
-  background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-surface) 55%, #0f3460 100%);
+  background: linear-gradient(135deg, var(--color-espresso) 0%, #2A1810 55%, #3D1F10 100%);
   display: flex;
   align-items: center;
   padding: 2rem 0;

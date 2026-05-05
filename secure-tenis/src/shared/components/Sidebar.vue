@@ -155,13 +155,13 @@ const logout = async () => {
   z-index: 200;
   display: flex;
   flex-direction: column;
-  background: #0f1b34;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 6px 0 40px rgba(0, 0, 0, 0.5);
+  background: var(--color-espresso);
+  border-right: 1px solid rgba(201, 170, 130, 0.1);
+  box-shadow: 6px 0 40px rgba(0, 0, 0, 0.45);
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: rgba(233, 69, 96, 0.25) transparent;
+  scrollbar-color: rgba(107, 30, 46, 0.3) transparent;
 }
 
 /* ── Nav ── */
@@ -180,7 +180,7 @@ const logout = async () => {
   padding: 0.9rem 1.2rem 0.35rem;
 }
 .nav-section-title span {
-  color: rgba(192, 192, 216, 0.4);
+  color: rgba(201, 170, 130, 0.45);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -190,7 +190,7 @@ const logout = async () => {
 .section-line {
   flex: 1;
   height: 1px;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(201, 170, 130, 0.1);
 }
 
 .nav-link {
@@ -200,21 +200,21 @@ const logout = async () => {
   padding: 0.65rem 1rem;
   margin: 0 0.5rem;
   border-radius: 10px;
-  color: #7878a0;
+  color: rgba(201, 170, 130, 0.55);
   text-decoration: none;
   font-size: 0.88rem;
   font-weight: 500;
   transition: background 0.2s, color 0.2s, transform 0.18s ease;
 }
 .nav-link:hover {
-  background: rgba(233, 69, 96, 0.09);
-  color: #d0d0e8;
+  background: rgba(107, 30, 46, 0.1);
+  color: rgba(245, 240, 232, 0.9);
   transform: translateX(3px);
 }
 .nav-link--active {
-  background: rgba(233, 69, 96, 0.15) !important;
-  color: #fff !important;
-  box-shadow: inset 3px 0 0 #e94560;
+  background: rgba(107, 30, 46, 0.18) !important;
+  color: var(--color-cream) !important;
+  box-shadow: inset 3px 0 0 var(--color-garnet);
 }
 
 .nav-link--admin { color: #d4a800; }
@@ -225,12 +225,12 @@ const logout = async () => {
   width: 22px;
   text-align: center;
   font-size: 0.95rem;
-  color: #e94560;
+  color: var(--color-garnet);
   flex-shrink: 0;
   transition: transform 0.2s;
 }
 .nav-link:hover .link-icon { transform: scale(1.15); }
-.nav-link--active .link-icon { color: #ff7088; }
+.nav-link--active .link-icon { color: #C06070; }
 
 .link-label { flex: 1; }
 
@@ -242,14 +242,14 @@ const logout = async () => {
   line-height: 1.5;
 }
 .new-badge {
-  background: linear-gradient(135deg, #e94560, #ff8a65);
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 .cart-badge {
-  background: #e94560;
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   min-width: 18px;
   text-align: center;
 }
@@ -257,7 +257,7 @@ const logout = async () => {
 /* ── Footer ── */
 .sidebar-footer {
   padding: 0.75rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(201, 170, 130, 0.1);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -268,16 +268,16 @@ const logout = async () => {
   align-items: center;
   gap: 0.6rem;
   padding: 0.55rem 0.7rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(201, 170, 130, 0.05);
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(201, 170, 130, 0.09);
 }
 .user-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e94560, #c73652);
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   font-weight: 700;
   font-size: 0.85rem;
   display: flex;
@@ -292,7 +292,7 @@ const logout = async () => {
   flex-direction: column;
 }
 .user-name {
-  color: #e0e0f0;
+  color: var(--color-cream);
   font-size: 0.8rem;
   font-weight: 600;
   white-space: nowrap;
@@ -300,21 +300,21 @@ const logout = async () => {
   text-overflow: ellipsis;
 }
 .user-role {
-  color: rgba(192, 192, 216, 0.45);
+  color: rgba(201, 170, 130, 0.5);
   font-size: 0.65rem;
   text-transform: capitalize;
 }
 .logout-btn {
   background: transparent;
   border: none;
-  color: #7878a0;
+  color: rgba(201, 170, 130, 0.5);
   font-size: 0.95rem;
   cursor: pointer;
   padding: 0.3rem;
   border-radius: 7px;
   transition: color 0.2s, background 0.2s;
 }
-.logout-btn:hover { color: #e94560; background: rgba(233, 69, 96, 0.1); }
+.logout-btn:hover { color: var(--color-cream); background: rgba(107, 30, 46, 0.15); }
 
 .footer-btn {
   display: flex;
@@ -331,16 +331,16 @@ const logout = async () => {
 .footer-btn:hover { transform: translateY(-2px); }
 
 .footer-btn--login {
-  background: linear-gradient(135deg, #e94560, #c73652);
-  color: #fff;
-  box-shadow: 0 3px 12px rgba(233, 69, 96, 0.3);
+  background: var(--color-garnet);
+  color: var(--color-cream);
+  box-shadow: 0 3px 12px rgba(107, 30, 46, 0.35);
 }
-.footer-btn--login:hover { box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5); filter: brightness(1.07); }
+.footer-btn--login:hover { box-shadow: 0 6px 20px rgba(107, 30, 46, 0.55); filter: brightness(1.1); }
 
 .footer-btn--register {
-  background: rgba(255, 255, 255, 0.05);
-  color: #9090b8;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(201, 170, 130, 0.07);
+  color: rgba(245, 240, 232, 0.6);
+  border: 1px solid rgba(201, 170, 130, 0.12);
 }
-.footer-btn--register:hover { background: rgba(255, 255, 255, 0.09); color: #d0d0e8; }
+.footer-btn--register:hover { background: rgba(201, 170, 130, 0.12); color: var(--color-cream); }
 </style>

@@ -131,9 +131,9 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   top: 0;
   z-index: 300;
   height: var(--navbar-height, 60px);
-  background: #0f1b34;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 1px 0 rgba(233, 69, 96, 0.2), 0 4px 20px rgba(0, 0, 0, 0.4);
+  background: var(--color-espresso);
+  border-bottom: 1px solid rgba(201, 170, 130, 0.12);
+  box-shadow: 0 1px 0 rgba(107, 30, 46, 0.15), 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .nav-inner {
@@ -175,7 +175,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   display: block;
   width: 22px;
   height: 2px;
-  background: #c0c0d8;
+  background: rgba(201, 170, 130, 0.65);
   border-radius: 2px;
   margin: 0 auto;
   transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
@@ -183,7 +183,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
               background 0.2s ease;
   transform-origin: center;
 }
-.hamburger:hover .bar { background: #fff; }
+.hamburger:hover .bar { background: var(--color-cream); }
 
 .hamburger.is-open .bar-1 { transform: translateY(7px) rotate(45deg); }
 .hamburger.is-open .bar-2 { opacity: 0; transform: scaleX(0); }
@@ -202,30 +202,30 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #e94560, #c73652);
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   font-weight: 900;
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 2px 10px rgba(107, 30, 46, 0.4);
   flex-shrink: 0;
 }
 
 .brand-divider {
   width: 1px;
   height: 18px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(201, 170, 130, 0.18);
 }
 
 .brand-text {
   font-size: 1.05rem;
   line-height: 1;
 }
-.brand-light { color: #8888aa; font-weight: 400; }
-.brand-bold  { color: #fff;    font-weight: 800; }
+.brand-light { color: rgba(201, 170, 130, 0.65); font-weight: 400; }
+.brand-bold  { color: var(--color-cream);         font-weight: 800; }
 
 /* ── Derecha ── */
 .nav-right {
@@ -263,14 +263,14 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8888aa;
+  color: rgba(201, 170, 130, 0.6);
   font-size: 1.1rem;
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
 }
 .icon-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: #fff;
+  background: rgba(201, 170, 130, 0.08);
+  color: var(--color-cream);
 }
 
 .cart-badge {
@@ -281,8 +281,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   height: 16px;
   padding: 0 3px;
   border-radius: 8px;
-  background: #e94560;
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   font-size: 0.56rem;
   font-weight: 700;
   display: flex;
@@ -304,26 +304,26 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   gap: 0.45rem;
   padding: 0.28rem 0.7rem 0.28rem 0.28rem;
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(201, 170, 130, 0.14);
+  background: rgba(201, 170, 130, 0.05);
   cursor: pointer;
-  color: #b0b0cc;
+  color: rgba(245, 240, 232, 0.65);
   font-size: 0.83rem;
   font-weight: 500;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 .user-pill:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(233, 69, 96, 0.35);
-  color: #fff;
+  background: rgba(201, 170, 130, 0.1);
+  border-color: rgba(107, 30, 46, 0.45);
+  color: var(--color-cream);
 }
 
 .pill-avatar {
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e94560, #c73652);
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   font-weight: 700;
   font-size: 0.76rem;
   display: flex;
@@ -351,8 +351,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   top: calc(100% + 6px);
   right: 0;
   width: 220px;
-  background: #131325;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #150D07;
+  border: 1px solid rgba(201, 170, 130, 0.12);
   border-radius: 12px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
   overflow: hidden;
@@ -375,15 +375,15 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   align-items: center;
   gap: 0.6rem;
   padding: 0.85rem 0.9rem;
-  background: rgba(255, 255, 255, 0.025);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(201, 170, 130, 0.04);
+  border-bottom: 1px solid rgba(201, 170, 130, 0.1);
 }
 .dd-avatar {
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e94560, #c73652);
-  color: #fff;
+  background: var(--color-garnet);
+  color: var(--color-cream);
   font-weight: 700;
   font-size: 0.9rem;
   display: flex;
@@ -399,7 +399,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   gap: 0.08rem;
 }
 .dd-name {
-  color: #fff;
+  color: var(--color-cream);
   font-size: 0.82rem;
   font-weight: 600;
   white-space: nowrap;
@@ -407,7 +407,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   text-overflow: ellipsis;
 }
 .dd-email {
-  color: rgba(192, 192, 216, 0.45);
+  color: rgba(201, 170, 130, 0.5);
   font-size: 0.66rem;
   white-space: nowrap;
   overflow: hidden;
@@ -418,9 +418,9 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  background: rgba(233, 69, 96, 0.18);
-  color: #ff6b80;
-  border: 1px solid rgba(233, 69, 96, 0.28);
+  background: rgba(107, 30, 46, 0.2);
+  color: rgba(201, 170, 130, 0.9);
+  border: 1px solid rgba(107, 30, 46, 0.3);
   border-radius: 8px;
   padding: 0.12em 0.45em;
   white-space: nowrap;
@@ -441,8 +441,8 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
 }
-.dd-logout { color: #ff6b80; }
-.dd-logout:hover { background: rgba(233, 69, 96, 0.12); color: #ff8fa3; }
+.dd-logout { color: rgba(201, 170, 130, 0.8); }
+.dd-logout:hover { background: rgba(107, 30, 46, 0.15); color: var(--color-cream); }
 
 /* ── Invitado ── */
 .btn-ghost, .btn-fill {
@@ -456,16 +456,16 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .btn-ghost:hover, .btn-fill:hover { transform: translateY(-1px); }
 
 .btn-ghost {
-  color: #a0a0c0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(245, 240, 232, 0.6);
+  border: 1px solid rgba(201, 170, 130, 0.18);
   background: transparent;
 }
-.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
+.btn-ghost:hover { background: rgba(201, 170, 130, 0.08); color: var(--color-cream); }
 
 .btn-fill {
-  background: linear-gradient(135deg, #e94560, #c73652);
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(233, 69, 96, 0.3);
+  background: var(--color-garnet);
+  color: var(--color-cream);
+  box-shadow: 0 2px 10px rgba(107, 30, 46, 0.35);
 }
-.btn-fill:hover { box-shadow: 0 5px 18px rgba(233, 69, 96, 0.5); filter: brightness(1.08); }
+.btn-fill:hover { box-shadow: 0 5px 18px rgba(107, 30, 46, 0.55); filter: brightness(1.1); }
 </style>

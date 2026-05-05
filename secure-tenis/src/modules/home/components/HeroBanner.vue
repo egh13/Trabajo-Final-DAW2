@@ -62,15 +62,15 @@ const tickerItems = [
 <style scoped>
 .hero-banner {
   background:
-    radial-gradient(ellipse at 75% 50%, rgba(233, 69, 96, 0.18) 0%, transparent 55%),
-    linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-surface) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+    radial-gradient(ellipse at 75% 50%, rgba(107, 30, 46, 0.2) 0%, transparent 58%),
+    linear-gradient(135deg, var(--color-espresso) 0%, #2A1810 100%);
+  border: 1px solid rgba(201, 170, 130, 0.1);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
 }
 
 .hero-banner:hover {
-  border-color: rgba(233, 69, 96, 0.3);
-  box-shadow: 0 0 30px rgba(233, 69, 96, 0.18), 0 6px 20px rgba(233, 69, 96, 0.1);
+  border-color: rgba(107, 30, 46, 0.35);
+  box-shadow: 0 0 30px rgba(107, 30, 46, 0.2), 0 6px 20px rgba(107, 30, 46, 0.12);
   transform: scale(1.002);
 }
 
@@ -85,8 +85,8 @@ const tickerItems = [
 .hero-ticker {
   overflow: hidden;
   padding: 0.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(201, 170, 130, 0.1);
+  border-bottom: 1px solid rgba(201, 170, 130, 0.1);
 }
 
 .ticker-track {
@@ -103,7 +103,7 @@ const tickerItems = [
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(201, 170, 130, 0.55);
   font-size: 0.78rem;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -118,7 +118,7 @@ const tickerItems = [
 }
 
 .ticker-sep {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(201, 170, 130, 0.3);
   font-size: 0.55rem;
   padding: 0 0.75rem;
   align-self: center;

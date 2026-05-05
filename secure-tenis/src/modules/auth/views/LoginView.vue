@@ -109,56 +109,56 @@ const handleLogin = async () => {
 <style scoped>
 .auth-brand-icon {
   font-size: 2.75rem;
-  color: var(--color-accent);
-  filter: drop-shadow(0 0 14px rgba(233, 69, 96, 0.55));
+  color: var(--color-garnet);
+  filter: drop-shadow(0 0 14px rgba(107, 30, 46, 0.6));
 }
 
 .auth-card {
-  background: rgba(22, 33, 62, 0.85);
+  background: rgba(28, 16, 8, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(201, 170, 130, 0.12);
   border-radius: 1.25rem;
   padding: 2rem 2.25rem;
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(233, 69, 96, 0.08);
+    0 0 0 1px rgba(107, 30, 46, 0.1);
 }
 
 .auth-subtitle {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(201, 170, 130, 0.6);
   font-size: 0.875rem;
 }
 
 .auth-label {
   display: block;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(245, 240, 232, 0.9);
   font-size: 0.875rem;
   font-weight: 500;
   margin-bottom: 0.4rem;
 }
 
 .auth-addon {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(201, 170, 130, 0.08);
+  border-color: rgba(201, 170, 130, 0.22);
+  color: rgba(201, 170, 130, 0.8);
 }
 
 .auth-input {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #fff;
+  background: rgba(201, 170, 130, 0.07);
+  border-color: rgba(201, 170, 130, 0.2);
+  color: var(--color-cream);
 }
 
 .auth-input:focus {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: var(--color-accent);
-  color: #fff;
-  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.25);
+  background: rgba(201, 170, 130, 0.12);
+  border-color: var(--color-garnet);
+  color: var(--color-cream);
+  box-shadow: 0 0 0 3px rgba(107, 30, 46, 0.25);
 }
 
 .auth-input::placeholder {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(201, 170, 130, 0.4);
 }
 
 .input-group:has(.is-invalid) .auth-addon {
@@ -170,6 +170,6 @@ const handleLogin = async () => {
 }
 
 .auth-footer {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(201, 170, 130, 0.5);
 }
 </style>
