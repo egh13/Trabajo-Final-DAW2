@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import { jwtConfig } from '../config/jwt'
-import { createLog, getClientIp } from '../services/logService'
+import { createLog, getClientIp } from '../services/admin/logService'
 import type { JwtPayload, UserRole, ApiResponse } from '../types'
 
 // Extiende Request para incluir el usuario autenticado

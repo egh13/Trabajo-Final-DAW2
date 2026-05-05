@@ -75,9 +75,28 @@ DATABASE_PASSWORD=password
 DATABASE_NAME=mydb
 DATABASE_HOST=mariadb
 DATABASE_PORT=3306
+
+# Configuración SMTP para envío de correos (opcional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=tu-email@gmail.com
+SMTP_PASS=tu-app-password
+FRONTEND_URL=http://localhost:5173
 ```
 
-> ⚠️ Las credenciales deben coincidir con las del servicio `mariadb` en `docker-compose.yml`.
+### Configuración de envío de correos (opcional)
+
+Para habilitar el envío automático de correos de bienvenida a nuevos usuarios:
+
+1. **Gmail SMTP**: Crea una "contraseña de aplicación" en tu cuenta Google:
+   - Ve a [Google Account Settings](https://myaccount.google.com/)
+   - Activa la autenticación de 2 factores
+   - Genera una "contraseña de aplicación" para usar como `SMTP_PASS`
+
+2. **Otros proveedores SMTP**: Ajusta las variables según tu proveedor:
+   - Outlook/Hotmail: `SMTP_HOST=smtp-mail.outlook.com`, `SMTP_PORT=587`
+   - Yahoo: `SMTP_HOST=smtp.mail.yahoo.com`, `SMTP_PORT=587`
 
 ### 3. Levantar el backend + MariaDB
 
@@ -92,6 +111,8 @@ Esto realiza automáticamente:
 2. Arranque del contenedor de MariaDB
 3. Aplicación de las migraciones (`prisma migrate deploy`)
 4. Inicio del servidor Express en el puerto `3000`
+
+> ⚠️ Las credenciales deben coincidir con las del servicio `mariadb` en `docker-compose.yml`.
 
 ### 4. Poblar la base de datos (seed)
 

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import authService from '../services/authService'
 import { mergeSessionCartIntoUser } from '../services/cartService'
-import { createLog, getClientIp } from '../services/logService'
+import { createLog, getClientIp } from '../services/admin/logService'
+import { sendWelcomeEmail } from '../services/mailService'
 import type { ApiResponse, UserPublic } from '../types'
 
 // POST /api/auth/register
@@ -11,12 +12,17 @@ export const register = async (req: Request, res: Response, next: NextFunction):
     const sessionId = req.headers['x-session-id'] as string | undefined
     if (sessionId) await mergeSessionCartIntoUser(sessionId, user.id)
 
+    // Enviar correo de bienvenida de forma asíncrona (no bloquea la respuesta)
+    sendWelcomeEmail(user.email, user.name).catch(err =>
+      console.error('Error al enviar correo de bienvenida:', err)
+    )
+
     await createLog({ level: 'INFO', module: 'Auth', action: 'Registro de nuevo usuario', userId: user.id, ip: getClientIp(req) })
 
     res.status(201).json({
       success: true,
       message: 'Usuario registrado correctamente.',
-      data: { user: user as any, token }, 
+      data: { user: user as any, token },
     } as ApiResponse<{ user: UserPublic; token: string }>)
   } catch (err: any) {
     if (err.statusCode) {

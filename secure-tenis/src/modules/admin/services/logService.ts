@@ -1,5 +1,5 @@
 import { api } from '@/services/apiClient'
-import type { AuthStats, PaginatedLogs, UserLogFilters } from '@/types'
+import type { AuthStats, PaginatedLogs, SystemStats, UserLogFilters } from '@/types'
 
 // Construye la query string a partir de los filtros activos
 const buildQuery = (filters: UserLogFilters): string => {
@@ -42,9 +42,16 @@ export const downloadExport = async (format: 'csv' | 'pdf', filters: UserLogFilt
   URL.revokeObjectURL(url)
 }
 
-// Obtiene las estadísticas de autenticación para el panel de seguridad
+// Obtiene las estadísticas de autenticación para el panel de administración
 export const fetchAuthStats = async (): Promise<AuthStats> => {
-  const res = await api.get<AuthStats>('/logs/auth-stats')
+  const res = await api.get<AuthStats>('/stats/auth-stats')
+  if (!res.data) throw new Error('Respuesta inesperada del servidor')
+  return res.data
+}
+
+// Obtiene las estadísticas generales del sistema
+export const fetchSystemStats = async (): Promise<SystemStats> => {
+  const res = await api.get<SystemStats>('/stats/system-stats')
   if (!res.data) throw new Error('Respuesta inesperada del servidor')
   return res.data
 }
