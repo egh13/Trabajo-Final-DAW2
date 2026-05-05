@@ -2,29 +2,26 @@
   <nav class="app-navbar">
     <div class="nav-inner">
 
-      <div class="nav-left">
-        <button
-          class="hamburger"
-          :class="{ 'is-open': sidebar.isOpen.value }"
-          @click="sidebar.toggle()"
-          :aria-expanded="sidebar.isOpen.value"
-          aria-label="Abrir o cerrar menú lateral"
-        >
-          <span class="bar bar-1" />
-          <span class="bar bar-2" />
-          <span class="bar bar-3" />
-        </button>
+      <router-link class="nav-brand" to="/">
+        <span class="brand-mark">ST</span>
+        <span class="brand-divider" />
+        <span class="brand-text">
+          <span class="brand-light">Secure</span><span class="brand-bold">Tenis</span>
+        </span>
+      </router-link>
 
-        <router-link class="nav-brand" to="/" @click="sidebar.close()">
-          <span class="brand-mark">ST</span>
-          <span class="brand-divider" />
-          <span class="brand-text">
-            <span class="brand-light">Secure</span><span class="brand-bold">Tenis</span>
-          </span>
-        </router-link>
-      </div>
+      <nav class="nav-links" :class="{ 'mobile-open': mobileOpen }">
+        <router-link class="nav-link" to="/" exact-active-class="nav-link--active" active-class="">Inicio</router-link>
+        <router-link class="nav-link" to="/zapatillas" active-class="nav-link--active">Zapatillas</router-link>
+        <router-link class="nav-link" to="/ropa" active-class="nav-link--active">Ropa</router-link>
+        <router-link class="nav-link" to="/accesorios" active-class="nav-link--active">Accesorios</router-link>
+      </nav>
 
       <div class="nav-right">
+        <button class="mobile-toggle" @click="mobileOpen = !mobileOpen" :aria-expanded="mobileOpen" aria-label="Menú de navegación">
+          <i :class="mobileOpen ? 'bi bi-x-lg' : 'bi bi-list'" />
+        </button>
+
 
         <router-link v-if="showAdminLink" class="admin-chip" to="/admin">
           <i class="bi bi-shield-fill-check" />
@@ -81,15 +78,13 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cartStore'
 import { useAuthStore } from '@/stores/authStore'
-import { useSidebar } from '@/shared/composables/useSidebar'
 
 const router = useRouter()
 const cartStore = useCartStore()
 const { itemCount } = storeToRefs(cartStore)
 const authStore = useAuthStore()
 const { isAuthenticated, userName, user } = storeToRefs(authStore)
-const sidebar = useSidebar()
-
+const mobileOpen = ref(false)
 const menuOpen = ref(false)
 const userMenuRef = ref<HTMLElement | null>(null)
 
@@ -147,47 +142,78 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   gap: 1rem;
 }
 
-/* ── Izquierda ── */
-.nav-left {
+/* ── Nav Links (desktop) ── */
+.nav-links {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
+  gap: 0.15rem;
+  flex: 1;
+  justify-content: center;
 }
 
-.hamburger {
-  display: flex;
-  flex-direction: column;
+.nav-link {
+  padding: 0.38rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: rgba(201, 170, 130, 0.65);
+  letter-spacing: 0.02em;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.nav-link:hover {
+  background: rgba(201, 170, 130, 0.08);
+  color: var(--color-cream);
+}
+.nav-link--active {
+  color: var(--color-cream);
+  background: rgba(107, 30, 46, 0.22);
+}
+
+/* ── Mobile toggle ── */
+.mobile-toggle {
+  display: none;
+  align-items: center;
   justify-content: center;
-  gap: 5px;
   width: 36px;
   height: 36px;
-  padding: 0;
   background: transparent;
   border: none;
-  cursor: pointer;
   border-radius: 8px;
-  transition: background 0.2s;
+  color: rgba(201, 170, 130, 0.7);
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
 }
-.hamburger:hover { background: rgba(255, 255, 255, 0.06); }
-
-.bar {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: rgba(201, 170, 130, 0.65);
-  border-radius: 2px;
-  margin: 0 auto;
-  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
-              opacity 0.2s ease,
-              background 0.2s ease;
-  transform-origin: center;
+.mobile-toggle:hover {
+  background: rgba(201, 170, 130, 0.08);
+  color: var(--color-cream);
 }
-.hamburger:hover .bar { background: var(--color-cream); }
 
-.hamburger.is-open .bar-1 { transform: translateY(7px) rotate(45deg); }
-.hamburger.is-open .bar-2 { opacity: 0; transform: scaleX(0); }
-.hamburger.is-open .bar-3 { transform: translateY(-7px) rotate(-45deg); }
+@media (max-width: 768px) {
+  .mobile-toggle { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: var(--navbar-height, 60px);
+    left: 0;
+    right: 0;
+    background: var(--color-espresso);
+    border-bottom: 1px solid rgba(201, 170, 130, 0.1);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 1rem 0.75rem;
+    gap: 0.2rem;
+    z-index: 299;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .nav-links.mobile-open { display: flex; }
+  .nav-link {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+  }
+}
 
 .nav-brand {
   display: flex;
@@ -195,6 +221,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   gap: 0.6rem;
   text-decoration: none;
   transition: opacity 0.2s;
+  flex-shrink: 0;
 }
 .nav-brand:hover { opacity: 0.82; }
 
@@ -232,6 +259,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  flex-shrink: 0;
 }
 
 .admin-chip {

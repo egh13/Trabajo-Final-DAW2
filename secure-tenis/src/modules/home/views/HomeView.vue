@@ -1,14 +1,20 @@
 <template>
   <div class="d-flex flex-column gap-4">
     <HeroBanner @scroll-to-products="scrollToProducts" />
+    <ConfidenceTicker />
+    <CategoryGrid />
     <FeaturedProducts ref="productsSection" />
+    <EditorialBlock />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import HeroBanner from '../components/HeroBanner.vue'
+import ConfidenceTicker from '../components/ConfidenceTicker.vue'
+import CategoryGrid from '../components/CategoryGrid.vue'
 import FeaturedProducts from '../components/FeaturedProducts.vue'
+import EditorialBlock from '../components/EditorialBlock.vue'
 
 const productsSection = ref<InstanceType<typeof FeaturedProducts> | null>(null)
 
