@@ -139,8 +139,6 @@ export const sendWelcomeEmail = async (to: string, userName: string): Promise<vo
 
               <p>Si tienes alguna pregunta o necesitas ayuda, no dudes en contactarnos. Nuestro equipo de soporte está aquí para ayudarte.</p>
 
-              // Reemplaza el bloque del botón por este:
-
             <div style="text-align: center;">
                 <a href="${process.env.FRONTEND_URL || 'http://localhost:5173'}"
                     class="cta-button" 

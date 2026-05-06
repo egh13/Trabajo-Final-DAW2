@@ -50,7 +50,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="product in products" :key="product.id" @click="goToProduct(product)" class="clickable-row">
+                    <tr v-for="product in sortedProducts" :key="product.id" @click="goToProduct(product)" class="clickable-row">
                       <td>{{ product.id }}</td>
                       <td>
                         <img v-if="product.image_url" :src="product.image_url" :alt="product.name" class="product-thumb" />
@@ -242,7 +242,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Product, Category } from '@/types'
 import { fetchProducts, createProduct, updateProduct as updateProductApi, deleteProduct as deleteProductApi } from '@/modules/products/services/productService'
@@ -280,6 +280,11 @@ const editProductForm = ref({
   stock: 0,
   category_id: 0,
   image_url: ''
+})
+
+// Productos ordenados por ID
+const sortedProducts = computed(() => {
+  return [...products.value].sort((a, b) => a.id - b.id)
 })
 
 // Funciones

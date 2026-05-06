@@ -49,7 +49,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users" :key="user.id">
+                    <tr v-for="user in sortedUsers" :key="user.id">
                       <td class="small text-muted">{{ user.id }}</td>
                       <td class="small fw-semibold">{{ user.name }}</td>
                       <td class="small">{{ user.email }}</td>
@@ -216,7 +216,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { api } from '@/services/apiClient'
 import type { User } from '@/types'
 
@@ -243,6 +243,11 @@ const editUserForm = ref({
   email: '',
   password: '',
   role: ''
+})
+
+// Usuarios ordenados por ID
+const sortedUsers = computed(() => {
+  return [...users.value].sort((a, b) => a.id - b.id)
 })
 
 const loadUsers = async () => {
