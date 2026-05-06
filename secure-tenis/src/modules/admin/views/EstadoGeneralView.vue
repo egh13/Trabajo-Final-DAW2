@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid px-0">
     <h2 class="fw-bold mb-4">Estado General del Sistema</h2>
 
     <!-- Loading -->
@@ -205,9 +205,28 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.status-text {
+  color: var(--color-surface, #1E1E1E);
+}
+
+.card-header-console {
+  background: var(--color-surface, #1E1E1E);
+  color: #fff;
+}
+
+.btn-outline-admin {
+  border-color: var(--color-garnet, #6B1E2E);
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.btn-outline-admin:hover {
+  background: var(--color-garnet, #6B1E2E);
+  color: #fff;
+}
+
 .status-indicator {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   flex-shrink: 0;
   animation: pulse-dot 2s ease-in-out infinite;

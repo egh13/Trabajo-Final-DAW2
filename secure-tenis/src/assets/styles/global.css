@@ -1,16 +1,39 @@
 :root {
-  --color-accent: #e94560;
-  --color-accent-dark: #c73652;
-  --color-dark: #1a1a2e;
-  --color-dark-surface: #16213e;
-  --color-light-bg: #f8f9fa;
-  --color-border: #dee2e6;
-  --color-text: #212529;
+  /* ── Paleta grises ── */
+  --color-bg:           #F4F4F2;   /* gris muy claro — fondo principal */
+  --color-bg-alt:       #E8E8E6;   /* gris claro — cards, alternado */
+  --color-surface:      #1E1E1E;   /* gris oscuro — navbar, hero */
+  --color-surface-2:    #282828;   /* gris oscuro 2 — dropdown */
+  --color-gray:         #7A7A7A;   /* gris medio */
+  --color-gray-light:   #CECECE;   /* gris borde claro */
+
+  /* ── Acentos ── */
+  --color-garnet:       #6B1E2E;
+  --color-garnet-dark:  #4E1420;
+  --color-brown:        #7A5040;
+  --color-brown-dark:   #5A3628;
+
+  /* ── Aliases backward-compat ── */
+  --color-accent:       var(--color-garnet);
+  --color-accent-dark:  var(--color-garnet-dark);
+  --color-dark:         var(--color-surface);
+  --color-dark-surface: var(--color-surface-2);
+  --color-light-bg:     var(--color-bg);
+  --color-border:       var(--color-gray-light);
+  --color-text:         var(--color-surface);
+  /* componentes scoped usan estos nombres */
+  --color-cream:        var(--color-bg);
+  --color-cream-dark:   var(--color-bg-alt);
+  --color-espresso:     var(--color-surface);
+  --color-coffee:       var(--color-brown);
+  --color-sand:         var(--color-gray);
+
+  /* ── Layout ── */
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 56px;
   --navbar-height: 60px;
   --transition-speed: 0.3s;
-  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.18);
 }
 
@@ -75,12 +98,12 @@ body {
   border-color: var(--color-accent-dark);
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 4px 14px rgba(107, 30, 46, 0.45);
 }
 
 .auth-page {
   min-height: calc(100vh - var(--navbar-height));
-  background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-surface) 55%, #0f3460 100%);
+  background: linear-gradient(135deg, var(--color-surface) 0%, #282828 55%, #323232 100%);
   display: flex;
   align-items: center;
   padding: 2rem 0;

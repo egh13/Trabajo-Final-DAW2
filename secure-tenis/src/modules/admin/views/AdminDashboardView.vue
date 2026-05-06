@@ -9,8 +9,8 @@
     <div class="row g-4 mb-4">
       <div class="col-md-4" v-for="card in generalCards" :key="card.to">
         <router-link :to="card.to" class="text-decoration-none">
-          <div class="card h-100 module-card border-0">
-            <div class="card-body d-flex flex-column">
+          <div class="module-card h-100">
+            <div class="card-body d-flex flex-column p-4">
               <div class="module-icon-wrapper mb-3" :style="{ background: card.bg }">
                 <i class="bi module-icon" :class="card.icon"></i>
               </div>
@@ -40,13 +40,13 @@
               <div class="module-icon-wrapper mb-3" :style="{ background: card.bg }">
                 <i class="bi module-icon" :class="card.icon"></i>
               </div>
-              <h5 class="card-title fw-bold text-dark">{{ card.label }}</h5>
-              <p class="card-text text-muted small mb-3">{{ card.description }}</p>
-              <div class="mb-3">
-                <span class="badge bg-dark bg-opacity-75 me-1" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
+              <h5 class="card-title fw-bold mb-1" style="color: var(--color-surface, #1E1E1E)">{{ card.label }}</h5>
+              <p class="card-text text-muted small mb-3" style="line-height:1.5">{{ card.description }}</p>
+              <div class="mb-3 d-flex flex-wrap gap-1">
+                <span class="tag-badge" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
               </div>
               <div class="mt-auto">
-                <span class="module-enter text-success fw-semibold small">Acceder →</span>
+                <span class="module-enter fw-semibold small">Acceder <i class="bi bi-arrow-right ms-1"></i></span>
               </div>
             </div>
           </div>
@@ -112,30 +112,41 @@ const securityCards = [
     icon: 'bi-journal-text',
     label: 'Auditoría de Actividad',
     description: 'Consulta la tabla completa de logs de actividad del sistema con opción de descarga.',
-    bg: 'linear-gradient(135deg, #f59e0b33, #0a0a0a22)',
+    bg: 'rgba(30, 30, 30, 0.06)',
+    iconColor: 'var(--color-surface, #1E1E1E)',
     tags: ['Logs', 'Tabla', 'Exportar'],
   },
 ]
 </script>
 
 <style scoped>
+.dashboard-hero {
+  background: #fff;
+  border: 1px solid var(--color-border, #CECECE);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  border-left: 4px solid var(--color-garnet, #6B1E2E);
+}
+
 .module-card {
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--color-border, #CECECE);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  border: 1px solid #e5e7eb !important;
+  display: block;
 }
 
 .module-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.4) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(107, 30, 46, 0.12);
+  border-color: rgba(107, 30, 46, 0.35);
 }
 
 .module-icon-wrapper {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,6 +167,8 @@ const securityCards = [
 }
 
 .module-enter {
+  color: var(--color-garnet, #6B1E2E);
+  font-size: 0.82rem;
   opacity: 0;
   transition: opacity 0.2s;
 }

@@ -6,7 +6,7 @@
 
     <!-- Loading -->
     <div v-if="loading" class="text-center py-5">
-      <div class="spinner-border text-success" role="status">
+      <div class="spinner-border spinner-admin" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
       <p class="mt-2 text-muted">Cargando estadísticas...</p>
@@ -17,17 +17,17 @@
       <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
     </div>
 
-    <!-- Contenido con datos reales -->
-    <template v-else-if="stats">      <div class="row g-3 mb-3">
-        <div class="col-md-4">
+    <template v-else-if="stats">
+      <div class="row g-3 mb-3">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
           <div class="card border-0 shadow-sm text-center py-3">
             <div class="card-body">
-              <div class="kpi-value text-success">{{ stats.totalLogins30d.toLocaleString('es-ES') }}</div>
+              <div class="kpi-value kpi-admin">{{ stats.totalLogins30d.toLocaleString('es-ES') }}</div>
               <div class="small text-muted">Inicios de sesión (30d)</div>
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
           <div class="card border-0 shadow-sm text-center py-3">
             <div class="card-body">
               <div class="kpi-value text-danger">{{ stats.failedAttempts30d }}</div>
@@ -35,10 +35,10 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
           <div class="card border-0 shadow-sm text-center py-3">
             <div class="card-body">
-              <div class="kpi-value text-success">{{ stats.uniqueUsersToday }}</div>
+              <div class="kpi-value kpi-admin">{{ stats.uniqueUsersToday }}</div>
               <div class="small text-muted">Usuarios activos hoy</div>
             </div>
           </div>
@@ -57,8 +57,7 @@
           </div>
         </div>
 
-        <!-- Últimas sesiones -->
-        <div class="col-md-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
           <div class="card border-0 shadow-sm h-100">
             <div class="card-header border-bottom py-2">
               <span class="fw-semibold small">Últimas sesiones</span>
@@ -83,8 +82,9 @@
             </ul>
           </div>
         </div>
-      </div>      <!-- Tabla de intentos fallidos con filtros y paginación -->
-      <div class="card border-0 shadow-sm">
+      </div>
+
+      <div class="card border-0 shadow-sm" data-aos="fade-up">
         <div class="card-header border-bottom d-flex justify-content-between align-items-center py-2">
           <span class="fw-semibold small">
             <i class="bi bi-shield-exclamation me-2 text-danger"></i>Últimos intentos fallidos
@@ -111,7 +111,7 @@
               <input v-model="attemptsFilters.to" type="date" class="form-control form-control-sm" />
             </div>
             <div class="col-md-1 d-grid">
-              <button class="btn btn-success btn-sm" @click="applyFilters">
+              <button class="btn btn-admin btn-sm" @click="applyFilters">
                 <i class="bi bi-funnel"></i>
               </button>
             </div>
@@ -166,7 +166,7 @@
               >
                 <a
                   class="page-link"
-                  :class="{ 'bg-success border-success text-white': p === attemptsFilters.page }"
+                  :class="{ 'page-link-active': p === attemptsFilters.page }"
                   href="#"
                   @click.prevent="goToPage(p)"
                 >{{ p }}</a>

@@ -6,7 +6,7 @@
       <div>
         <p class="section-overline">Nuestra selección</p>
         <h2 class="section-title fw-bold mb-0">
-          <i class="bi bi-star-fill text-accent me-2"></i>Productos Destacados
+          <i class="text-accent me-2"></i>Productos Destacados
         </h2>
       </div>
       <router-link to="/productos" class="btn btn-outline-dark btn-sm px-4 see-all-btn">
@@ -235,7 +235,7 @@ onMounted(async () => {
 .product-cell {
   cursor: pointer;
   border-radius: 1rem;
-  background: #fff;
+  background: var(--color-cream);
   border: 1px solid var(--color-border);
   overflow: hidden;
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
@@ -250,9 +250,9 @@ onMounted(async () => {
 /* ── Imagen ── */
 .product-img-wrap {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: linear-gradient(145deg, #f5f5f8 0%, #ebebf3 100%);
+  background: linear-gradient(145deg, var(--color-cream-dark) 0%, #DDD4C4 100%);
 }
 
 .product-img {
@@ -273,7 +273,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   font-size: 3rem;
-  color: #ccc;
+  color: var(--color-sand);
 }
 
 /* ── Overlay ── */
@@ -309,8 +309,8 @@ onMounted(async () => {
   position: absolute;
   top: 0.65rem;
   left: 0.65rem;
-  background: rgba(26, 26, 46, 0.82);
-  color: #fff;
+  background: rgba(28, 16, 8, 0.82);
+  color: var(--color-cream);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.04em;

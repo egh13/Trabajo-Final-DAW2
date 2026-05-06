@@ -1,43 +1,38 @@
 <template>
-  <section class="hero-banner rounded-3 mb-4">
+  <section class="hero-banner rounded-3">
+    <div class="hero-split">
 
-    <div class="hero-ticker" aria-hidden="true">
-      <div class="ticker-track">
-        <template v-for="(item, i) in tickerItems.concat(tickerItems)" :key="i">
-          <span class="ticker-item">
-            <i :class="`bi ${item.icon}`"></i>{{ item.label }}
-          </span>
-          <span class="ticker-sep">✦</span>
-        </template>
+      <!-- Izquierda: texto -->
+      <div class="hero-left" data-aos="fade-right">
+        <div class="hero-logo">
+          <span class="hero-logo-secure">Secure</span><span class="hero-logo-tenis">Tenis</span>
+        </div>
+        <span class="hero-badge">Nueva Colección 2026</span>
+        <h1 class="hero-title">
+          Mejores productos<br>
+          <span class="hero-title-accent">a un mejor precio</span>
+        </h1>
+        <p class="hero-desc">
+          Zapatillas, ropa y accesorios seleccionados para quienes no se conforman con lo ordinario.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-hero-primary" @click="emit('scroll-to-products')">
+            Ver Colección <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+          <router-link class="btn-hero-ghost" to="/productos">
+            Explorar todo
+          </router-link>
+        </div>
       </div>
-    </div>
 
-    <div class="hero-content text-center py-5 px-3">
-      <span class="badge bg-accent text-white mb-3 px-3 py-2 fs-6" data-aos="fade-down">Nueva Colección 2026</span>
-      <h1 class="display-5 fw-bold text-white mb-3" data-aos="fade-up" data-aos-delay="100">
-        Bienvenido a <span class="text-accent">Secure Tenis</span>
-      </h1>
-      <p class="lead text-light mb-4 mx-auto" style="max-width: 520px;" data-aos="fade-up" data-aos-delay="200">
-        Los mejores tenis para cada ocasión. Calidad y estilo en cada paso.
-      </p>
-      <div data-aos="fade-up" data-aos-delay="300">
-        <button class="btn btn-accent btn-lg px-5 shadow" @click="emit('scroll-to-products')">
-          Ver Productos <i class="bi bi-arrow-down ms-2"></i>
-        </button>
+      <!-- Derecha: imagen de modelo -->
+      <div class="hero-right" data-aos="fade-left" data-aos-delay="150">
+        <div class="hero-image-wrap">
+          <img src="@/assets/images/PesonaConGafas.jpg" alt="Modelo con gafas" class="hero-model-img" />
+        </div>
       </div>
-    </div>
 
-    <div class="hero-ticker" aria-hidden="true">
-      <div class="ticker-track ticker-track--reverse">
-        <template v-for="(item, i) in tickerItems.concat(tickerItems)" :key="i">
-          <span class="ticker-item">
-            <i :class="`bi ${item.icon}`"></i>{{ item.label }}
-          </span>
-          <span class="ticker-sep">✦</span>
-        </template>
-      </div>
     </div>
-
   </section>
 </template>
 
@@ -45,92 +40,185 @@
 const emit = defineEmits<{
   (e: 'scroll-to-products'): void
 }>()
-
-const tickerItems = [
-  { icon: 'bi-bag-fill',              label: 'Zapatillas'      },
-  { icon: 'bi-person-fill',           label: 'Camisetas'       },
-  { icon: 'bi-gem',                   label: 'Colgantes'       },
-  { icon: 'bi-lightning-charge-fill', label: 'Moda Urbana'     },
-  { icon: 'bi-trophy-fill',           label: 'Deporte'         },
-  { icon: 'bi-stars',                 label: 'Accesorios'      },
-  { icon: 'bi-heart-fill',            label: 'Ropa de Calle'   },
-  { icon: 'bi-wind',                  label: 'Running'         },
-  { icon: 'bi-palette-fill',          label: 'Estilo Propio'   },
-]
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap');
+
+/* ── Logo ── */
+.hero-logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+.hero-logo-secure { color: #F4F4F2; }
+.hero-logo-tenis  { color: var(--color-garnet); }
+
+/* ── Banner ── */
 .hero-banner {
-  background:
-    radial-gradient(ellipse at 75% 50%, rgba(233, 69, 96, 0.18) 0%, transparent 55%),
-    linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-surface) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
-}
-
-.hero-banner:hover {
-  border-color: rgba(233, 69, 96, 0.3);
-  box-shadow: 0 0 30px rgba(233, 69, 96, 0.18), 0 6px 20px rgba(233, 69, 96, 0.1);
-  transform: scale(1.002);
-}
-
-.hero-content {
-  max-width: 640px;
-  margin: 0 auto;
-  padding-top: 3.5rem;
-  padding-bottom: 3.5rem;
-}
-
-/* ── Ticker ── */
-.hero-ticker {
+  position: relative;
+  background-color: #1E1E1E;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 22px,
+    rgba(200, 200, 200, 0.035) 22px,
+    rgba(200, 200, 200, 0.035) 23px
+  );
+  border: 1px solid rgba(200, 200, 200, 0.1);
   overflow: hidden;
-  padding: 0.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.ticker-track {
-  display: flex;
-  width: max-content;
-  animation: ticker-ltr 28s linear infinite;
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(107, 30, 46, 0.22) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.ticker-track--reverse {
-  animation: ticker-rtl 28s linear infinite;
+/* ── Grid ── */
+.hero-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: end;
+  min-height: 260px;
+  padding: 0 0 0 3.5rem;
+  gap: 0;
 }
 
-.ticker-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+@media (max-width: 900px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+    padding: 2.5rem 1.75rem;
+    min-height: auto;
+    text-align: center;
+  }
+  .hero-right { display: none; }
+  .hero-actions { justify-content: center; }
+  .hero-desc { max-width: 100%; }
+}
+
+/* ── Izquierda ── */
+.hero-left {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 0.3rem 1rem;
+  border-radius: 50px;
+  border: 1px solid rgba(200, 200, 200, 0.35);
+  background: rgba(200, 200, 200, 0.09);
+  color: #F4F4F2;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  white-space: nowrap;
-  padding: 0 0.25rem;
+  margin-bottom: 1.35rem;
 }
 
-.ticker-item i {
-  color: var(--color-accent);
-  font-size: 0.8rem;
+.hero-title {
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #F4F4F2;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.02em;
 }
 
-.ticker-sep {
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 0.55rem;
-  padding: 0 0.75rem;
-  align-self: center;
+.hero-title-accent { color: #CECECE; }
+
+.hero-desc {
+  font-size: 1.05rem;
+  color: rgba(210, 210, 210, 0.82);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 2rem;
 }
 
-@keyframes ticker-ltr {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+.hero-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-@keyframes ticker-rtl {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+.btn-hero-primary {
+  padding: 0.7rem 1.75rem;
+  border-radius: 50px;
+  background: var(--color-garnet);
+  color: var(--color-cream);
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+.btn-hero-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(107, 30, 46, 0.5);
+  filter: brightness(1.1);
+}
+
+.btn-hero-ghost {
+  padding: 0.7rem 1.75rem;
+  border-radius: 50px;
+  border: 1px solid rgba(200, 200, 200, 0.35);
+  color: rgba(240, 240, 240, 0.85);
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.btn-hero-ghost:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #F4F4F2;
+  border-color: rgba(200, 200, 200, 0.55);
+}
+
+/* ── Derecha ── */
+.hero-right {
+  margin-right: -3.5rem;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.hero-image-wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 55%, transparent 100%),
+    linear-gradient(to right,  transparent 0%, #000 22%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 55%, transparent 100%),
+    linear-gradient(to right,  transparent 0%, #000 22%, #000 100%);
+  mask-composite: intersect;
+}
+
+.hero-model-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  mix-blend-mode: luminosity;
+  filter: contrast(1.05) brightness(0.95);
 }
 </style>

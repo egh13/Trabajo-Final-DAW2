@@ -1,19 +1,19 @@
 <template>
-  <div class="container-fluid py-4">
+  <div class="container-fluid px-0">
     <div class="row">
-      <div class="col-12">
+      <div class="col-12" data-aos="fade-up">
         <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">
+          <div class="card-header-admin d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-semibold">
               <i class="bi bi-people me-2"></i>
               Gestión de Usuarios
             </h4>
             <div class="d-flex gap-2">
-              <button class="btn btn-success btn-sm" @click="openModal">
+              <button class="btn btn-admin-outline btn-sm" @click="openModal">
                 <i class="bi bi-plus-circle me-1"></i>
-                Agregar Usuario
+                Nuevo usuario
               </button>
-              <button class="btn btn-light btn-sm" @click="loadUsers">
+              <button class="btn btn-ghost-sm btn-sm" @click="loadUsers">
                 <i class="bi bi-arrow-clockwise me-1"></i>
                 Actualizar
               </button>
@@ -21,11 +21,11 @@
           </div>
           <div class="card-body">
             <!-- Loading -->
-            <div v-if="loading" class="text-center py-4">
-              <div class="spinner-border text-primary" role="status">
+            <div v-if="loading" class="text-center py-5">
+              <div class="spinner-border spinner-admin" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
-              <p class="mt-2 text-muted">Cargando usuarios...</p>
+              <p class="mt-2 text-muted small">Cargando usuarios...</p>
             </div>
 
             <!-- Error -->
@@ -60,7 +60,7 @@
                       </td>
                       <td class="small font-monospace">{{ formatDate(user.createdAt) }}</td>
                       <td>
-                        <button class="btn btn-sm btn-outline-primary me-1" @click="editUser(user)">
+                        <button class="btn btn-sm btn-outline-admin me-1" @click="editUser(user)">
                           <i class="bi bi-pencil"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-danger" @click="deleteUser(user)">
@@ -87,9 +87,9 @@
     <div v-if="showCreateModal" class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header bg-success text-white">
+          <div class="modal-header modal-header-admin">
             <h5 class="modal-title">
-              <i class="bi bi-person-plus me-2"></i> Agregar Nuevo Usuario
+              <i class="bi bi-person-plus me-2"></i> Nuevo Usuario
             </h5>
             <button type="button" class="btn-close btn-close-white" @click="closeModal"></button>
           </div>
@@ -122,11 +122,11 @@
                 </select>
               </div>
               <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success btn-sm" :disabled="creatingUser">
+                <button type="submit" class="btn btn-admin btn-sm" :disabled="creatingUser">
                   <i class="bi me-1" :class="creatingUser ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
                   {{ creatingUser ? 'Creando...' : 'Crear Usuario' }}
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" @click="closeModal" :disabled="creatingUser">Cancelar</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @click="closeModal" :disabled="creatingUser">Cancelar</button>
               </div>
             </form>
           </div>
@@ -138,7 +138,7 @@
     <div v-if="showEditModal" class="modal d-block" style="background: rgba(0,0,0,0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
+          <div class="modal-header modal-header-admin">
             <h5 class="modal-title">
               <i class="bi bi-pencil-square me-2"></i> Editar Usuario
             </h5>
@@ -174,11 +174,11 @@
                 </select>
               </div>
               <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-success btn-sm" :disabled="updatingUser">
+                <button type="submit" class="btn btn-admin btn-sm" :disabled="updatingUser">
                   <i class="bi me-1" :class="updatingUser ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
                   {{ updatingUser ? 'Actualizando...' : 'Guardar Cambios' }}
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" @click="closeEditModal" :disabled="updatingUser">Cancelar</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @click="closeEditModal" :disabled="updatingUser">Cancelar</button>
               </div>
             </form>
           </div>
@@ -421,7 +421,80 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.card-header-admin {
+  background: var(--color-surface, #1E1E1E);
+  color: #fff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 0;
+}
+
+.modal-header-admin {
+  background: var(--color-garnet, #6B1E2E);
+  color: #fff;
+}
+
+.modal-header-admin .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.btn-admin {
+  background: var(--color-garnet, #6B1E2E);
+  border-color: var(--color-garnet, #6B1E2E);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-admin:hover, .btn-admin:focus {
+  background: var(--color-garnet-dark, #4E1420);
+  border-color: var(--color-garnet-dark, #4E1420);
+  color: #fff;
+}
+
+.btn-admin:disabled {
+  background: var(--color-garnet, #6B1E2E);
+  opacity: 0.6;
+}
+
+.btn-admin-outline {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  background: transparent;
+  font-weight: 500;
+}
+
+.btn-admin-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-outline-admin {
+  border-color: var(--color-garnet, #6B1E2E);
+  color: var(--color-garnet, #6B1E2E);
+}
+
+.btn-outline-admin:hover {
+  background: var(--color-garnet, #6B1E2E);
+  color: #fff;
+}
+
+.btn-ghost-sm {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.btn-ghost-sm:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.spinner-admin {
+  color: var(--color-garnet, #6B1E2E);
+}
+
 .modal-content {
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
+  border: none;
 }
 </style>

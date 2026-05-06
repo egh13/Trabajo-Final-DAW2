@@ -1,17 +1,16 @@
 <template>
   <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-down">
       <h2 class="fw-bold mb-0">Auditoría de Actividad</h2>      <div class="d-flex gap-2">
-        <button class="btn btn-outline-success btn-sm" :disabled="exporting" @click="exportFile('csv')">
+        <button class="btn btn-admin btn-sm" :disabled="exporting" @click="exportFile('csv')">
           <i class="bi bi-download me-1"></i> Exportar CSV
         </button>
-        <button class="btn btn-outline-dark btn-sm" :disabled="exporting" @click="exportFile('pdf')">
+        <button class="btn btn-outline-secondary btn-sm" :disabled="exporting" @click="exportFile('pdf')">
           <i class="bi bi-filetype-pdf me-1"></i> Exportar PDF
         </button>
       </div>
     </div>    
-    <!-- Filtros de búsqueda -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card border-0 shadow-sm mb-4" data-aos="fade-up" data-aos-delay="80">
       <div class="card-body">
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
@@ -47,14 +46,13 @@
             <input v-model="filters.to" type="date" class="form-control form-control-sm" />
           </div>
           <div class="col-md-1 d-grid">
-            <button class="btn btn-success btn-sm" @click="applyFilters">
+            <button class="btn btn-admin btn-sm" @click="applyFilters">
               <i class="bi bi-funnel"></i>
             </button>
           </div>
         </div>
       </div>
-    </div>    <!-- Tabla de logs -->
-    <div class="card border-0 shadow-sm">
+    </div>    <div class="card border-0 shadow-sm" data-aos="fade-up" data-aos-delay="160">
       <div class="table-responsive">
         <table class="table table-hover table-striped mb-0 align-middle">
           <thead class="table-dark">
@@ -130,7 +128,7 @@
             >
               <a
                 class="page-link"
-                :class="{ 'bg-success border-success text-white': p === filters.page }"
+                :class="{ 'page-link-active': p === filters.page }"
                 href="#"
                 @click.prevent="goToPage(p)"
               >{{ p }}</a>
@@ -222,6 +220,30 @@ onMounted(loadLogs)
 </script>
 
 <style scoped>
+.btn-admin {
+  background: var(--color-garnet, #6B1E2E);
+  border-color: var(--color-garnet, #6B1E2E);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-admin:hover {
+  background: var(--color-garnet-dark, #4E1420);
+  border-color: var(--color-garnet-dark, #4E1420);
+  color: #fff;
+}
+
+.btn-admin:disabled {
+  background: var(--color-garnet, #6B1E2E);
+  opacity: 0.6;
+}
+
+.page-link-active {
+  background: var(--color-garnet, #6B1E2E) !important;
+  border-color: var(--color-garnet, #6B1E2E) !important;
+  color: #fff !important;
+}
+
 pre {
   white-space: pre-wrap;
   word-break: break-word;
