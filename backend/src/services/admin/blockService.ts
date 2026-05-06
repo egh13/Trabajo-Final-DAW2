@@ -23,7 +23,7 @@ interface CreateBlockBody {
 // Obtiene todos los bloqueos activos (no expirados)
 const findAllActive = async (): Promise<BlockEntry[]> => {
   const now = new Date()
-  const rows = await prisma.ipBlock.findMany({
+  const rows = await (prisma as any).ipBlock.findMany({
     where: {
       OR: [
         { expiresAt: null },
@@ -46,7 +46,7 @@ const createBlock = async (data: CreateBlockBody): Promise<BlockEntry> => {
     ? new Date(Date.now() + data.durationMinutes * 60 * 1000)
     : null
 
-  const row = await prisma.ipBlock.create({
+  const row = await (prisma as any).ipBlock.create({
     data: {
       ip: data.ip ?? null,
       email: data.email ?? null,
@@ -62,7 +62,7 @@ const createBlock = async (data: CreateBlockBody): Promise<BlockEntry> => {
 // Elimina (desbloquea) un bloqueo por su ID
 const removeBlock = async (id: number): Promise<boolean> => {
   try {
-    await prisma.ipBlock.delete({ where: { id } })
+    await (prisma as any).ipBlock.delete({ where: { id } })
     return true
   } catch {
     return false
@@ -77,7 +77,7 @@ const isBlocked = async (ip: string, userId?: number, email?: string): Promise<{
   if (userId) conditions.push({ userId })
   if (email) conditions.push({ email })
 
-  const block = await prisma.ipBlock.findFirst({
+  const block = await (prisma as any).ipBlock.findFirst({
     where: {
       OR: conditions,
       AND: [
@@ -99,7 +99,7 @@ const isBlocked = async (ip: string, userId?: number, email?: string): Promise<{
 // Registra un bloqueo automático por exceso de intentos fallidos (por email)
 const createAutoBlock = async (email: string, reason: string, durationMinutes: number): Promise<void> => {
   const expiresAt = new Date(Date.now() + durationMinutes * 60 * 1000)
-  await prisma.ipBlock.create({
+  await (prisma as any).ipBlock.create({
     data: {
       email,
       reason,

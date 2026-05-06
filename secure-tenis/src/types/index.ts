@@ -3,6 +3,7 @@ export interface Category {
   name: string
   description: string | null
   createdAt: string
+  productCount?: number
 }
 
 export interface Product {
