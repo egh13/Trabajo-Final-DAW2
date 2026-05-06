@@ -219,4 +219,12 @@ const handleRegister = async () => {
 .auth-footer {
   color: rgba(200, 200, 200, 0.5);
 }
+
+.auth-footer .text-accent {
+  color: #e05a6a;
+}
+
+.auth-footer .text-accent:hover {
+  color: #f07a88;
+}
 </style>

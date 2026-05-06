@@ -95,14 +95,21 @@ const securityCards = [
     description: 'Monitoriza el estado del backend, la base de datos y los últimos logs del sistema.',
     bg: 'linear-gradient(135deg, #22c55e33, #0a0a0a22)',
     tags: ['Backend', 'Base de datos', 'Logs'],
-  },
-  {
+  },  {
     to: '/admin/autenticacion',
     icon: 'bi-shield-lock',
     label: 'Autenticación y Accesos',
     description: 'Visualiza inicios de sesión, intentos fallidos y actividad de acceso con gráficos.',
     bg: 'linear-gradient(135deg, #3b82f633, #0a0a0a22)',
     tags: ['Sesiones', 'Intentos fallidos', 'Gráficos'],
+  },
+  {
+    to: '/admin/bloqueos',
+    icon: 'bi-shield-x',
+    label: 'Control de Bloqueos',
+    description: 'Gestiona bloqueos por IP o usuario, automáticos y manuales, con desbloqueo inmediato.',
+    bg: 'linear-gradient(135deg, #ef444433, #0a0a0a22)',
+    tags: ['IPs', 'Usuarios', 'Rate limiting'],
   },
   {
     to: '/admin/auditoria',

@@ -74,6 +74,11 @@ body {
   transition: all var(--transition-speed) ease;
 }
 
+.app-main--auth {
+  background-color: transparent;
+  padding: 0;
+}
+
 .text-accent {
   color: var(--color-accent);
 }
@@ -103,7 +108,7 @@ body {
 
 .auth-page {
   min-height: calc(100vh - var(--navbar-height));
-  background: linear-gradient(135deg, var(--color-surface) 0%, #282828 55%, #323232 100%);
+  background: linear-gradient(135deg, rgb(230, 223, 223) 0%, #a79292 55%, #f7efef 100%);
   display: flex;
   align-items: center;
   padding: 2rem 0;

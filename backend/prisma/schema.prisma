@@ -100,3 +100,18 @@ model CartItem {
   @@unique([sessionId, productId])
 }
 
+model IpBlock {
+  id        Int       @id @default(autoincrement())
+  ip        String?
+  userId    Int?
+  email     String?
+  reason    String
+  manual    Boolean   @default(false)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([ip])
+  @@index([userId])
+  @@index([email])
+}
+

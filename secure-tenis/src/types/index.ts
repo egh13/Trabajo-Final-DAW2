@@ -134,3 +134,15 @@ export interface SystemStats {
   logsByLevel: { level: string; count: number }[]
   logsByModule: { module: string; count: number }[]
 }
+
+// Bloqueo activo por IP o usuario
+export interface IpBlock {
+  id: number
+  ip: string | null
+  userId: number | null
+  email: string | null
+  reason: string
+  manual: boolean
+  expiresAt: string | null
+  createdAt: string
+}

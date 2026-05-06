@@ -69,8 +69,8 @@ const allMenuItems = [
   { to: '/admin',              icon: 'bi-speedometer2', label: 'Dashboard',               section: 'general',   adminOnly: false },
   { to: '/admin/usuarios',     icon: 'bi-people',       label: 'Gestión de Usuarios',      section: 'general',   adminOnly: true  },
   { to: '/admin/productos',    icon: 'bi-box-seam',     label: 'Gestión de Productos',     section: 'general',   adminOnly: true  },
-  { to: '/admin/estado',       icon: 'bi-display',      label: 'Estado General',           section: 'seguridad', adminOnly: false },
-  { to: '/admin/autenticacion',icon: 'bi-shield-lock',  label: 'Autenticación y Accesos',  section: 'seguridad', adminOnly: false },
+  { to: '/admin/estado',       icon: 'bi-display',      label: 'Estado General',           section: 'seguridad', adminOnly: false },  { to: '/admin/autenticacion',icon: 'bi-shield-lock',  label: 'Autenticación y Accesos',  section: 'seguridad', adminOnly: false },
+  { to: '/admin/bloqueos',     icon: 'bi-shield-x',     label: 'Control de Bloqueos',      section: 'seguridad', adminOnly: true  },
   { to: '/admin/auditoria',    icon: 'bi-journal-text', label: 'Auditoría de Actividad',   section: 'seguridad', adminOnly: false },
 ]
 
