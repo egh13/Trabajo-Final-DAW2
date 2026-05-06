@@ -2,117 +2,206 @@
   <div class="container-fluid px-0">
     <h2 class="fw-bold mb-4">Estado General del Sistema</h2>
 
-    <div class="row g-3 mb-4">
-      <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-3">
-              <div class="status-indicator bg-success"></div>
-              <div>
-                <h6 class="mb-0 text-muted small text-uppercase" style="letter-spacing:.05em">Backend</h6>
-                <span class="fw-bold fs-5 status-text">Operativo</span>
-              </div>
-            </div>
-            <hr />
-            <div class="row text-center small text-muted">
-              <div class="col">
-                <div class="fw-semibold status-text">99.9%</div>
-                Uptime
-              </div>
-              <div class="col">
-                <div class="fw-semibold status-text">42ms</div>
-                Latencia
-              </div>
-              <div class="col">
-                <div class="fw-semibold status-text">v1.0.0</div>
-                Versión
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- Loading -->
+    <div v-if="loading" class="text-center py-5">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Cargando...</span>
       </div>
-
-      <div class="col-md-4" data-aos="fade-up" data-aos-delay="80">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-3">
-              <div class="status-indicator bg-success"></div>
-              <div>
-                <h6 class="mb-0 text-muted small text-uppercase">Base de Datos</h6>
-                <span class="fw-bold fs-5 status-text">Conectada</span>
-              </div>
-            </div>
-            <hr />
-            <div class="row text-center small text-muted">
-              <div class="col">
-                <div class="fw-semibold status-text">MariaDB</div>
-                Motor
-              </div>
-              <div class="col">
-                <div class="fw-semibold status-text">156 MB</div>
-                Tamaño
-              </div>
-              <div class="col">
-                <div class="fw-semibold status-text">12</div>
-                Tablas
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4" data-aos="fade-up" data-aos-delay="160">
-        <div class="card border-0 shadow-sm h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center gap-3">
-              <div class="status-indicator bg-warning"></div>
-              <div>
-                <h6 class="mb-0 text-muted small text-uppercase">Última Backup</h6>
-                <span class="fw-bold fs-5 status-text">Hace 2 días</span>
-              </div>
-            </div>
-            <hr />
-            <div class="d-flex justify-content-between small text-muted">
-              <span>Tamaño: <strong class="status-text">84 MB</strong></span>
-              <span>Estado: <strong class="text-warning">Pendiente</strong></span>
-            </div>
-            <button class="btn btn-sm btn-outline-admin w-100 mt-3" disabled>
-              <i class="bi bi-download me-1"></i> Realizar backup ahora
-            </button>
-          </div>
-        </div>
-      </div>
+      <p class="mt-2 text-muted">Cargando estadísticas...</p>
     </div>
 
-    <div class="card border-0 shadow-sm" data-aos="fade-up" data-aos-delay="240">
-      <div class="card-header card-header-console d-flex justify-content-between align-items-center">
-        <span class="fw-semibold"><i class="bi bi-terminal me-2"></i>Últimos Logs del Sistema</span>
-        <span class="badge bg-success">Live</span>
-      </div>
-      <div class="card-body p-0">
-        <div class="log-console">
-          <div class="log-line" v-for="(log, i) in sampleLogs" :key="i">
-            <span class="log-time text-muted">{{ log.time }}</span>
-            <span class="log-level" :class="'level-' + log.level">{{ log.level.toUpperCase() }}</span>
-            <span class="log-msg">{{ log.message }}</span>
+    <!-- Error -->
+    <div v-else-if="error" class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+    </div>
+
+    <!-- Contenido con datos reales -->
+    <template v-else-if="stats">
+      <!-- Tarjetas de estado -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex align-items-center gap-3">
+                <div class="status-indicator bg-success"></div>
+                <div>
+                  <h6 class="mb-0 text-muted small text-uppercase">Backend</h6>
+                  <span class="fw-bold fs-5 text-dark">{{ stats.backend.status }}</span>
+                </div>
+              </div>
+              <hr />
+              <div class="row text-center small text-muted">
+                <div class="col">
+                  <div class="fw-semibold text-dark">{{ stats.backend.latencyMs }} ms</div>
+                  Latencia
+                </div>
+                <div class="col">
+                  <div class="fw-semibold text-dark">{{ stats.backend.version }}</div>
+                  Versión
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex align-items-center gap-3">
+                <div class="status-indicator bg-success"></div>
+                <div>
+                  <h6 class="mb-0 text-muted small text-uppercase">Base de Datos</h6>
+                  <span class="fw-bold fs-5 text-dark">{{ stats.database.status }}</span>
+                </div>
+              </div>
+              <hr />
+              <div class="row text-center small text-muted">
+                <div class="col">
+                  <div class="fw-semibold text-dark">{{ stats.database.engine }}</div>
+                  Motor
+                </div>
+                <div class="col">
+                  <div class="fw-semibold text-dark">{{ stats.database.tables }}</div>
+                  Tablas
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <!-- Contadores generales -->
+      <div class="row g-3 mb-4">
+        <div class="col" v-for="item in countCards" :key="item.label">
+          <div class="card border-0 shadow-sm text-center py-3">
+            <div class="card-body">
+              <div class="kpi-value" :class="item.color">{{ item.value.toLocaleString('es-ES') }}</div>
+              <div class="small text-muted">{{ item.label }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-7">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-semibold">
+              <i class="bi bi-bar-chart me-2"></i>Logs por Módulo
+            </div>            <div class="card-body">
+              <div class="chart-container">
+                <Bar :data="moduleChartData" :options="barOptions" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white fw-semibold">
+              <i class="bi bi-pie-chart me-2"></i>Logs por Nivel
+            </div>
+            <div class="card-body d-flex justify-content-center align-items-center">
+              <div class="chart-container">
+                <Doughnut :data="levelChartData" :options="doughnutOptions" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-const sampleLogs = [
-  { time: '2026-04-21 10:32:01', level: 'info', message: 'Servidor iniciado en puerto 3000' },
-  { time: '2026-04-21 10:32:02', level: 'info', message: 'Conexión a MariaDB establecida correctamente' },
-  { time: '2026-04-21 10:33:15', level: 'info', message: 'GET /api/products — 200 OK (23ms)' },
-  { time: '2026-04-21 10:34:08', level: 'warn', message: 'Intento de acceso sin token a /api/orders' },
-  { time: '2026-04-21 10:35:42', level: 'info', message: 'POST /api/auth/login — 200 OK (145ms)' },
-  { time: '2026-04-21 10:36:01', level: 'error', message: 'POST /api/auth/login — 401 Credenciales inválidas' },
-  { time: '2026-04-21 10:37:55', level: 'info', message: 'GET /api/categories — 200 OK (8ms)' },
-  { time: '2026-04-21 10:38:20', level: 'info', message: 'Backup automático completado — 84 MB' },
-]
+import { ref, computed, onMounted } from 'vue'
+import { Bar, Doughnut } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import { fetchSystemStats } from '../services/logService'
+import type { SystemStats } from '@/types'
+
+// Registro de componentes Chart.js
+ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
+
+const stats = ref<SystemStats | null>(null)
+const loading = ref(true)
+const error = ref('')
+
+// Colores por nivel de log
+const levelColors: Record<string, string> = {
+  INFO: '#22c55e',
+  WARNING: '#f59e0b',
+  ERROR: '#ef4444',
+  DEBUG: '#3b82f6',
+}
+
+// Tarjetas de contadores
+const countCards = computed(() => {
+  if (!stats.value) return []
+  const c = stats.value.counts
+  return [
+    { label: 'Usuarios', value: c.users, color: 'text-primary' },
+    { label: 'Productos', value: c.products, color: 'text-success' },
+    { label: 'Pedidos', value: c.orders, color: 'text-warning' },
+    { label: 'Categorías', value: c.categories, color: 'text-info' },
+    { label: 'Logs', value: c.logs, color: 'text-secondary' },
+  ]
+})
+
+// Datos del gráfico de barras (logs por módulo)
+const moduleChartData = computed(() => ({
+  labels: stats.value?.logsByModule.map((m) => m.module) ?? [],
+  datasets: [
+    {
+      label: 'Logs',
+      data: stats.value?.logsByModule.map((m) => m.count) ?? [],
+      backgroundColor: '#198754',
+      borderRadius: 4,
+    },
+  ],
+}))
+
+// Datos del gráfico doughnut (logs por nivel)
+const levelChartData = computed(() => ({
+  labels: stats.value?.logsByLevel.map((l) => l.level.toUpperCase()) ?? [],
+  datasets: [
+    {
+      data: stats.value?.logsByLevel.map((l) => l.count) ?? [],
+      backgroundColor: stats.value?.logsByLevel.map((l) => levelColors[l.level.toUpperCase()] ?? '#6b7280') ?? [],
+    },
+  ],
+}))
+
+const barOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { display: false } },
+  scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+}
+
+const doughnutOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { position: 'bottom' as const } },
+}
+
+// Carga de datos al montar el componente
+onMounted(async () => {
+  try {
+    stats.value = await fetchSystemStats()
+  } catch (e: any) {
+    error.value = e.message || 'Error al cargar estadísticas del sistema'
+  } finally {
+    loading.value = false
+  }
+})
 </script>
 
 <style scoped>
@@ -144,47 +233,24 @@ const sampleLogs = [
 }
 
 @keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(107, 30, 46, 0.35); }
-  50% { box-shadow: 0 0 0 7px rgba(107, 30, 46, 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+  }
 }
 
-.log-console {
-  background: #0a0a0a;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 0.8rem;
-  padding: 1rem;
-  max-height: 320px;
-  overflow-y: auto;
-}
-
-.log-line {
-  display: flex;
-  gap: 1rem;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid #1a1a1a;
-}
-
-.log-time {
-  color: #666;
-  flex-shrink: 0;
-}
-
-.log-level {
+.kpi-value {
+  font-size: 1.8rem;
   font-weight: 700;
-  flex-shrink: 0;
-  width: 50px;
-  text-align: center;
-  border-radius: 3px;
-  padding: 0 4px;
-  font-size: 0.7rem;
-  line-height: 1.6;
+  line-height: 1.2;
 }
 
-.level-info { color: #22c55e; }
-.level-warn { color: #f59e0b; }
-.level-error { color: #ef4444; }
-
-.log-msg {
-  color: #d4d4d4;
+.chart-container {
+  position: relative;
+  height: 260px;
+  width: 100%;
 }
 </style>

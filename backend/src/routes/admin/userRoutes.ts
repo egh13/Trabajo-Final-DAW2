@@ -1,10 +1,10 @@
 import { Router } from 'express'
-import { getUsers, createUser, updateUser, deleteUser } from '../controllers/userController'
-import { authenticate, authorize } from '../middlewares/authMiddleware'
+import { getUsers, createUser, updateUser, deleteUser } from '../../controllers/admin/userController'
+import { authenticate, authorize } from '../../middlewares/authMiddleware'
 
 const router = Router()
 
-// Todas las rutas requieren autenticación y rol de administrador
+// Rutas solo para administrador
 router.use(authenticate, authorize('admin'))
 
 router.get('/', getUsers)

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import authService from '../services/authService'
 import { mergeSessionCartIntoUser } from '../services/cartService'
-import { createLog, getClientIp } from '../services/logService'
+import { createLog, getClientIp } from '../services/admin/logService'
 import { sendWelcomeEmail } from '../services/mailService'
 import type { ApiResponse, UserPublic } from '../types'
 

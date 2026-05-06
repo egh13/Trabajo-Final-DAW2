@@ -1,8 +1,8 @@
 import type { Request, Response, NextFunction } from 'express'
-import userService from '../services/userService'
-import { createLog, getClientIp } from '../services/logService'
-import { sendWelcomeEmail } from '../services/mailService'
-import type { ApiResponse, UserPublic } from '../types'
+import userService from '../../services/admin/userService'
+import { createLog, getClientIp } from '../../services/admin/logService'
+import { sendWelcomeEmail } from '../../services/mailService'
+import type { ApiResponse, UserPublic } from '../../types'
 
 // Devuelve la lista completa de usuarios
 export const getUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
