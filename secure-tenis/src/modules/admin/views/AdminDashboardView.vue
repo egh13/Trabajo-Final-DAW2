@@ -1,32 +1,49 @@
 <template>
-  <div class="container-fluid px-0">
-    <div class="dashboard-hero mb-4" data-aos="fade-down">
-      <div>
-        <h2 class="fw-bold mb-1">Bienvenido al Panel de Administración</h2>
-        <p class="text-muted mb-0 small">Gestiona todos los aspectos de SecureTenis desde aquí.</p>
-      </div>
-    </div>
-    <div class="row g-3">
-      <div
-        class="col-lg-4 col-md-6"
-        v-for="(card, index) in cards"
-        :key="card.to"
-        data-aos="fade-up"
-        :data-aos-delay="index * 80"
-      >
+  <div class="container-fluid">    <h2 class="fw-bold mb-4">Panel de Administración</h2>
+
+    <!-- Sección General -->    
+    <h5 v-if="generalCards.length > 0" class="section-title text-muted mb-3" data-aos="fade-up">
+      <i class="bi bi-grid me-2"></i>General
+    </h5>
+    <div v-if="generalCards.length > 0" class="row g-4 mb-4">
+      <div class="col-md-4" v-for="(card, i) in generalCards" :key="card.to" data-aos="fade-up" :data-aos-delay="i * 80">
         <router-link :to="card.to" class="text-decoration-none">
           <div class="module-card h-100">
             <div class="card-body d-flex flex-column p-4">
               <div class="module-icon-wrapper mb-3" :style="{ background: card.bg }">
-                <i :class="['bi', card.icon, 'module-icon']" :style="{ color: card.iconColor }"></i>
+                <i class="bi module-icon" :class="card.icon"></i>
               </div>
-              <h5 class="card-title fw-bold mb-1" style="color: var(--color-surface, #1E1E1E)">{{ card.label }}</h5>
-              <p class="card-text text-muted small mb-3" style="line-height:1.5">{{ card.description }}</p>
-              <div class="mb-3 d-flex flex-wrap gap-1">
-                <span class="tag-badge" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
+              <h5 class="card-title fw-bold text-dark">{{ card.label }}</h5>
+              <p class="card-text text-muted small mb-3">{{ card.description }}</p>
+              <div class="mb-3">
+                <span class="badge bg-dark bg-opacity-75 me-1" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
               </div>
               <div class="mt-auto">
-                <span class="module-enter fw-semibold small">Acceder <i class="bi bi-arrow-right ms-1"></i></span>
+                <span class="module-enter text-success fw-semibold small">Acceder →</span>
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </div>
+
+    <!-- Sección Seguridad -->    <h5 class="section-title text-muted mb-3" data-aos="fade-up">
+      <i class="bi bi-shield-check me-2"></i>Seguridad
+    </h5>
+    <div class="row g-4">      <div class="col-md-4" v-for="(card, i) in securityCards" :key="card.to" data-aos="fade-up" :data-aos-delay="i * 80">
+        <router-link :to="card.to" class="text-decoration-none">
+          <div class="module-card h-100">
+            <div class="card-body d-flex flex-column p-4">
+              <div class="module-icon-wrapper mb-3" :style="{ background: card.bg }">
+                <i class="bi module-icon" :class="card.icon"></i>
+              </div>
+              <h5 class="card-title fw-bold text-dark">{{ card.label }}</h5>
+              <p class="card-text text-muted small mb-3">{{ card.description }}</p>
+              <div class="mb-3">
+                <span class="badge bg-dark bg-opacity-75 me-1" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
+              </div>
+              <div class="mt-auto">
+                <span class="module-enter fw-semibold small">Acceder →</span>
               </div>
             </div>
           </div>
@@ -37,24 +54,62 @@
 </template>
 
 <script setup lang="ts">
-const cards = [
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
+const isAdmin = computed(() => authStore.hasAnyRole('admin'))
+
+// Tarjetas de la sección General
+const allGeneralCards = [
+  {
+    to: '/admin/usuarios',
+    icon: 'bi-people',
+    label: 'Gestión de Usuarios',
+    description: 'Administra usuarios, roles y permisos del sistema. Crea, edita y elimina cuentas.',
+    bg: 'linear-gradient(135deg, #8b5cf633, #0a0a0a22)',
+    tags: ['Usuarios', 'Roles', 'Permisos'],
+    adminOnly: true,
+  },
+  {
+    to: '/admin/productos',
+    icon: 'bi-box-seam',
+    label: 'Gestión de Productos',
+    description: 'Administra el catálogo de productos, precios, stock y categorías.',
+    bg: 'linear-gradient(135deg, #06b6d433, #0a0a0a22)',
+    tags: ['Productos', 'Precios', 'Stock'],
+    adminOnly: true,
+  },
+]
+
+const generalCards = computed(() =>
+  allGeneralCards.filter(c => !c.adminOnly || isAdmin.value)
+)
+
+// Tarjetas de la sección Seguridad
+const securityCards = [
   {
     to: '/admin/estado',
     icon: 'bi-display',
     label: 'Estado General',
     description: 'Monitoriza el estado del backend, la base de datos y los últimos logs del sistema.',
-    bg: 'rgba(107, 30, 46, 0.08)',
-    iconColor: 'var(--color-garnet, #6B1E2E)',
+    bg: 'linear-gradient(135deg, #22c55e33, #0a0a0a22)',
     tags: ['Backend', 'Base de datos', 'Logs'],
-  },
-  {
+  },  {
     to: '/admin/autenticacion',
     icon: 'bi-shield-lock',
     label: 'Autenticación y Accesos',
-    description: 'Visualiza inicios de sesión, intentos fallidos y actividad de acceso con gráficos en tiempo real.',
-    bg: 'rgba(122, 80, 64, 0.08)',
-    iconColor: 'var(--color-brown, #7A5040)',
+    description: 'Visualiza inicios de sesión, intentos fallidos y actividad de acceso con gráficos.',
+    bg: 'linear-gradient(135deg, #3b82f633, #0a0a0a22)',
     tags: ['Sesiones', 'Intentos fallidos', 'Gráficos'],
+  },
+  {
+    to: '/admin/bloqueos',
+    icon: 'bi-shield-x',
+    label: 'Control de Bloqueos',
+    description: 'Gestiona bloqueos por IP o usuario, automáticos y manuales, con desbloqueo inmediato.',
+    bg: 'linear-gradient(135deg, #ef444433, #0a0a0a22)',
+    tags: ['IPs', 'Usuarios', 'Rate limiting'],
   },
   {
     to: '/admin/auditoria',
@@ -65,36 +120,10 @@ const cards = [
     iconColor: 'var(--color-surface, #1E1E1E)',
     tags: ['Logs', 'Tabla', 'Exportar'],
   },
-  {
-    to: '/admin/usuarios',
-    icon: 'bi-people',
-    label: 'Gestión de Usuarios',
-    description: 'Administra usuarios, roles y permisos del sistema. Crea, edita y elimina cuentas.',
-    bg: 'rgba(107, 30, 46, 0.06)',
-    iconColor: 'var(--color-garnet, #6B1E2E)',
-    tags: ['Usuarios', 'Roles', 'Permisos'],
-  },
-  {
-    to: '/admin/productos',
-    icon: 'bi-box-seam',
-    label: 'Gestión de Productos',
-    description: 'Administra el catálogo de productos, precios, stock y categorías.',
-    bg: 'rgba(122, 80, 64, 0.06)',
-    iconColor: 'var(--color-brown, #7A5040)',
-    tags: ['Productos', 'Precios', 'Stock'],
-  },
 ]
 </script>
 
 <style scoped>
-.dashboard-hero {
-  background: #fff;
-  border: 1px solid var(--color-border, #CECECE);
-  border-radius: 12px;
-  padding: 1.5rem 1.75rem;
-  border-left: 4px solid var(--color-garnet, #6B1E2E);
-}
-
 .module-card {
   background: #fff;
   border-radius: 12px;
@@ -120,17 +149,17 @@ const cards = [
 }
 
 .module-icon {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+  color: #333;
 }
 
-.tag-badge {
-  background: var(--color-bg-alt, #E8E8E6);
-  color: var(--color-gray, #7A7A7A);
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 0.15rem 0.55rem;
-  border-radius: 20px;
-  letter-spacing: 0.02em;
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
 }
 
 .module-enter {

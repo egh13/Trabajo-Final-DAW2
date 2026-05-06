@@ -43,33 +43,15 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="row g-3 mb-3">
+      </div><div class="row g-3 mb-3">        <!-- Gráfico de logins vs fallidos -->
         <div class="col-md-8" data-aos="fade-up" data-aos-delay="80">
           <div class="card border-0 shadow-sm">
             <div class="card-header border-bottom py-2">
               <span class="fw-semibold small">Inicios de sesión vs Intentos fallidos (últimos 7 días)</span>
             </div>
-            <div class="card-body d-flex align-items-center justify-content-center">
-              <div class="chart-placeholder">
-                <div class="chart-bars">
-                  <div v-for="(bar, i) in stats.chartData" :key="i" class="chart-bar-group">
-                    <div class="chart-bar-wrapper">
-                      <span class="bar-tooltip tooltip-success">{{ bar.ok }}</span>
-                      <div class="chart-bar bar-success" :style="{ height: barHeight(bar.ok) + 'px' }"></div>
-                    </div>
-                    <div class="chart-bar-wrapper">
-                      <span class="bar-tooltip tooltip-danger">{{ bar.fail }}</span>
-                      <div class="chart-bar bar-danger" :style="{ height: barHeight(bar.fail) + 'px' }"></div>
-                    </div>
-                    <span class="chart-label small text-muted">{{ bar.day }}</span>
-                  </div>
-                </div>
-                <div class="d-flex justify-content-center gap-4 mt-2">
-                  <span class="small"><span class="legend-dot bg-success"></span> Exitosos</span>
-                  <span class="small"><span class="legend-dot bg-danger"></span> Fallidos</span>
-                </div>
+            <div class="card-body">
+              <div class="chart-container">
+                <Bar :data="loginChartData" :options="loginChartOptions" />
               </div>
             </div>
           </div>
@@ -202,22 +184,47 @@
 
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
+import { Bar } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+  Legend,
+} from 'chart.js'
 import { useAuthStats } from '@/modules/admin/composables/useAuthStats'
 import { useFailedAttempts } from '@/modules/admin/composables/useFailedAttempts'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
 const { stats, loading, error, load } = useAuthStats()
 const { attempts, total: attemptsTotal, loading: attemptsLoading, filters: attemptsFilters, applyFilters, goToPage, totalPages, visiblePages } = useFailedAttempts()
 
-// Calcula la altura máxima para escalar las barras del gráfico
-const maxChartValue = computed(() => {
-  if (!stats.value) return 1
-  const values = stats.value.chartData.flatMap(d => [d.ok, d.fail])
-  return Math.max(...values, 1)
-})
+// Datos del gráfico de logins vs fallidos por día
+const loginChartData = computed(() => ({
+  labels: stats.value?.chartData.map((d) => d.day) ?? [],
+  datasets: [
+    {
+      label: 'Exitosos',
+      data: stats.value?.chartData.map((d) => d.ok) ?? [],
+      backgroundColor: '#22c55e',
+      borderRadius: 4,
+    },
+    {
+      label: 'Fallidos',
+      data: stats.value?.chartData.map((d) => d.fail) ?? [],
+      backgroundColor: '#ef4444',
+      borderRadius: 4,
+    },
+  ],
+}))
 
-// Escala la altura de cada barra proporcionalmente
-const barHeight = (value: number): number => {
-  return Math.max((value / maxChartValue.value) * 115, value > 0 ? 4 : 0)
+const loginChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: { legend: { position: 'bottom' as const } },
+  scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
 }
 
 // Formatea una fecha ISO a formato legible
@@ -256,119 +263,9 @@ onMounted(() => {
   line-height: 1.2;
 }
 
-.kpi-admin {
-  color: var(--color-garnet, #6B1E2E);
-}
-
-.spinner-admin {
-  color: var(--color-garnet, #6B1E2E);
-}
-
-.btn-admin {
-  background: var(--color-garnet, #6B1E2E);
-  border-color: var(--color-garnet, #6B1E2E);
-  color: #fff;
-  font-weight: 600;
-}
-
-.btn-admin:hover {
-  background: var(--color-garnet-dark, #4E1420);
-  border-color: var(--color-garnet-dark, #4E1420);
-  color: #fff;
-}
-
-.page-link-active {
-  background: var(--color-garnet, #6B1E2E) !important;
-  border-color: var(--color-garnet, #6B1E2E) !important;
-  color: #fff !important;
-}
-
-.chart-placeholder {
-  width: 100%;
-  padding: 0.75rem 0;
-}
-
-.chart-bars {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 1.5rem;
-  height: 200px;
-}
-
-.chart-bar-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.chart-bar-wrapper {
+.chart-container {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.chart-bar-wrapper:hover .bar-tooltip {
-  opacity: 1;
-  transform: translateY(-4px);
-}
-
-.bar-tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(0);
-  margin-bottom: 4px;
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-  z-index: 10;
-}
-
-.tooltip-success {
-  background: #16a34a;
-  color: #fff;
-}
-
-.tooltip-danger {
-  background: #dc2626;
-  color: #fff;
-}
-
-.chart-bar {
-  width: 22px;
-  border-radius: 4px 4px 0 0;
-}
-
-.bar-success {
-  background: #86efac;
-  transition: background 0.2s ease, height 0.4s ease;
-}
-.bar-success:hover { background: #22c55e; }
-
-.bar-danger {
-  background: #fca5a5;
-  transition: background 0.2s ease, height 0.4s ease;
-}
-.bar-danger:hover { background: #ef4444; }
-
-.chart-label {
-  margin-top: 6px;
-}
-
-.legend-dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 4px;
-  vertical-align: middle;
+  height: 260px;
+  width: 100%;
 }
 </style>

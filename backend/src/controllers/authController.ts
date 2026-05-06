@@ -1,9 +1,19 @@
 import { Request, Response, NextFunction } from 'express'
 import authService from '../services/authService'
 import { mergeSessionCartIntoUser } from '../services/cartService'
-import { createLog, getClientIp } from '../services/logService'
+import { createLog } from '../services/admin/logService'
+import { getClientIp } from '../utils/getClientIp'
+import blockService from '../services/admin/blockService'
 import { sendWelcomeEmail } from '../services/mailService'
 import type { ApiResponse, UserPublic } from '../types'
+
+// Configuración del auto-bloqueo por intentos fallidos
+const MAX_FAILED_ATTEMPTS = 5
+const FAILED_WINDOW_MS = 10 * 60 * 1000
+const AUTO_BLOCK_MINUTES = 15
+
+// Registro en memoria de intentos fallidos por email
+const failedAttempts = new Map<string, { count: number; firstAttempt: number }>()
 
 // POST /api/auth/register
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -46,10 +56,27 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     res.status(200).json({
       success: true,
       message: 'Inicio de sesión correcto.',
-      data: { user: user as any, token },    } as ApiResponse<{ user: UserPublic; token: string }>)
-  } catch (err: any) {
-    if (err.statusCode) {
-      await createLog({ level: 'ERROR', module: 'Auth', action: `Login fallido — ${err.message}`, ip: getClientIp(req), detail: `email: ${req.body?.email ?? 'desconocido'}` })
+      data: { user: user as any, token },    } as ApiResponse<{ user: UserPublic; token: string }>) 
+
+    } catch (err: any) {    if (err.statusCode) {
+      const ip = getClientIp(req)
+      const email = req.body?.email ?? 'desconocido'
+
+      // Registrar intento fallido por email y auto-bloquear si se supera el umbral
+      const now = Date.now()
+      const entry = failedAttempts.get(email)
+      if (!entry || now - entry.firstAttempt > FAILED_WINDOW_MS) {
+        failedAttempts.set(email, { count: 1, firstAttempt: now })
+      } else {
+        entry.count++
+        if (entry.count >= MAX_FAILED_ATTEMPTS) {
+          await blockService.createAutoBlock(email, `Auto-bloqueo: ${MAX_FAILED_ATTEMPTS} intentos fallidos en ${FAILED_WINDOW_MS / 60000} min`, AUTO_BLOCK_MINUTES)
+          await createLog({ level: 'WARNING', module: 'Auth', action: `Usuario auto-bloqueado por ${MAX_FAILED_ATTEMPTS} intentos fallidos`, ip, detail: `email: ${email}` })
+          failedAttempts.delete(email)
+        }
+      }
+
+      await createLog({ level: 'ERROR', module: 'Auth', action: `Login fallido — ${err.message}`, ip, detail: `email: ${email}` })
       res.status(err.statusCode).json({ success: false, message: err.message } as ApiResponse<null>)
       return
     }

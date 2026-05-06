@@ -116,7 +116,7 @@ export interface PaginatedLogs {
   pageSize: number
 }
 
-// Estadísticas de autenticación del panel de seguridad
+// Estadísticas de autenticación del panel de administración
 export interface AuthStats {
   totalLogins30d: number
   failedAttempts30d: number
@@ -124,4 +124,25 @@ export interface AuthStats {
   recentSessions: { user: string; time: string; ok: boolean }[]
   failedAttempts: { time: string; email: string; ip: string; reason: string }[]
   chartData: { day: string; ok: number; fail: number }[]
+}
+
+// Estadísticas generales del sistema
+export interface SystemStats {
+  backend: { status: string; latencyMs: number; version: string }
+  database: { status: string; engine: string; tables: number }
+  counts: { users: number; products: number; orders: number; logs: number; categories: number }
+  logsByLevel: { level: string; count: number }[]
+  logsByModule: { module: string; count: number }[]
+}
+
+// Bloqueo activo por IP o usuario
+export interface IpBlock {
+  id: number
+  ip: string | null
+  userId: number | null
+  email: string | null
+  reason: string
+  manual: boolean
+  expiresAt: string | null
+  createdAt: string
 }

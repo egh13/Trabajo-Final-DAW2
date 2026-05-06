@@ -98,8 +98,6 @@ Para habilitar el envío automático de correos de bienvenida a nuevos usuarios:
    - Outlook/Hotmail: `SMTP_HOST=smtp-mail.outlook.com`, `SMTP_PORT=587`
    - Yahoo: `SMTP_HOST=smtp.mail.yahoo.com`, `SMTP_PORT=587`
 
-> ⚠️ Las credenciales deben coincidir con las del servicio `mariadb` en `docker-compose.yml`.
-
 ### 3. Levantar el backend + MariaDB
 
 Desde la raíz del proyecto:
@@ -113,6 +111,8 @@ Esto realiza automáticamente:
 2. Arranque del contenedor de MariaDB
 3. Aplicación de las migraciones (`prisma migrate deploy`)
 4. Inicio del servidor Express en el puerto `3000`
+
+> ⚠️ Las credenciales deben coincidir con las del servicio `mariadb` en `docker-compose.yml`.
 
 ### 4. Poblar la base de datos (seed)
 
