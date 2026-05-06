@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from 'express'
 import blockService from '../services/admin/blockService'
-import { getClientIp } from '../services/admin/logService'
+import { getClientIp } from '../utils/getClientIp'
 import type { ApiResponse } from '../types'
 
-// Rechaza la petición si la IP, el usuario o el email están bloqueados
+// Rechaza la petición si la IP o el usuario (por email) están bloqueados
 export const checkBlock = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const ip = getClientIp(req)
   const userId = req.user?.userId

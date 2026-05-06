@@ -20,7 +20,7 @@ app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
 
-// Verificar bloqueo por IP antes de procesar cualquier ruta
+// Verificar bloqueo antes de procesar cualquier ruta
 app.use(checkBlock)
 
 // Rutas de la API

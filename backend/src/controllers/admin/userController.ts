@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import userService from '../../services/admin/userService'
-import { createLog, getClientIp } from '../../services/admin/logService'
+import { createLog } from '../../services/admin/logService'
+import { getClientIp } from '../../utils/getClientIp'
 import { sendWelcomeEmail } from '../../services/mailService'
 import type { ApiResponse, UserPublic } from '../../types'
 

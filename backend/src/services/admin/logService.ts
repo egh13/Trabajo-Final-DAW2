@@ -1,17 +1,6 @@
-import type { Request } from 'express'
 import { prisma } from '../../config/prisma'
 import type { LogLevel, PaginatedLogs, UserLog, UserLogFilters } from '../../types'
-
-// Extrae la IP real del cliente y la normaliza a formato IPv4
-const getClientIp = (req: Request): string => {
-  const forwarded = req.headers['x-forwarded-for']
-  const raw = typeof forwarded === 'string'
-    ? forwarded.split(',')[0].trim()
-    : req.ip ?? req.socket.remoteAddress ?? '0.0.0.0'
-
-  // Convierte IPv4-mapped IPv6 (::ffff:x.x.x.x) a IPv4 puro
-  return raw.startsWith('::ffff:') ? raw.slice(7) : raw
-}
+import { getClientIp } from '../../utils/getClientIp'
 
 // Construye el objeto where de Prisma a partir de los filtros comunes
 const buildWhere = (filters: UserLogFilters): Record<string, unknown> => {
