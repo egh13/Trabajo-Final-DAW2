@@ -44,7 +44,7 @@
           </div>
         </div>
       </div><div class="row g-3 mb-3">        <!-- Gráfico de logins vs fallidos -->
-        <div class="col-md-8">
+        <div class="col-md-8" data-aos="fade-up" data-aos-delay="80">
           <div class="card border-0 shadow-sm">
             <div class="card-header border-bottom py-2">
               <span class="fw-semibold small">Inicios de sesión vs Intentos fallidos (últimos 7 días)</span>

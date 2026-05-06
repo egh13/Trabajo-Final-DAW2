@@ -231,6 +231,13 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
   color: var(--color-surface, #1E1E1E);
 }
 
+.admin-topbar h1 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-surface, #1E1E1E);
+}
+
 .topbar-user {
   display: flex;
   align-items: center;

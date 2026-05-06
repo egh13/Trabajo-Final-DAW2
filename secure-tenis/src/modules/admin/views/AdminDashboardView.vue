@@ -1,13 +1,12 @@
 <template>
-  <div class="container-fluid">
-    <h2 class="fw-bold mb-4">Panel de Administración</h2>
+  <div class="container-fluid">    <h2 class="fw-bold mb-4">Panel de Administración</h2>
 
-    <!-- Sección General -->
-    <h5 class="section-title text-muted mb-3">
+    <!-- Sección General -->    
+    <h5 v-if="generalCards.length > 0" class="section-title text-muted mb-3" data-aos="fade-up">
       <i class="bi bi-grid me-2"></i>General
     </h5>
-    <div class="row g-4 mb-4">
-      <div class="col-md-4" v-for="card in generalCards" :key="card.to">
+    <div v-if="generalCards.length > 0" class="row g-4 mb-4">
+      <div class="col-md-4" v-for="(card, i) in generalCards" :key="card.to" data-aos="fade-up" :data-aos-delay="i * 80">
         <router-link :to="card.to" class="text-decoration-none">
           <div class="module-card h-100">
             <div class="card-body d-flex flex-column p-4">
@@ -28,25 +27,23 @@
       </div>
     </div>
 
-    <!-- Sección Seguridad -->
-    <h5 class="section-title text-muted mb-3">
+    <!-- Sección Seguridad -->    <h5 class="section-title text-muted mb-3" data-aos="fade-up">
       <i class="bi bi-shield-check me-2"></i>Seguridad
     </h5>
-    <div class="row g-4">
-      <div class="col-md-4" v-for="card in securityCards" :key="card.to">
+    <div class="row g-4">      <div class="col-md-4" v-for="(card, i) in securityCards" :key="card.to" data-aos="fade-up" :data-aos-delay="i * 80">
         <router-link :to="card.to" class="text-decoration-none">
-          <div class="card h-100 module-card border-0">
-            <div class="card-body d-flex flex-column">
+          <div class="module-card h-100">
+            <div class="card-body d-flex flex-column p-4">
               <div class="module-icon-wrapper mb-3" :style="{ background: card.bg }">
                 <i class="bi module-icon" :class="card.icon"></i>
               </div>
-              <h5 class="card-title fw-bold mb-1" style="color: var(--color-surface, #1E1E1E)">{{ card.label }}</h5>
-              <p class="card-text text-muted small mb-3" style="line-height:1.5">{{ card.description }}</p>
-              <div class="mb-3 d-flex flex-wrap gap-1">
-                <span class="tag-badge" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
+              <h5 class="card-title fw-bold text-dark">{{ card.label }}</h5>
+              <p class="card-text text-muted small mb-3">{{ card.description }}</p>
+              <div class="mb-3">
+                <span class="badge bg-dark bg-opacity-75 me-1" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
               </div>
               <div class="mt-auto">
-                <span class="module-enter fw-semibold small">Acceder <i class="bi bi-arrow-right ms-1"></i></span>
+                <span class="module-enter fw-semibold small">Acceder →</span>
               </div>
             </div>
           </div>
@@ -120,14 +117,6 @@ const securityCards = [
 </script>
 
 <style scoped>
-.dashboard-hero {
-  background: #fff;
-  border: 1px solid var(--color-border, #CECECE);
-  border-radius: 12px;
-  padding: 1.5rem 1.75rem;
-  border-left: 4px solid var(--color-garnet, #6B1E2E);
-}
-
 .module-card {
   background: #fff;
   border-radius: 12px;

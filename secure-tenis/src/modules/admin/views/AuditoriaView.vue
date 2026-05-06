@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-down">
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="fw-bold mb-0">Auditoría de Actividad</h2>      <div class="d-flex gap-2">
         <button class="btn btn-admin btn-sm" :disabled="exporting" @click="exportFile('csv')">
           <i class="bi bi-download me-1"></i> Exportar CSV

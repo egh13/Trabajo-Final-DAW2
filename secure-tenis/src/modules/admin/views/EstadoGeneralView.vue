@@ -14,12 +14,11 @@
     <div v-else-if="error" class="alert alert-danger">
       <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
     </div>
-
     <!-- Contenido con datos reales -->
-    <template v-else-if="stats">
+    <template v-else-if="stats">    
       <!-- Tarjetas de estado -->
       <div class="row g-3 mb-4">
-        <div class="col-md-6">
+        <div class="col-md-6" data-aos="fade-up" data-aos-delay="0">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
               <div class="d-flex align-items-center gap-3">
@@ -42,9 +41,7 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="col-md-6">
+        </div>        <div class="col-md-6" data-aos="fade-up" data-aos-delay="80">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
               <div class="d-flex align-items-center gap-3">
@@ -68,11 +65,9 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Contadores generales -->
+      </div>      <!-- Contadores generales -->
       <div class="row g-3 mb-4">
-        <div class="col" v-for="item in countCards" :key="item.label">
+        <div class="col" v-for="(item, i) in countCards" :key="item.label" data-aos="fade-up" :data-aos-delay="i * 60">
           <div class="card border-0 shadow-sm text-center py-3">
             <div class="card-body">
               <div class="kpi-value" :class="item.color">{{ item.value.toLocaleString('es-ES') }}</div>
@@ -80,11 +75,9 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Gráficos -->
+      </div>      <!-- Gráficos -->
       <div class="row g-3 mb-4">
-        <div class="col-md-7">
+        <div class="col-md-7" data-aos="fade-up" data-aos-delay="0">
           <div class="card border-0 shadow-sm">
             <div class="card-header bg-white fw-semibold">
               <i class="bi bi-bar-chart me-2"></i>Logs por Módulo
@@ -95,7 +88,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5" data-aos="fade-up" data-aos-delay="80">
           <div class="card border-0 shadow-sm">
             <div class="card-header bg-white fw-semibold">
               <i class="bi bi-pie-chart me-2"></i>Logs por Nivel
