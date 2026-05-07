@@ -252,9 +252,6 @@
       </div>
     </div>
   </div>
-
-  falta por añadir: eliminar todos los productos de una categoria al eliminar la categoría (de momento da error)<br>
-  falta por añadir: al cambiar la categoria de un producto, que ese producto no aparezca en productos de esa categoría hasta cerrar
 </template>
 
 <script setup lang="ts">
@@ -443,11 +440,16 @@ const changeProductCategory = async (product: Product, event: Event) => {
   try {
     const response = await updateProduct(product.id, { category_id: newCategoryId })
     if (response.success) {
-      // Actualizar el producto en la lista local
-      const updatedProduct = categoryProducts.value.find(p => p.id === product.id)
-      if (updatedProduct) {
-        updatedProduct.category_id = newCategoryId
-        updatedProduct.category_name = categories.value.find(c => c.id === newCategoryId)?.name || updatedProduct.category_name
+      // Si la nueva categoría es diferente a la categoría expandida, remover el producto de la lista
+      if (newCategoryId !== expandedCategoryId.value) {
+        categoryProducts.value = categoryProducts.value.filter(p => p.id !== product.id)
+      } else {
+        // Actualizar el producto en la lista local
+        const updatedProduct = categoryProducts.value.find(p => p.id === product.id)
+        if (updatedProduct) {
+          updatedProduct.category_id = newCategoryId
+          updatedProduct.category_name = categories.value.find(c => c.id === newCategoryId)?.name || updatedProduct.category_name
+        }
       }
       // Recargar categorías para actualizar los contadores
       await loadCategories()

@@ -38,5 +38,7 @@ export const updateCategory = async (id: number, name: string, description: stri
 }
 
 export const deleteCategory = async (id: number): Promise<void> => {
+  // Elimina todos los productos asociados a la categoría antes de eliminar la categoría
+  await prisma.product.deleteMany({ where: { categoryId: id } })
   await prisma.category.delete({ where: { id } })
 }
