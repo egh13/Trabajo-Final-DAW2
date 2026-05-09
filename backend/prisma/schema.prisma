@@ -19,6 +19,7 @@ model User {
     orders    Order[]
   cartItems CartItem[]
   logs      UserLog[]
+  ipBlocks  IpBlock[]
 }
 
 enum Role {
@@ -101,17 +102,14 @@ model CartItem {
 }
 
 model IpBlock {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   ip        String?
   userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
   email     String?
   reason    String
-  manual    Boolean   @default(false)
+  manual    Boolean  @default(false)
   expiresAt DateTime?
-  createdAt DateTime  @default(now())
-
-  @@index([ip])
-  @@index([userId])
-  @@index([email])
+  createdAt DateTime @default(now())
 }
 
