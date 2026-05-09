@@ -174,7 +174,7 @@ const securityCards = [
 .module-enter {
   color: var(--color-garnet, #6B1E2E);
   font-size: 0.82rem;
-  opacity: 0;
+      opacity: 0;
   transition: opacity 0.2s;
 }
 

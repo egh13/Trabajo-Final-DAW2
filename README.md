@@ -42,11 +42,14 @@ La aplicación sigue una arquitectura cliente-servidor desacoplada.
   -  Implementacion de seeders para poblar la DB
 
 
-## 🚀 Despliegue Local con Docker
+## 🚀 Despliegue Local
 
 ### Requisitos previos
 
-* [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado y en ejecución.
+| Herramienta | Versión mínima | Enlace |
+|---|---|---|
+| [Docker](https://docs.docker.com/get-docker/) | 24+ | Con el demonio en marcha |
+| [Node.js](https://nodejs.org/) | 20+ | Necesario para el frontend |
 
 ### 1. Clonar el repositorio
 
@@ -55,99 +58,95 @@ git clone <url-del-repositorio>
 cd Trabajo-Final-DAW2
 ```
 
-### 2. Configurar variables de entorno del backend
+### 2. Lanzar todo el proyecto
 
-Copia el archivo de ejemplo y edítalo con tus valores:
+El proyecto incluye scripts que automatizan la configuración del `.env`, la instalación de dependencias del frontend, el arranque de los contenedores Docker y la ejecución de Vite.
+
+#### Linux / macOS
 
 ```bash
-cp backend/.env.example backend/.env
+# Primer arranque (incluye seed de la BD)
+./start.sh --seed
+
+# Arranques posteriores
+./start.sh
 ```
 
-Edita `backend/.env`:
+#### Windows (PowerShell)
+
+```powershell
+# Si PowerShell bloquea scripts de terceros, ejecuta esto una sola vez:
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+# Primer arranque (incluye seed de la BD)
+.\start.ps1 -Seed
+
+# Arranques posteriores
+.\start.ps1
+```
+
+Al arrancar por primera vez, el script crea automáticamente `backend/.env` desde `backend/.env.example` con un `JWT_SECRET` aleatorio. Si necesitas configurar el **envío de correos (SMTP)**, edita ese archivo antes de arrancar:
 
 ```env
-PORT=3000
-JWT_SECRET=tu_secreto_seguro
-JWT_EXPIRES_IN=24h
-DATABASE_URL=mysql://username:password@mariadb:3306/mydb
-DATABASE_USER=username
-DATABASE_PASSWORD=password
-DATABASE_NAME=mydb
-DATABASE_HOST=mariadb
-DATABASE_PORT=3306
-
-# Configuración SMTP para envío de correos (opcional)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_SECURE=false
 SMTP_USER=tu-email@gmail.com
-SMTP_PASS=tu-app-password
-FRONTEND_URL=http://localhost:5173
+SMTP_PASS=tu-app-password   # contraseña de aplicación de Google
 ```
 
-### Configuración de envío de correos (opcional)
-
-Para habilitar el envío automático de correos de bienvenida a nuevos usuarios:
-
-1. **Gmail SMTP**: Crea una "contraseña de aplicación" en tu cuenta Google:
-   - Ve a [Google Account Settings](https://myaccount.google.com/)
-   - Activa la autenticación de 2 factores
-   - Genera una "contraseña de aplicación" para usar como `SMTP_PASS`
-
-2. **Otros proveedores SMTP**: Ajusta las variables según tu proveedor:
-   - Outlook/Hotmail: `SMTP_HOST=smtp-mail.outlook.com`, `SMTP_PORT=587`
-   - Yahoo: `SMTP_HOST=smtp.mail.yahoo.com`, `SMTP_PORT=587`
-
-### 3. Levantar el backend + MariaDB
-
-Desde la raíz del proyecto:
-
-```bash
-docker compose up --build
-```
-
-Esto realiza automáticamente:
-1. Construcción de la imagen del backend
-2. Arranque del contenedor de MariaDB
-3. Aplicación de las migraciones (`prisma migrate deploy`)
-4. Inicio del servidor Express en el puerto `3000`
-
-> ⚠️ Las credenciales deben coincidir con las del servicio `mariadb` en `docker-compose.yml`.
-
-### 4. Poblar la base de datos (seed)
-
-Una vez los contenedores estén en ejecución:
-
-```bash
-docker exec tfg-backend npx ts-node prisma/seed.ts
-```
-
-Esto insertará categorías, usuarios y productos de ejemplo.
-
-### 5. Ejecutar el frontend en local
-
-```bash
-cd secure-tenis
-npm install
-npm run dev
-```
+> Para Gmail: activa la autenticación en 2 pasos y genera una [contraseña de aplicación](https://myaccount.google.com/apppasswords).
 
 ### Servicios disponibles
 
 | Servicio | URL |
 |---|---|
+| Frontend | http://localhost:5173 |
 | Backend | http://localhost:3000 |
 | MariaDB | localhost:3306 |
-| Frontend | http://localhost:5173 |
 
-### Parar los contenedores
+### Parar el proyecto
+
+#### Linux / macOS
 
 ```bash
-# Solo parar
-docker compose down
+# Ctrl+C en la terminal donde corre start.sh detiene todo automáticamente, o:
 
-# Parar y eliminar datos de la BD
-docker compose down -v
+./stop.sh           # para los contenedores (conserva la BD)
+./stop.sh --clean   # para + elimina la BD (pide confirmación)
+```
+
+#### Windows (PowerShell)
+
+```powershell
+# Ctrl+C en la terminal donde corre start.ps1 detiene todo automáticamente, o:
+
+.\stop.ps1          # para los contenedores (conserva la BD)
+.\stop.ps1 -Clean   # para + elimina la BD (pide confirmación)
+```
+
+### Arranque manual (sin scripts)
+
+Si prefieres arrancar los servicios por separado:
+
+```bash
+# 1. Configurar el entorno
+cp backend/.env.example backend/.env
+# Edita backend/.env con tus valores
+
+# 2. Levantar BD + Backend
+docker compose up --build -d
+
+# 3. Poblar la BD (solo la primera vez)
+docker exec tfg-backend npx ts-node prisma/seed.ts
+
+# 4. Arrancar el frontend
+cd secure-tenis
+npm install
+npm run dev
+
+# 5. Parar
+docker compose down        # conserva datos
+docker compose down -v     # elimina datos
 ```
 
 ---
