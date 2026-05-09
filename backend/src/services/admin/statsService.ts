@@ -1,11 +1,7 @@
-import { readFileSync } from "fs";
-import { join } from "path";
 import { prisma } from "../../config/prisma";
 
-// Versión de la aplicación leída desde package.json
-const { version } = JSON.parse(
-    readFileSync(join(__dirname, "../../../package.json"), "utf-8")
-) as { version: string };
+// Versión de la aplicación desde package.json
+const version = process.env.npm_package_version ?? '1.0.0'; 
 
 // Estadísticas de autenticación calculadas desde los logs reales
 interface AuthStats {
@@ -60,7 +56,7 @@ const getAuthStats = async (): Promise<AuthStats> => {
         select: { userId: true }
     });
     const uniqueUsersToday = new Set(
-        todayLogins.map((l) => l.userId).filter(Boolean)
+        todayLogins.map((l: typeof todayLogins[0]) => l.userId).filter(Boolean)
     ).size;
 
     // Últimas 10 sesiones (login exitoso + fallido)
@@ -77,7 +73,7 @@ const getAuthStats = async (): Promise<AuthStats> => {
         take: 10
     });
 
-    const recentSessions = recentRows.map((r) => ({
+    const recentSessions = recentRows.map((r: typeof recentRows[0]) => ({
         user:
             r.user?.email ?? r.detail?.replace("email: ", "") ?? "Desconocido",
         time: r.createdAt.toISOString(),
@@ -91,7 +87,7 @@ const getAuthStats = async (): Promise<AuthStats> => {
         take: 10
     });
 
-    const failedAttempts = failedRows.map((r) => {
+    const failedAttempts = failedRows.map((r: typeof failedRows[0]) => {
         const reason = r.action
             .replace("Login fallido — ", "")
             .replace("Login fallido — ", "");
@@ -185,7 +181,7 @@ const getSystemStats = async (): Promise<SystemStats> => {
         by: ["level"],
         _count: { level: true }
     });
-    const logsByLevel = levelGroups.map((g) => ({
+    const logsByLevel = levelGroups.map((g: typeof levelGroups[0]) => ({
         level: g.level,
         count: g._count.level
     }));
@@ -197,7 +193,7 @@ const getSystemStats = async (): Promise<SystemStats> => {
         orderBy: { _count: { module: "desc" } },
         take: 10
     });
-    const logsByModule = moduleGroups.map((g) => ({
+    const logsByModule = moduleGroups.map((g: typeof moduleGroups[0]) => ({
         module: g.module,
         count: g._count.module
     }));
