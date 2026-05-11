@@ -1,82 +1,145 @@
+<div align="center">
+
 # SecureTenis
 
-Tenda online de zapatillas desarrollado como Trabajo de Fin de Grado (TFG) de 2º DAW.
+### Ecommerce de zapatillas con panel de administración completo
 
-La aplicacion permite a los usuarios navegar un catalogo de productos, gestionar un carrito de compra y realizar pedidos. Cuenta con un panel de administracion para la gestion de usuarios, pedidos, bloqueos de IP y registro de actividad.
+[![Vue 3](https://img.shields.io/badge/Vue-3.5-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-5.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![MariaDB](https://img.shields.io/badge/MariaDB-10+-003545?style=for-the-badge&logo=mariadb&logoColor=white)](https://mariadb.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](./LICENSE)
+
+<br/>
+
+> Proyecto de Fin de Grado · 2º DAW · 2025–2026
+
+</div>
 
 ---
 
-## Tecnologias
+## Descripción
 
-| Capa | Stack |
-|---|---|
-| Frontend | Vue 3, Pinia, Vue Router, Bootstrap 5, TypeScript |
-| Backend | Node.js, Express, TypeScript |
-| Base de datos | MariaDB, Prisma ORM |
-| Despliegue local | Docker Compose |
+**SecureTenis** es una plataforma de comercio electrónico especializada en zapatillas deportivas. Desarrollada como TFG de 2.º DAW, aborda el reto real de construir una tienda online completa con autenticación y autorización segura, gestión de carrito persistente (tanto para usuarios anónimos como autenticados) y un panel de administración con múltiples funcionalidades.
+
+El proyecto demuestra la integración de un frontend reactivo en **Vue 3** con un backend **Express** tipado en **TypeScript**, usando **Prisma ORM** sobre **MariaDB** y desplegando toda la infraestructura con **Docker Compose**.
 
 ---
 
-### Backend
+## Características principales
 
-Organizado en capas con responsabilidades separadas:
+### Tienda
+- Catálogo de productos con filtrado por categoría y búsqueda
+- Carrito persistente: funciona sin cuenta y se fusiona automáticamente al iniciar sesión
+- Gestión de cantidad, eliminación de artículos y vaciado de carrito
+- Proceso de compra con reducción de stock automática en base de datos
+- Historial de pedidos por usuario
+
+### Autenticación y seguridad
+- Registro e inicio de sesión con **JWT** (expiración configurable)
+- Control de acceso por roles: `CLIENT`, `ADMIN`, `ANALYST`
+- Auto-bloqueo tras 5 intentos de login fallidos en 10 minutos
+- Bloqueo manual de usuarios e IPs desde el panel
+- Middleware de comprobación de bloqueo en cada petición
+- Hash de contraseñas con **bcrypt**
+- Correo de bienvenida automático al registrarse (SMTP configurable)
+
+### Panel de administración
+- Gestión de usuarios: listado, cambio de rol, bloqueo/desbloqueo
+- Gestión de pedidos con actualización de estado
+- Gestión de productos y categorías (CRUD completo)
+- Registro de actividad (logs) con niveles INFO, WARNING, ERROR, DEBUG
+- Estadísticas del negocio con gráficas (Chart.js)
+- Gestión de bloqueos de IP y usuarios
+
+## Arquitectura
+
+### Diagrama de comunicación entre capas
 
 ```
-backend/src/
-  routes/         Registro de endpoints y aplicacion de middlewares
-  controllers/    Reciben la peticion y devuelven la respuesta JSON
-  services/       Logica de negocio y acceso a la base de datos
-  middlewares/    Autenticacion, autorizacion, validacion y manejo de errores
-  validators/     Esquemas Zod para validacion de entrada
-  types/          Interfaces y tipos compartidos
+CLIENTE (Vue 3 + Vite)
+  Vue Router (guards)  +  Pinia (stores)  +  Composables
+                       |
+                 API Client (fetch)
+              + x-session-id header
+                       |  HTTP/JSON
+                       v
+BACKEND (Express 5)
+  checkBlock -> Router -> Validator (Zod)
+                    |
+              Controller -> Service -> Prisma ORM
+                    |
+              errorHandler
+                       |
+                       v
+MariaDB (Docker)
+  Users, Products, Categories, Orders
+  CartItems, OrderItems, UserLogs, IpBlocks
 ```
+
+### Gestión de estado con Pinia
+
+El proyecto sigue el principio de **separación de responsabilidades** entre stores y composables:
+
+| Capa | Responsabilidad | Ejemplos |
+|---|---|---|
+| **Stores (Pinia)** | Estado global compartido entre vistas, llamadas a la API, manejo de errores | `authStore`, `cartStore` |
+| **Composables** | Lógica reactiva local o reutilizable dentro de un módulo | Filtros de productos, paginación |
+| **Services** | Llamadas HTTP puras, sin estado | `orderService`, `cartService` |
+
+Esta separación permite que el carrito, por ejemplo, sea accesible desde el `Navbar`, el `CartView` y el flujo de checkout sin duplicar peticiones ni estado.
+
+---
+
+## Stack tecnológico
 
 ### Frontend
 
-Organizado por dominio funcional:
+| Tecnología | Versión | Uso |
+|---|---|---|
+| Vue 3 | 3.5 | Framework reactivo con Composition API y script setup |
+| Vite | 7.x | Bundler y servidor de desarrollo |
+| Pinia | 3.x | Gestión de estado global |
+| Vue Router | 5.x | Navegación SPA con navigation guards |
+| TypeScript | 5.9 | Tipado estático en todo el frontend |
+| Bootstrap | 5.3 | Sistema de diseño y componentes UI |
+| Bootstrap Icons | — | Iconografía |
+| Chart.js + vue-chartjs | 4.x | Gráficas en el panel de administración |
 
-```
-secure-tenis/src/modules/<dominio>/
-  views/          Paginas (componentes raiz de ruta)
-  services/       Llamadas a la API
-  composables/    Logica reactiva reutilizable
-```
+### Backend
+
+| Tecnología | Versión | Uso |
+|---|---|---|
+| Node.js | 20+ | Runtime del servidor |
+| Express | 5.x | Framework HTTP |
+| TypeScript | 5.9 | Tipado estático en todo el backend |
+| Prisma ORM | 6.x | Acceso a base de datos con tipado |
+| Zod | 4.x | Validación de datos de entrada |
+| bcryptjs | 3.x | Hash seguro de contraseñas |
+| jsonwebtoken | 9.x | Autenticación con JWT |
+| Nodemailer | 8.x | Envío de correos transaccionales |
+| morgan | 1.x | Logging de peticiones HTTP |
+
+### Base de datos e infraestructura
+
+| Tecnología | Uso |
+|---|---|
+| MariaDB 10+ | Base de datos relacional principal |
+| Prisma Migrate | Migraciones versionadas del esquema |
+| Docker Compose | Orquestación de contenedores (backend + BD) |
 
 ---
 
-## Seguridad
+## Instalación y configuración
 
-- Autenticacion con JWT (expiracion configurable)
-- Control de roles: `CLIENT`, `ADMIN`, `ANALYST`
-- Bloqueo de IPs y usuarios desde el panel de administracion
-- Proteccion de rutas en frontend y backend
-- Validacion de todos los datos de entrada con Zod
-- Hash de contrasenas con bcrypt
-- Registro de actividad (logs) por usuario y modulo
-- Carrito anonimo vinculado por `session_id`, fusionado al autenticarse
+### Requisitos previos
 
----
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 24+
+- [Node.js](https://nodejs.org/) 20+
 
-## Puesta en marcha
-
-### Requisitos
-
-- Docker 24+
-- Node.js 20+ 
-
-### Arranque con scripts
-
-Los scripts automatizan la configuracion del `.env`, la instalacion de dependencias del frontend, el arranque de los contenedores y la ejecucion de Vite.
-
-**Linux / macOS**
-
-```bash
-# Primer arranque (incluye seed de la base de datos)
-./start.sh --seed
-
-# Arranques posteriores
-./start.sh
-```
+### Arranque con scripts (recomendado)
 
 **Windows (PowerShell)**
 
@@ -84,70 +147,54 @@ Los scripts automatizan la configuracion del `.env`, la instalacion de dependenc
 # Si PowerShell bloquea scripts, ejecuta esto una sola vez:
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
-# Primer arranque
+# Primer arranque (instala dependencias, genera .env y siembra la BD)
 .\start.ps1 -Seed
 
 # Arranques posteriores
 .\start.ps1
 ```
 
-En el primer arranque se genera `backend/.env` automaticamente desde `backend/.env.example` con un `JWT_SECRET` aleatorio.
-
-### Servicios disponibles
-
-| Servicio | URL |
-|---|---|
-| Frontend | http://localhost:5173 |
-| Backend | http://localhost:3000 |
-| MariaDB | localhost:3306 |
-
-### Parar el proyecto
-
 **Linux / macOS**
 
 ```bash
-./stop.sh           # Para los contenedores (conserva la base de datos)
-./stop.sh --clean   # Para y elimina la base de datos (pide confirmacion)
+# Primer arranque
+./start.sh --seed
+
+# Arranques posteriores
+./start.sh
 ```
 
-**Windows (PowerShell)**
+El script automatiza:
+1. Copia de `backend/.env.example` a `backend/.env` con un `JWT_SECRET` aleatorio
+2. `npm install` del frontend
+3. `docker compose up --build -d`
+4. Seed de la base de datos (solo con `--seed` / `-Seed`)
 
-```powershell
-.\stop.ps1
-.\stop.ps1 -Clean
-```
-
-### Arranque manual (sin scripts)
+### Arranque manual
 
 ```bash
-# 1. Configurar el entorno
-cp backend/.env.example backend/.env
-# Editar backend/.env con los valores necesarios
+# 1. Clonar el repositorio
+git clone <url-del-repositorio>
+cd Trabajo-Final-DAW2
 
-# 2. Levantar base de datos y backend
+# 2. Configurar variables de entorno
+cp backend/.env.example backend/.env
+
+# 3. Levantar backend y base de datos
 docker compose up --build -d
 
-# 3. Poblar la base de datos (solo la primera vez)
+# 4. Sembrar datos de ejemplo (solo la primera vez)
 docker exec tfg-backend npx ts-node prisma/seed.ts
 
-# 4. Arrancar el frontend
+# 5. Arrancar el frontend
 cd secure-tenis
 npm install
 npm run dev
 ```
 
-Para detener:
+### Variables de entorno
 
-```bash
-docker compose down      # Conserva los datos
-docker compose down -v   # Elimina los datos
-```
-
----
-
-## Configuracion del entorno
-
-El archivo `backend/.env.example` contiene todas las variables disponibles. Las mas relevantes:
+Crea `backend/.env` a partir de `backend/.env.example`:
 
 ```env
 PORT=3000
@@ -155,32 +202,100 @@ NODE_ENV=development
 
 JWT_SECRET=cambia_este_secreto_en_produccion
 JWT_EXPIRES_IN=24h
+SALT_ROUNDS=10
 
 DATABASE_URL=mysql://username:password@mariadb:3306/mydb
 
-# Opcional: envio de correos
+# Correo (opcional)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=tu-email@gmail.com
 SMTP_PASS=tu-app-password
 
 FRONTEND_URL=http://localhost:5173
-SALT_ROUNDS=10
 ```
 
-Para el envio de correos con Gmail, activa la autenticacion en 2 pasos y genera una [contrasena de aplicacion](https://myaccount.google.com/apppasswords).
+> Para el envío de correos con Gmail, activa la autenticación en 2 pasos y genera una [contraseña de aplicación](https://myaccount.google.com/apppasswords).
 
----
+### Servicios disponibles
 
-## Despliegue en produccion
-
-| Servicio | Plataforma |
+| Servicio | URL |
 |---|---|
-| Frontend | Vercel |
-| Backend + Base de datos | Render o Railway |
+| Frontend (Vite) | http://localhost:5173 |
+| Backend (API) | http://localhost:3000 |
+| MariaDB | localhost:3306 |
+
+### Parar el proyecto
+
+```powershell
+# Windows
+.\stop.ps1          # Para los contenedores (conserva la BD)
+.\stop.ps1 -Clean   # Para y elimina los datos
+```
+
+```bash
+# Linux / macOS
+./stop.sh
+./stop.sh --clean
+```
 
 ---
 
-## Licencia
+## Estructura de carpetas
 
-Proyecto academico desarrollado para 2º DAW. Ver `LICENSE` para los terminos completos.
+```
+Trabajo-Final-DAW2/
+├── docker-compose.yml
+├── start.ps1 / start.sh
+├── stop.ps1 / stop.sh
+│
+├── backend/                    # API REST (Express + TypeScript)
+│   ├── prisma/
+│   │   ├── schema.prisma       # Modelo de datos
+│   │   ├── seed.ts             # Datos de ejemplo
+│   │   └── migrations/
+│   └── src/
+│       ├── app.ts
+│       ├── config/             # Prisma client, JWT
+│       ├── controllers/        # Request -> Service -> Response JSON
+│       │   └── admin/
+│       ├── middlewares/        # Auth, bloqueos, validación, errores
+│       ├── routes/
+│       │   └── admin/
+│       ├── services/           # Lógica de negocio y acceso a datos
+│       │   └── admin/
+│       ├── types/
+│       ├── utils/
+│       └── validators/         # Esquemas Zod
+│
+└── secure-tenis/               # SPA (Vue 3 + Vite + TypeScript)
+    └── src/
+        ├── App.vue
+        ├── main.ts
+        ├── layouts/
+        ├── modules/            # Organización por dominio funcional
+        │   ├── auth/
+        │   ├── cart/
+        │   ├── checkout/
+        │   ├── home/
+        │   ├── products/
+        │   └── admin/
+        ├── router/             # Guards de autenticación y rol
+        ├── services/           # apiClient.ts (fetch wrapper)
+        ├── stores/             # authStore, cartStore
+        └── types/
+```
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](./LICENSE) para más detalles.
+
+---
+
+<div align="center">
+
+Proyecto académico · **Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Web (DAW)** · 2025–2026
+
+</div>
