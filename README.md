@@ -1,100 +1,97 @@
-# SecureTenis – Ecommerce de Zapatillas
-Proyecto desarrollado como Trabajo de Fin de Grado (TFG) para 2º de Desarrollo de Aplicaciones Web (DAW).
+# SecureTenis
 
-## Descripción del Proyecto
+Tenda online de zapatillas desarrollado como Trabajo de Fin de Grado (TFG) de 2º DAW.
 
-* Aplicación ecommerce completamente funcional especializada en la venta de zapatillas.
-*  Especial hincapié en el uso de buenas prácticas y herramientas para mejorar la seguridad de la web.
+La aplicacion permite a los usuarios navegar un catalogo de productos, gestionar un carrito de compra y realizar pedidos. Cuenta con un panel de administracion para la gestion de usuarios, pedidos, bloqueos de IP y registro de actividad.
 
-## Arquitectura del Proyecto
+---
 
-La aplicación sigue una arquitectura cliente-servidor desacoplada.
+## Tecnologias
 
-* Frontend: Vue.js aplicando el patrón de diseño MVVM (Model–View–ViewModel).
-  - Estilos mediante la librería bootstrap
-* Backend: Express.js sobre el entorno Node.js
-  - Comunicación mediante endpoints API REST.
-  - Base de datos relacional con MariaDB.
-  - Prisma ORM para interacciones con la DB
- 
-> Tanto frontend como backend utilizan TypeScript para asegurar un código más robusto y seguro.
+| Capa | Stack |
+|---|---|
+| Frontend | Vue 3, Pinia, Vue Router, Bootstrap 5, TypeScript |
+| Backend | Node.js, Express, TypeScript |
+| Base de datos | MariaDB, Prisma ORM |
+| Despliegue local | Docker Compose |
 
-### Características Frontend
+---
 
-* SPA (Single Page Application)
-* Componentes reutilizables
-* Routing con Vue Router
-* Validación de formularios
-* Protección de rutas
+### Backend
 
-### Características Backend
+Organizado en capas con responsabilidades separadas:
 
-* API RESTful
-* Autenticación con JWT
-* Middleware usando la libreria 'morgan' de npm para:
-  - Autenticación
-  - Control de roles
-  - Manejo de errores
-* Encriptación de contraseñas (bcrypt)
-* Validación de datos
-  - Uso de la librería Zod para la validación de datos en typescript
-* Base de Datos con MariaDB
-  -  Implementacion de seeders para poblar la DB
-
-
-## 🚀 Despliegue Local
-
-### Requisitos previos
-
-| Herramienta | Versión mínima | Enlace |
-|---|---|---|
-| [Docker](https://docs.docker.com/get-docker/) | 24+ | Con el demonio en marcha |
-| [Node.js](https://nodejs.org/) | 20+ | Necesario para el frontend |
-
-### 1. Clonar el repositorio
-
-```bash
-git clone <url-del-repositorio>
-cd Trabajo-Final-DAW2
+```
+backend/src/
+  routes/         Registro de endpoints y aplicacion de middlewares
+  controllers/    Reciben la peticion y devuelven la respuesta JSON
+  services/       Logica de negocio y acceso a la base de datos
+  middlewares/    Autenticacion, autorizacion, validacion y manejo de errores
+  validators/     Esquemas Zod para validacion de entrada
+  types/          Interfaces y tipos compartidos
 ```
 
-### 2. Lanzar todo el proyecto
+### Frontend
 
-El proyecto incluye scripts que automatizan la configuración del `.env`, la instalación de dependencias del frontend, el arranque de los contenedores Docker y la ejecución de Vite.
+Organizado por dominio funcional:
 
-#### Linux / macOS
+```
+secure-tenis/src/modules/<dominio>/
+  views/          Paginas (componentes raiz de ruta)
+  services/       Llamadas a la API
+  composables/    Logica reactiva reutilizable
+```
+
+---
+
+## Seguridad
+
+- Autenticacion con JWT (expiracion configurable)
+- Control de roles: `CLIENT`, `ADMIN`, `ANALYST`
+- Bloqueo de IPs y usuarios desde el panel de administracion
+- Proteccion de rutas en frontend y backend
+- Validacion de todos los datos de entrada con Zod
+- Hash de contrasenas con bcrypt
+- Registro de actividad (logs) por usuario y modulo
+- Carrito anonimo vinculado por `session_id`, fusionado al autenticarse
+
+---
+
+## Puesta en marcha
+
+### Requisitos
+
+- Docker 24+
+- Node.js 20+ 
+
+### Arranque con scripts
+
+Los scripts automatizan la configuracion del `.env`, la instalacion de dependencias del frontend, el arranque de los contenedores y la ejecucion de Vite.
+
+**Linux / macOS**
 
 ```bash
-# Primer arranque (incluye seed de la BD)
+# Primer arranque (incluye seed de la base de datos)
 ./start.sh --seed
 
 # Arranques posteriores
 ./start.sh
 ```
 
-#### Windows (PowerShell)
+**Windows (PowerShell)**
 
 ```powershell
-# Si PowerShell bloquea scripts de terceros, ejecuta esto una sola vez:
+# Si PowerShell bloquea scripts, ejecuta esto una sola vez:
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
-# Primer arranque (incluye seed de la BD)
+# Primer arranque
 .\start.ps1 -Seed
 
 # Arranques posteriores
 .\start.ps1
 ```
 
-Al arrancar por primera vez, el script crea automáticamente `backend/.env` desde `backend/.env.example` con un `JWT_SECRET` aleatorio. Si necesitas configurar el **envío de correos (SMTP)**, edita ese archivo antes de arrancar:
-
-```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=tu-email@gmail.com
-SMTP_PASS=tu-app-password   # contraseña de aplicación de Google
-```
-
-> Para Gmail: activa la autenticación en 2 pasos y genera una [contraseña de aplicación](https://myaccount.google.com/apppasswords).
+En el primer arranque se genera `backend/.env` automaticamente desde `backend/.env.example` con un `JWT_SECRET` aleatorio.
 
 ### Servicios disponibles
 
@@ -106,54 +103,84 @@ SMTP_PASS=tu-app-password   # contraseña de aplicación de Google
 
 ### Parar el proyecto
 
-#### Linux / macOS
+**Linux / macOS**
 
 ```bash
-# Ctrl+C en la terminal donde corre start.sh detiene todo automáticamente, o:
-
-./stop.sh           # para los contenedores (conserva la BD)
-./stop.sh --clean   # para + elimina la BD (pide confirmación)
+./stop.sh           # Para los contenedores (conserva la base de datos)
+./stop.sh --clean   # Para y elimina la base de datos (pide confirmacion)
 ```
 
-#### Windows (PowerShell)
+**Windows (PowerShell)**
 
 ```powershell
-# Ctrl+C en la terminal donde corre start.ps1 detiene todo automáticamente, o:
-
-.\stop.ps1          # para los contenedores (conserva la BD)
-.\stop.ps1 -Clean   # para + elimina la BD (pide confirmación)
+.\stop.ps1
+.\stop.ps1 -Clean
 ```
 
 ### Arranque manual (sin scripts)
 
-Si prefieres arrancar los servicios por separado:
-
 ```bash
 # 1. Configurar el entorno
 cp backend/.env.example backend/.env
-# Edita backend/.env con tus valores
+# Editar backend/.env con los valores necesarios
 
-# 2. Levantar BD + Backend
+# 2. Levantar base de datos y backend
 docker compose up --build -d
 
-# 3. Poblar la BD (solo la primera vez)
+# 3. Poblar la base de datos (solo la primera vez)
 docker exec tfg-backend npx ts-node prisma/seed.ts
 
 # 4. Arrancar el frontend
 cd secure-tenis
 npm install
 npm run dev
+```
 
-# 5. Parar
-docker compose down        # conserva datos
-docker compose down -v     # elimina datos
+Para detener:
+
+```bash
+docker compose down      # Conserva los datos
+docker compose down -v   # Elimina los datos
 ```
 
 ---
 
-## Despliegue Final
+## Configuracion del entorno
 
-### Frontend
-* Vercel
-### Backend (Servidor + Base de datos)
-* Render o Railway
+El archivo `backend/.env.example` contiene todas las variables disponibles. Las mas relevantes:
+
+```env
+PORT=3000
+NODE_ENV=development
+
+JWT_SECRET=cambia_este_secreto_en_produccion
+JWT_EXPIRES_IN=24h
+
+DATABASE_URL=mysql://username:password@mariadb:3306/mydb
+
+# Opcional: envio de correos
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=tu-email@gmail.com
+SMTP_PASS=tu-app-password
+
+FRONTEND_URL=http://localhost:5173
+SALT_ROUNDS=10
+```
+
+Para el envio de correos con Gmail, activa la autenticacion en 2 pasos y genera una [contrasena de aplicacion](https://myaccount.google.com/apppasswords).
+
+---
+
+## Despliegue en produccion
+
+| Servicio | Plataforma |
+|---|---|
+| Frontend | Vercel |
+| Backend + Base de datos | Render o Railway |
+
+---
+
+## Licencia
+
+Proyecto academico desarrollado para 2º DAW. Ver `LICENSE` para los terminos completos.
