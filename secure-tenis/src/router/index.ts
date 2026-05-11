@@ -1,9 +1,6 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 import HomeView from '@/modules/home/views/HomeView.vue'
 import ProductsView from '@/modules/products/views/ProductsView.vue'
-import ZapatillasView from '@/modules/products/views/ZapatillasView.vue'
-import AccesoriosView from '@/modules/products/views/AccesoriosView.vue'
-import RopaView from '@/modules/products/views/RopaView.vue'
 import CartView from '@/modules/cart/views/CartView.vue'
 import ProductDetailView from '@/modules/products/views/ProductDetailView.vue'
 import LoginView from '@/modules/auth/views/LoginView.vue'
@@ -32,12 +29,10 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: MainLayout,
-    children: [      { path: '', name: 'Home', component: HomeView },
+    component: MainLayout,    children: [
+      { path: '', name: 'Home', component: HomeView },
       { path: 'productos', name: 'Products', component: ProductsView },
-      { path: 'zapatillas', name: 'Zapatillas', component: ZapatillasView },
-      { path: 'accesorios', name: 'Accesorios', component: AccesoriosView },
-      { path: 'ropa', name: 'Ropa', component: RopaView },
+      { path: ':slug', name: 'Category', component: ProductsView },
       { path: 'cart', name: 'Cart', component: CartView },
       { path: 'producto/:id', name: 'ProductDetail', component: ProductDetailView },
 

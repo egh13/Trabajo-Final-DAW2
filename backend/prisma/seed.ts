@@ -178,7 +178,7 @@ async function main() {
     const logs: LogDraft[] = [];
 
     // Genera logins exitosos y fallidos para los ultimos 3 dias
-    for (let daysAgo = 2; daysAgo >= 0; daysAgo--) {
+    for (let daysAgo = 3; daysAgo >= 1; daysAgo--) {
         const day = new Date(now);
         day.setDate(day.getDate() - daysAgo);
 
@@ -234,11 +234,13 @@ async function main() {
                 }`
             });
         }
-    }
-
-    // Logs adicionales variados para hoy
-    const today = (h: number, m: number) =>
-        new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+    }    // Logs adicionales variados para hoy
+    // Si la hora construida es futura, se desplaza al día anterior para evitar timestamps en el futuro
+    const today = (h: number, m: number) => {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
+        if (d > now) d.setDate(d.getDate() - 1);
+        return d;
+    };
 
     logs.push(
         {
