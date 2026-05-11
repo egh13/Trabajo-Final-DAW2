@@ -28,7 +28,7 @@
       <!-- Derecha: imagen de modelo -->
       <div class="hero-right" data-aos="fade-left" data-aos-delay="150">
         <div class="hero-image-wrap">
-          <img src="@/assets/images/PesonaConGafas.jpg" alt="Modelo con gafas" class="hero-model-img" />
+          <img src="@/assets/images/secure-header.png" alt="Modelo con zapatillas" class="hero-model-img" />
         </div>
       </div>
 
