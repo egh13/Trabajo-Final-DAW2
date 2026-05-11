@@ -160,10 +160,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useLogs } from '@/modules/admin/composables/useLogs'
 import { downloadExport } from '@/modules/admin/services/logService'
 import type { LogLevel } from '@/types'
 
+const route = useRoute()
 const { logs, total, loading, error, filters, loadLogs, applyFilters, goToPage, totalPages } = useLogs()
 
 // Detalle seleccionado para el modal
@@ -216,7 +218,12 @@ const levelClass = (level: LogLevel): string => {
 const formatDate = (iso: string): string =>
   new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'medium' })
 
-onMounted(loadLogs)
+// Si se navega desde otro módulo con un filtro preseleccionado, lo aplica antes de cargar
+onMounted(() => {
+  const mod = route.query.module as string | undefined
+  if (mod) filters.module = mod
+  loadLogs()
+})
 </script>
 
 <style scoped>
