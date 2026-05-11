@@ -6,20 +6,22 @@
         <div class="brand-logo-circle">
           <img :src="logoUrl" alt="SecureTenis" class="brand-logo" />
         </div>
-      </router-link>
-
-      <nav class="nav-links" :class="{ 'mobile-open': mobileOpen }">
+      </router-link>      <nav class="nav-links" :class="{ 'mobile-open': mobileOpen }">  
         <router-link class="nav-link" to="/" exact-active-class="nav-link--active" active-class="">Inicio</router-link>
-        <router-link class="nav-link" to="/zapatillas" active-class="nav-link--active">Zapatillas</router-link>
-        <router-link class="nav-link" to="/ropa" active-class="nav-link--active">Ropa</router-link>
-        <router-link class="nav-link" to="/accesorios" active-class="nav-link--active">Accesorios</router-link>
+        <router-link
+          v-for="cat in categories"
+          :key="cat.id"
+          class="nav-link"
+          :to="`/${cat.name.toLowerCase()}`"
+          active-class="nav-link--active"
+        >{{ cat.name }}</router-link>
       </nav>
 
+      <!-- Menu para moviles -->
       <div class="nav-right">
         <button class="mobile-toggle" @click="mobileOpen = !mobileOpen" :aria-expanded="mobileOpen" aria-label="Menú de navegación">
           <i :class="mobileOpen ? 'bi bi-x-lg' : 'bi bi-list'" />
         </button>
-
 
         <router-link v-if="showAdminLink" class="admin-chip" to="/admin">
           <i class="bi bi-shield-fill-check" />
@@ -71,12 +73,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import logoUrl from '@/assets/images/Logo.png'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cartStore'
 import { useAuthStore } from '@/stores/authStore'
+import { fetchCategories } from '@/modules/products/services/categoryService'
+import type { Category } from '@/types'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -86,6 +90,7 @@ const { isAuthenticated, userName, user } = storeToRefs(authStore)
 const mobileOpen = ref(false)
 const menuOpen = ref(false)
 const userMenuRef = ref<HTMLElement | null>(null)
+const categories = ref<Category[]>([])
 
 const roleLabels: Record<string, string> = {
   admin: 'Admin',
@@ -111,9 +116,13 @@ const onClickOutside = (e: MouseEvent) => {
   }
 }
 
-onMounted(() => {
+watch(isAuthenticated, () => cartStore.load())
+
+onMounted(async () => {
   cartStore.load()
   document.addEventListener('click', onClickOutside)
+  const res = await fetchCategories()
+  categories.value = res.data ?? []
 })
 onUnmounted(() => document.removeEventListener('click', onClickOutside))
 </script>

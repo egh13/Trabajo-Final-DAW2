@@ -119,10 +119,15 @@
 
               <div class="mb-3">
                 <label for="category_id" class="form-label small fw-semibold text-muted">Categoría *</label>
-                <select v-model="newProductForm.category_id" class="form-select form-select-sm" id="category_id" required>
-                  <option value="">Seleccionar categoría...</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                </select>
+                <div class="d-flex gap-2">
+                  <select v-model="newProductForm.category_id" class="form-select form-select-sm flex-grow-1" id="category_id" required>
+                    <option value="">Seleccionar categoría...</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                  </select>
+                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openCategoryModal" title="Crear nueva categoría">
+                    <i class="bi bi-plus-circle"></i>
+                  </button>
+                </div>
               </div>
 
               <div class="mb-3">
@@ -183,10 +188,15 @@
 
               <div class="mb-3">
                 <label for="edit-category_id" class="form-label small fw-semibold text-muted">Categoría *</label>
-                <select v-model="editProductForm.category_id" class="form-select form-select-sm" id="edit-category_id" required>
-                  <option value="">Seleccionar categoría...</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-                </select>
+                <div class="d-flex gap-2">
+                  <select v-model="editProductForm.category_id" class="form-select form-select-sm flex-grow-1" id="edit-category_id" required>
+                    <option value="">Seleccionar categoría...</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                  </select>
+                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openCategoryModal" title="Crear nueva categoría">
+                    <i class="bi bi-plus-circle"></i>
+                  </button>
+                </div>
               </div>
 
               <div class="mb-3">
@@ -238,6 +248,46 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para crear categoría -->
+    <div v-if="showCategoryModal" class="modal d-block" tabindex="-1" style="background: rgba(0,0,0,0.5); z-index: 1055;">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header modal-header-admin">
+            <h5 class="modal-title">
+              <i class="bi bi-plus-circle me-2"></i> Nueva Categoría
+            </h5>
+            <button type="button" class="btn-close btn-close-white" @click="closeCategoryModal"></button>
+          </div>
+          <div class="modal-body">
+            <div v-if="categoryFormError" class="alert alert-danger alert-dismissible fade show" role="alert">
+              <i class="bi bi-exclamation-triangle me-2"></i>{{ categoryFormError }}
+              <button type="button" class="btn-close" @click="categoryFormError = null"></button>
+            </div>
+
+            <form @submit.prevent="createNewCategory">
+              <div class="mb-3">
+                <label for="category-name" class="form-label small fw-semibold text-muted">Nombre de la categoría *</label>
+                <input v-model="newCategoryForm.name" type="text" class="form-control form-control-sm" id="category-name" placeholder="Ej: Zapatillas" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="category-description" class="form-label small fw-semibold text-muted">Descripción</label>
+                <textarea v-model="newCategoryForm.description" class="form-control form-control-sm" id="category-description" rows="2" placeholder="Descripción opcional de la categoría"></textarea>
+              </div>
+
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-admin btn-sm" :disabled="creatingCategory">
+                  <i class="bi me-1" :class="creatingCategory ? 'bi-hourglass-split' : 'bi-check-circle'"></i>
+                  {{ creatingCategory ? 'Creando...' : 'Crear Categoría' }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" @click="closeCategoryModal" :disabled="creatingCategory">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -246,7 +296,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Product, Category } from '@/types'
 import { fetchProducts, createProduct, updateProduct as updateProductApi, deleteProduct as deleteProductApi } from '@/modules/products/services/productService'
-import { fetchCategories } from '@/modules/products/services/categoryService'
+import { fetchCategories, createCategory } from '@/modules/products/services/categoryService'
 
 const router = useRouter()
 
@@ -261,6 +311,9 @@ const creatingProduct = ref(false)
 const updatingProduct = ref(false)
 const deletingProductId = ref<number | null>(null)
 const formError = ref<string | null>(null)
+const showCategoryModal = ref(false)
+const creatingCategory = ref(false)
+const categoryFormError = ref<string | null>(null)
 
 // Formularios
 const newProductForm = ref({
@@ -327,6 +380,37 @@ const openModal = () => {
   }
   formError.value = null
   showCreateModal.value = true
+}
+
+const openCategoryModal = () => {
+  newCategoryForm.value = {
+    name: '',
+    description: ''
+  }
+  categoryFormError.value = null
+  showCategoryModal.value = true
+}
+
+const closeCategoryModal = () => {
+  showCategoryModal.value = false
+}
+
+const createNewCategory = async () => {
+  creatingCategory.value = true
+  categoryFormError.value = null
+  try {
+    const response = await createCategory(newCategoryForm.value)
+    if (response.success) {
+      await loadCategories()
+      closeCategoryModal()
+    } else {
+      categoryFormError.value = response.message || 'Error al crear categoría'
+    }
+  } catch (err) {
+    categoryFormError.value = err instanceof Error ? err.message : 'Error al crear categoría'
+  } finally {
+    creatingCategory.value = false
+  }
 }
 
 const closeModal = () => {

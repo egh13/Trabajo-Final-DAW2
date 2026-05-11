@@ -1,9 +1,6 @@
 import MainLayout from '@/layouts/MainLayout.vue'
 import HomeView from '@/modules/home/views/HomeView.vue'
 import ProductsView from '@/modules/products/views/ProductsView.vue'
-import ZapatillasView from '@/modules/products/views/ZapatillasView.vue'
-import AccesoriosView from '@/modules/products/views/AccesoriosView.vue'
-import RopaView from '@/modules/products/views/RopaView.vue'
 import CartView from '@/modules/cart/views/CartView.vue'
 import ProductDetailView from '@/modules/products/views/ProductDetailView.vue'
 import LoginView from '@/modules/auth/views/LoginView.vue'
@@ -15,6 +12,7 @@ import AutenticacionView from '@/modules/admin/views/AutenticacionView.vue'
 import AuditoriaView from '@/modules/admin/views/AuditoriaView.vue'
 import AdminUsersView from '@/modules/admin/views/AdminUsersView.vue'
 import AdminProductsView from '@/modules/admin/views/AdminProductsView.vue'
+import AdminCategoriesView from '@/modules/admin/views/AdminCategoriesView.vue'
 import BloqueosView from '@/modules/admin/views/BloqueosView.vue'
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import type { UserRole } from '@/types'
@@ -31,12 +29,10 @@ declare module 'vue-router' {
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: MainLayout,
-    children: [      { path: '', name: 'Home', component: HomeView },
+    component: MainLayout,    children: [
+      { path: '', name: 'Home', component: HomeView },
       { path: 'productos', name: 'Products', component: ProductsView },
-      { path: 'zapatillas', name: 'Zapatillas', component: ZapatillasView },
-      { path: 'accesorios', name: 'Accesorios', component: AccesoriosView },
-      { path: 'ropa', name: 'Ropa', component: RopaView },
+      { path: ':slug', name: 'Category', component: ProductsView },
       { path: 'cart', name: 'Cart', component: CartView },
       { path: 'producto/:id', name: 'ProductDetail', component: ProductDetailView },
 
@@ -65,6 +61,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'estado', name: 'admin-estado', component: EstadoGeneralView },
       { path: 'autenticacion', name: 'admin-autenticacion', component: AutenticacionView },      { path: 'auditoria', name: 'admin-auditoria', component: AuditoriaView },      { path: 'usuarios', name: 'admin-usuarios', component: AdminUsersView, meta: { requiresAuth: true, roles: ['admin'] as UserRole[] } },
       { path: 'productos', name: 'admin-productos', component: AdminProductsView, meta: { requiresAuth: true, roles: ['admin'] as UserRole[] } },
+      { path: 'categorias', name: 'admin-categorias', component: AdminCategoriesView, meta: { requiresAuth: true, roles: ['admin'] as UserRole[] } },
       { path: 'bloqueos', name: 'admin-bloqueos', component: BloqueosView, meta: { requiresAuth: true, roles: ['admin', 'analista'] as UserRole[] } },
     ],
   },

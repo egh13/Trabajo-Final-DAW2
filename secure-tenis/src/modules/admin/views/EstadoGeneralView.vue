@@ -82,7 +82,7 @@
             <div class="card-header bg-white fw-semibold">
               <i class="bi bi-bar-chart me-2"></i>Logs por Módulo
             </div>            <div class="card-body">
-              <div class="chart-container">
+              <div class="chart-container bar-chart">
                 <Bar :data="moduleChartData" :options="barOptions" />
               </div>
             </div>
@@ -107,6 +107,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { Bar, Doughnut } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -123,6 +124,7 @@ import type { SystemStats } from '@/types'
 // Registro de componentes Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
 
+const router = useRouter()
 const stats = ref<SystemStats | null>(null)
 const loading = ref(true)
 const error = ref('')
@@ -176,7 +178,16 @@ const barOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: { legend: { display: false } },
-  scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+  scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },  onClick: (_event: unknown, elements: { index: number }[]) => {
+    const first = elements[0]
+    if (!first) return
+    const mod = stats.value?.logsByModule[first.index]?.module
+    if (mod) router.push({ name: 'admin-auditoria', query: { module: mod } })
+  },
+  onHover: (_event: unknown, elements: unknown[]) => {
+    const canvas = document.querySelector('.bar-chart canvas') as HTMLCanvasElement | null
+    if (canvas) canvas.style.cursor = elements.length ? 'pointer' : 'default'
+  },
 }
 
 const doughnutOptions = {

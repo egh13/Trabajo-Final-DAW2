@@ -80,6 +80,15 @@ const allGeneralCards = [
     tags: ['Productos', 'Precios', 'Stock'],
     adminOnly: true,
   },
+  {
+    to: '/admin/categorias',
+    icon: 'bi-tags',
+    label: 'Gestión de Categorías',
+    description: 'Crea, edita y organiza las categorías disponibles en la tienda.',
+    bg: 'linear-gradient(135deg, #f59e0b33, #0a0a0a22)',
+    tags: ['Categorías', 'Organización', 'Catálogo'],
+    adminOnly: true,
+  },
 ]
 
 const generalCards = computed(() =>
@@ -165,7 +174,7 @@ const securityCards = [
 .module-enter {
   color: var(--color-garnet, #6B1E2E);
   font-size: 0.82rem;
-  opacity: 0;
+      opacity: 0;
   transition: opacity 0.2s;
 }
 

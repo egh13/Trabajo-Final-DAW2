@@ -53,7 +53,7 @@ const createBlock = async (data: CreateBlockBody): Promise<BlockEntry> => {
       reason: data.reason,
       manual: true,
       expiresAt,
-    } as any,
+    },
   })
 
   return toPublic(row)
@@ -105,7 +105,7 @@ const createAutoBlock = async (email: string, reason: string, durationMinutes: n
       reason,
       manual: false,
       expiresAt,
-    } as any,
+    },
   })
 }
 

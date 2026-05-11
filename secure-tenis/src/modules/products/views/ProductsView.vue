@@ -1,8 +1,7 @@
 <template>
   <div>
-    <div class="d-flex align-items-center justify-content-between mb-4">
-      <h2 class="fw-bold mb-0">
-        <i v-if="sectionIcon" :class="`bi ${sectionIcon} me-2`"></i>{{ sectionTitle }}
+    <div class="d-flex align-items-center justify-content-between mb-4">      <h2 class="fw-bold mb-0">
+        <i :class="`bi ${resolvedIcon} me-2`"></i>{{ resolvedTitle }}
       </h2>
       <span class="text-muted small">{{ products.length }} resultado(s)</span>
     </div>
@@ -55,24 +54,44 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useProducts } from '@/modules/products/composables/useProducts'
+import { fetchCategories } from '@/modules/products/services/categoryService'
 import { useCartStore } from '@/stores/cartStore'
+import type { Category } from '@/types'
 
-const props = defineProps<{
-  categoryId?: number
-  sectionTitle?: string
-  sectionIcon?: string
-}>()
-
+const route = useRoute()
 const router = useRouter()
 const { products, loading, error, hasProducts, load } = useProducts()
 const cartStore = useCartStore()
 
+// Categorías disponibles para resolver el slug de la ruta
+const categories = ref<Category[]>([])
+
 const addItem = (productId: number, quantity = 1) => cartStore.addItem(productId, quantity)
 
-onMounted(() => load(props.categoryId))
+// Resuelve la categoría activa a partir del slug de la URL
+const activeCategory = computed<Category | undefined>(() => {
+  const slug = route.params.slug as string | undefined
+  if (!slug) return undefined
+  return categories.value.find(c => c.name.toLowerCase() === slug.toLowerCase())
+})
+
+const resolvedTitle = computed(() => activeCategory.value?.name ?? 'Todos los productos')
+const resolvedIcon = computed(() => activeCategory.value ? 'bi-tag' : 'bi-grid')
+
+// Carga las categorías y luego los productos de la categoría activa
+const init = async () => {
+  const res = await fetchCategories()
+  categories.value = res.data ?? []
+  load(activeCategory.value?.id)
+}
+
+// Recarga los productos al cambiar de slug (navegación entre categorías)
+watch(() => route.params.slug, () => load(activeCategory.value?.id))
+
+onMounted(init)
 </script>
 
 <style scoped>
@@ -89,9 +108,10 @@ onMounted(() => load(props.categoryId))
 }
 
 .card-img-wrapper {
-  height: 200px;
+  position: relative;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: linear-gradient(145deg, #f0f0f5 0%, #e8e8f0 100%);
+  background: linear-gradient(145deg, var(--color-cream-dark) 0%, #DDD4C4 100%);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -99,11 +119,16 @@ onMounted(() => load(props.categoryId))
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.06);
 }
 
 .card-img-placeholder {
-  height: 200px;
-  background: linear-gradient(145deg, #f0f0f5 0%, #e8e8f0 100%);
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(145deg, var(--color-cream-dark) 0%, #DDD4C4 100%);
   border-bottom: 1px solid var(--color-border);
 }
 </style>
