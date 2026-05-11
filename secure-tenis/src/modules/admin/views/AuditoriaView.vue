@@ -29,11 +29,11 @@
           </div>
           <div class="col-md-2">
             <label class="form-label small fw-semibold text-muted">Módulo</label>
-            <select v-model="filters.module" class="form-select form-select-sm">
-              <option value="">Todos</option>
+            <select v-model="filters.module" class="form-select form-select-sm">              <option value="">Todos</option>
               <option value="Auth">Auth</option>
               <option value="Productos">Productos</option>
               <option value="Pedidos">Pedidos</option>
+              <option value="Categorias">Categorias</option>
               <option value="Sistema">Sistema</option>
             </select>
           </div>

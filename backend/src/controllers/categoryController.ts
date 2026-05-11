@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import * as categoryService from '../services/categoryService'
+import { createLog } from '../services/admin/logService'
+import { getClientIp } from '../utils/getClientIp'
 import type { ApiResponse, Category } from '../types'
 
 export const getCategories = async (req: Request, res: Response): Promise<void> => {
@@ -14,9 +16,9 @@ export const createCategory = async (req: Request, res: Response): Promise<void>
     res.status(400).json({ success: false, message: 'El nombre es obligatorio' } as ApiResponse<null>)
     return
   }
-
   try {
     const data = await categoryService.createCategory(name.trim(), description ?? null)
+    await createLog({ level: 'INFO', module: 'Categorias', action: `Categoría creada — ${data.name}`, userId: req.user?.userId, ip: getClientIp(req) })
     res.status(201).json({ success: true, data } as ApiResponse<Category>)
   } catch (error: any) {
     if (error.code === 'P2002') {
@@ -47,9 +49,9 @@ export const updateCategory = async (req: Request, res: Response): Promise<void>
     res.status(400).json({ success: false, message: 'El nombre es obligatorio' } as ApiResponse<null>)
     return
   }
-
   try {
     const data = await categoryService.updateCategory(id, name.trim(), description ?? null)
+    await createLog({ level: 'INFO', module: 'Categorias', action: `Categoría actualizada — ${data.name} (id: ${id})`, userId: req.user?.userId, ip: getClientIp(req) })
     res.json({ success: true, data } as ApiResponse<Category>)
   } catch (error) {
     res.status(404).json({ success: false, message: 'Categoría no encontrada' } as ApiResponse<null>)
@@ -61,6 +63,7 @@ export const deleteCategory = async (req: Request, res: Response): Promise<void>
 
   try {
     await categoryService.deleteCategory(id)
+    await createLog({ level: 'INFO', module: 'Categorias', action: `Categoría eliminada (id: ${id})`, userId: req.user?.userId, ip: getClientIp(req) })
     res.json({ success: true, message: 'Categoría eliminada correctamente' } as ApiResponse<null>)
   } catch (error) {
     res.status(404).json({ success: false, message: 'Categoría no encontrada' } as ApiResponse<null>)

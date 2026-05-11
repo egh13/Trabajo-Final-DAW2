@@ -203,9 +203,7 @@ async function main() {
                     minute
                 )
             });
-        }
-
-        const failEmails = [
+        }        const failEmails = [
             "hacker@evil.com",
             "desconocido@test.com",
             "brute@force.net",
@@ -233,48 +231,47 @@ async function main() {
                     failEmails[Math.floor(Math.random() * failEmails.length)]
                 }`
             });
+        }        // Operaciones de admin sobre productos en días anteriores
+        const adminProductActions = [
+            "Producto creado — Secure Runner",
+            "Producto actualizado — Secure Boot (id: 1)",
+            "Producto actualizado — Secure Oxford (id: 2)",
+            "Producto eliminado (id: 8)",
+        ];
+        if (Math.random() > 0.4) {
+            const hour = 10 + Math.floor(Math.random() * 4);
+            logs.push({
+                level: "INFO",
+                module: "Productos",
+                action: adminProductActions[Math.floor(Math.random() * adminProductActions.length)],
+                userId: admin?.id,
+                ip: "192.168.1.10",
+                createdAt: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, Math.floor(Math.random() * 60))
+            });
+        }// Pedidos del día con sus confirmaciones
+        const orderCount = Math.floor(Math.random() * 4) + 1;
+        for (let i = 0; i < orderCount; i++) {
+            const hour = 9 + Math.floor(Math.random() * 10);
+            const minute = Math.floor(Math.random() * 58);
+            const user = [cliente, analista][Math.floor(Math.random() * 2)];
+            const orderId = 900 + daysAgo * 10 + i;
+            logs.push({
+                level: "INFO",
+                module: "Pedidos",
+                action: `Nuevo pedido #${orderId} creado`,
+                userId: user?.id,
+                ip: `192.168.1.${30 + i}`,
+                createdAt: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, minute)
+            });
         }
-    }    // Logs adicionales variados para hoy
+    }// Logs adicionales variados para hoy
     // Si la hora construida es futura, se desplaza al día anterior para evitar timestamps en el futuro
     const today = (h: number, m: number) => {
         const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m);
         if (d > now) d.setDate(d.getDate() - 1);
         return d;
-    };
-
-    logs.push(
-        {
-            level: "WARNING",
-            module: "Auth",
-            action: "Acceso sin token a /api/orders",
-            userId: null,
-            ip: "45.33.32.156",
-            createdAt: today(10, 15)
-        },
-        {
-            level: "INFO",
-            module: "Productos",
-            action: "GET /api/products",
-            userId: cliente?.id,
-            ip: "192.168.1.42",
-            createdAt: today(10, 20)
-        },
-        {
-            level: "INFO",
-            module: "Pedidos",
-            action: "Nuevo pedido creado",
-            userId: cliente?.id,
-            ip: "192.168.1.42",
-            createdAt: today(10, 30)
-        },
-        {
-            level: "INFO",
-            module: "Auth",
-            action: "Registro de nuevo usuario",
-            userId: cliente?.id,
-            ip: "192.168.1.88",
-            createdAt: today(11, 0)
-        },
+    };    logs.push(
+        // Sistema
         {
             level: "DEBUG",
             module: "Sistema",
@@ -282,10 +279,106 @@ async function main() {
             userId: null,
             ip: "127.0.0.1",
             createdAt: today(8, 0)
+        },
+
+        // Autenticación
+        {
+            level: "INFO",
+            module: "Auth",
+            action: "Registro de nuevo usuario",
+            userId: cliente?.id,
+            ip: "192.168.1.88",
+            createdAt: today(8, 45)
+        },
+        {
+            level: "WARNING",
+            module: "Auth",
+            action: "Acceso sin token a /api/orders",
+            userId: null,
+            ip: "45.33.32.156",
+            createdAt: today(9, 5)
+        },
+        {
+            level: "ERROR",
+            module: "Auth",
+            action: "Login fallido — Credenciales incorrectas.",
+            userId: null,
+            ip: "103.21.88.44",
+            createdAt: today(9, 7),
+            detail: "email: hacker@evil.com"
+        },
+
+        // Gestión de productos (admin)
+        {
+            level: "INFO",
+            module: "Productos",
+            action: "Producto creado — Secure Runner Pro",
+            userId: admin?.id,
+            ip: "192.168.1.10",
+            createdAt: today(10, 10)
+        },
+        {
+            level: "INFO",
+            module: "Productos",
+            action: "Producto actualizado — Secure Boot (id: 1)",
+            userId: admin?.id,
+            ip: "192.168.1.10",
+            createdAt: today(10, 12)
+        },
+        {
+            level: "INFO",
+            module: "Productos",
+            action: "Producto eliminado (id: 9)",
+            userId: admin?.id,
+            ip: "192.168.1.10",
+            createdAt: today(10, 14)
+        },
+
+        // Pedidos
+        {
+            level: "INFO",
+            module: "Pedidos",
+            action: "Nuevo pedido #1001 creado",
+            userId: cliente?.id,
+            ip: "192.168.1.42",
+            createdAt: today(10, 30)
+        },
+        {
+            level: "INFO",
+            module: "Pedidos",
+            action: "Nuevo pedido #1002 creado",
+            userId: analista?.id,
+            ip: "192.168.1.77",
+            createdAt: today(10, 50)
+        },
+        {
+            level: "INFO",
+            module: "Pedidos",
+            action: "Nuevo pedido #1003 creado",
+            userId: cliente?.id,
+            ip: "192.168.1.90",
+            createdAt: today(11, 20)
+        },
+
+        // Categorías (admin)
+        {
+            level: "INFO",
+            module: "Categorias",
+            action: "Categoría creada — Running",
+            userId: admin?.id,
+            ip: "192.168.1.10",
+            createdAt: today(12, 0)
+        },
+        {
+            level: "INFO",
+            module: "Categorias",
+            action: "Categoría eliminada (id: 5)",
+            userId: admin?.id,
+            ip: "192.168.1.10",
+            createdAt: today(12, 3)
         }
     );
 
-    // El cast evita el conflicto entre el tipo local y el enum generado por Prisma
     await prisma.userLog.createMany({ data: logs as any[] });
 
     console.log(`  -> ${logs.length} logs insertados`);

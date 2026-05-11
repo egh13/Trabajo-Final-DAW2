@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import * as productService from '../services/productService'
+import { createLog } from '../services/admin/logService'
+import { getClientIp } from '../utils/getClientIp'
 import type { ApiResponse, Product } from '../types'
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
@@ -27,7 +29,6 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
     res.status(400).json({ success: false, message: 'Faltan campos obligatorios: name, price, category_id' } as ApiResponse<null>)
     return
   }
-
   const data = await productService.createProduct({
     name: name.trim(),
     description: description ?? null,
@@ -36,6 +37,8 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
     image_url: image_url ?? null,
     category_id,
   })
+
+  await createLog({ level: 'INFO', module: 'Productos', action: `Producto creado — ${data.name}`, userId: req.user?.userId, ip: getClientIp(req) })
 
   res.status(201).json({ success: true, data } as ApiResponse<Product>)
 }
@@ -49,6 +52,8 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
     return
   }
 
+  await createLog({ level: 'INFO', module: 'Productos', action: `Producto actualizado — ${data.name} (id: ${id})`, userId: req.user?.userId, ip: getClientIp(req) })
+
   res.json({ success: true, data } as ApiResponse<Product>)
 }
 
@@ -60,6 +65,8 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
     res.status(404).json({ success: false, message: 'Producto no encontrado' } as ApiResponse<null>)
     return
   }
+
+  await createLog({ level: 'INFO', module: 'Productos', action: `Producto eliminado (id: ${id})`, userId: req.user?.userId, ip: getClientIp(req) })
 
   res.json({ success: true, message: 'Producto eliminado correctamente' } as ApiResponse<null>)
 }
