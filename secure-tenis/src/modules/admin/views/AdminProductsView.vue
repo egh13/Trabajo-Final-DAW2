@@ -335,6 +335,11 @@ const editProductForm = ref({
   image_url: ''
 })
 
+const newCategoryForm = ref({
+  name: '',
+  description: ''
+})
+
 // Productos ordenados por ID
 const sortedProducts = computed(() => {
   return [...products.value].sort((a, b) => a.id - b.id)
