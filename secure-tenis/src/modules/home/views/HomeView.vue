@@ -19,5 +19,3 @@ const scrollToProducts = () => {
   el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
-
-<style scoped></style>

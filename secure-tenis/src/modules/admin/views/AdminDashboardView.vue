@@ -19,7 +19,7 @@
                 <span class="badge bg-dark bg-opacity-75 me-1" v-for="tag in card.tags" :key="tag">{{ tag }}</span>
               </div>
               <div class="mt-auto">
-                <span class="module-enter text-success fw-semibold small">Acceder →</span>
+                <span class="module-enter fw-semibold small">Acceder →</span>
               </div>
             </div>
           </div>
@@ -136,7 +136,7 @@ const securityCards = [
 .module-card {
   background: #fff;
   border-radius: 12px;
-  border: 1px solid var(--color-border, #CECECE);
+  border: 1px solid var(--color-border);
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   display: block;
@@ -172,7 +172,7 @@ const securityCards = [
 }
 
 .module-enter {
-  color: var(--color-garnet, #6B1E2E);
+  color: var(--color-garnet);
   font-size: 0.82rem;
       opacity: 0;
   transition: opacity 0.2s;

@@ -55,13 +55,13 @@ const emit = defineEmits<{
   margin-bottom: 1.5rem;
   user-select: none;
 }
-.hero-logo-secure { color: #F4F4F2; }
+.hero-logo-secure { color: var(--color-bg); }
 .hero-logo-tenis  { color: var(--color-garnet); }
 
 /* ── Banner ── */
 .hero-banner {
   position: relative;
-  background-color: #1E1E1E;
+  background-color: var(--color-surface);
   background-image: repeating-linear-gradient(
     45deg,
     transparent,
@@ -120,7 +120,7 @@ const emit = defineEmits<{
   border-radius: 50px;
   border: 1px solid rgba(200, 200, 200, 0.35);
   background: rgba(200, 200, 200, 0.09);
-  color: #F4F4F2;
+  color: var(--color-bg);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -132,12 +132,12 @@ const emit = defineEmits<{
   font-size: clamp(2.2rem, 4.5vw, 3.6rem);
   font-weight: 800;
   line-height: 1.1;
-  color: #F4F4F2;
+  color: var(--color-bg);
   margin-bottom: 1.25rem;
   letter-spacing: -0.02em;
 }
 
-.hero-title-accent { color: #CECECE; }
+.hero-title-accent { color: var(--color-gray-light); }
 
 .hero-desc {
   font-size: 1.05rem;

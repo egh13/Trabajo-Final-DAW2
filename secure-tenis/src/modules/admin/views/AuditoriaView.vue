@@ -163,6 +163,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLogs } from '@/modules/admin/composables/useLogs'
 import { downloadExport } from '@/modules/admin/services/logService'
+import { formatDate, normalizeIp } from '@/utils/formatters'
 import type { LogLevel } from '@/types'
 
 const route = useRoute()
@@ -199,10 +200,6 @@ const visiblePages = computed(() => {
   return pages
 })
 
-// Normaliza IPs IPv4-mapped IPv6 a formato IPv4 puro
-const normalizeIp = (ip: string): string =>
-  ip.startsWith('::ffff:') ? ip.slice(7) : (ip || '—')
-
 // Clase CSS del badge según el nivel del log
 const levelClass = (level: LogLevel): string => {
   switch (level) {
@@ -214,10 +211,6 @@ const levelClass = (level: LogLevel): string => {
   }
 }
 
-// Formatea fecha ISO a formato local legible
-const formatDate = (iso: string): string =>
-  new Date(iso).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'medium' })
-
 // Si se navega desde otro módulo con un filtro preseleccionado, lo aplica antes de cargar
 onMounted(() => {
   const mod = route.query.module as string | undefined
@@ -227,27 +220,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.btn-admin {
-  background: var(--color-garnet, #6B1E2E);
-  border-color: var(--color-garnet, #6B1E2E);
-  color: #fff;
-  font-weight: 600;
-}
-
-.btn-admin:hover {
-  background: var(--color-garnet-dark, #4E1420);
-  border-color: var(--color-garnet-dark, #4E1420);
-  color: #fff;
-}
-
-.btn-admin:disabled {
-  background: var(--color-garnet, #6B1E2E);
-  opacity: 0.6;
-}
-
 .page-link-active {
-  background: var(--color-garnet, #6B1E2E) !important;
-  border-color: var(--color-garnet, #6B1E2E) !important;
+  background: var(--color-garnet) !important;
+  border-color: var(--color-garnet) !important;
   color: #fff !important;
 }
 

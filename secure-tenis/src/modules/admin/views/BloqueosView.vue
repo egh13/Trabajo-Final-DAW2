@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { fetchBlocks, createBlock, deleteBlock } from '../services/blockService'
+import { formatDate } from '@/utils/formatters'
 import type { IpBlock } from '@/types'
 
 // Estado reactivo
@@ -68,13 +69,6 @@ const handleDelete = async (id: number) => {
     error.value = e instanceof Error ? e.message : 'Error al eliminar bloqueo'
   }
 }
-
-// Formatea una fecha ISO a formato legible
-const formatDate = (iso: string): string =>
-  new Date(iso).toLocaleString('es-ES', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
-  })
 
 onMounted(load)
 </script>
@@ -210,10 +204,3 @@ onMounted(load)
   </div>
 </template>
 
-<style scoped>
-.kpi-value {
-  font-size: 1.8rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-</style>
