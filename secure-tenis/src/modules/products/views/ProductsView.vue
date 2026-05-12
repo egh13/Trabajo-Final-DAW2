@@ -41,7 +41,7 @@
             <h5 class="card-title fw-semibold">{{ product.name }}</h5>
             <p class="card-text text-muted small flex-grow-1">{{ product.description }}</p>
             <div class="d-flex align-items-center justify-content-between mt-3">
-              <span class="fs-5 fw-bold text-accent">${{ product.price }}</span>
+              <span class="fs-5 fw-bold text-accent">{{ product.price }}€</span>
               <button class="btn btn-dark btn-sm px-3" @click.stop="addItem(product.id)">
                 <i class="bi bi-cart-plus me-1"></i>Añadir
               </button>

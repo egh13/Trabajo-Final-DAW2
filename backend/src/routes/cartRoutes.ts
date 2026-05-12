@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import { getCart, addToCart, updateCartItem, removeFromCart, clearCart } from '../controllers/cartController'
+import { optionalAuthenticate } from '../middlewares/authMiddleware'
 
 const router = Router()
+
+router.use(optionalAuthenticate)
 
 router.get('/', getCart)
 router.post('/', addToCart)

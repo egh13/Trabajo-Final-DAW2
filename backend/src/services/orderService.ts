@@ -1,6 +1,6 @@
 import { prisma } from '../config/prisma'
 import type { Prisma } from '@prisma/client'
-import { getCartBySession, clearCart } from './cartService'
+import { getCartBySession } from './cartService'
 
 export const getOrdersByUser = async (userId: number) => {
   return await prisma.order.findMany({
@@ -57,7 +57,11 @@ export const createOrderFromCart = async (userId: number) => {
       })
     }
 
-    await clearCart('', userId)
-    return order
+    await tx.cartItem.deleteMany({ where: { userId } })
+
+    return await tx.order.findUnique({
+      where: { id: order.id },
+      include: { items: { include: { product: true } } }
+    })
   })
 }

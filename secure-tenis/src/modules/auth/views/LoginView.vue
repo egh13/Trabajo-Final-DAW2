@@ -80,11 +80,12 @@
 
 <script setup lang="ts">
 import { reactive, ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import type { LoginPayload } from '@/types'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
 const form = reactive<LoginPayload>({
@@ -102,7 +103,8 @@ const handleLogin = async () => {
 
   try {
     await authStore.login(form)
-    router.push('/')
+    const redirect = route.query.redirect as string | undefined
+    router.push(redirect ?? '/')
   } catch {
     // El error ya se muestra desde el store
   }
