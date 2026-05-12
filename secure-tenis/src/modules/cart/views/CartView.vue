@@ -117,8 +117,7 @@ import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
 import { useAuthStore } from '@/stores/authStore'
 import { createOrderRequest } from '@/modules/checkout/services/orderService'
-
-const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
+import { BASE_URL } from '@/services/apiClient'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -173,7 +172,4 @@ onMounted(() => cartStore.load())
   object-fit: cover;
 }
 
-.text-accent {
-  color: var(--color-accent);
-}
 </style>

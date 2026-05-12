@@ -193,6 +193,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { formatDate, normalizeIp } from '@/utils/formatters'
 import { useAuthStats } from '@/modules/admin/composables/useAuthStats'
 import { useFailedAttempts } from '@/modules/admin/composables/useFailedAttempts'
 
@@ -227,24 +228,12 @@ const loginChartOptions = {
   scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
 }
 
-// Formatea una fecha ISO a formato legible
-const formatDate = (iso: string): string => {
-  return new Date(iso).toLocaleString('es-ES', {
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit',
-  })
-}
-
 // Formatea una fecha ISO a fecha y hora exacta en formato local
 const formatRelative = (iso: string): string =>
   new Date(iso).toLocaleString('es-ES', {
     day: '2-digit', month: '2-digit', year: 'numeric',
     hour: '2-digit', minute: '2-digit'
   })
-
-// Normaliza IPs IPv4-mapped IPv6 a formato IPv4 puro
-const normalizeIp = (ip: string): string =>
-  ip.startsWith('::ffff:') ? ip.slice(7) : (ip || '—')
 
 // Extrae el valor del campo detail eliminando el prefijo "email: "
 const formatDetail = (detail: string): string =>
@@ -257,12 +246,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.kpi-value {
-  font-size: 1.9rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
 .chart-container {
   position: relative;
   height: 260px;

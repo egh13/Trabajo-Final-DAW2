@@ -1,0 +1,110 @@
+/* ── Estilos compartidos del panel de administración ── */
+
+/* Cabecera de tarjetas */
+.card-header-admin {
+  background: var(--color-surface);
+  color: #fff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 0;
+}
+
+/* Cabecera de modales */
+.modal-header-admin {
+  background: var(--color-garnet);
+  color: #fff;
+}
+
+.modal-header-admin .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Botón primario admin (granate) */
+.btn-admin {
+  background: var(--color-garnet);
+  border-color: var(--color-garnet);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-admin:hover,
+.btn-admin:focus {
+  background: var(--color-garnet-dark);
+  border-color: var(--color-garnet-dark);
+  color: #fff;
+}
+
+.btn-admin:disabled {
+  background: var(--color-garnet);
+  opacity: 0.6;
+}
+
+/* Botón outline oscuro (para cabeceras oscuras) */
+.btn-admin-outline {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  background: transparent;
+  font-weight: 500;
+}
+
+.btn-admin-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* Botón outline claro (para fondos claros, borde granate) */
+.btn-outline-admin {
+  border-color: var(--color-garnet);
+  color: var(--color-garnet);
+}
+
+.btn-outline-admin:hover {
+  background: var(--color-garnet);
+  color: #fff;
+}
+
+/* Botón ghost pequeño (para cabeceras oscuras) */
+.btn-ghost-sm {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.btn-ghost-sm:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Spinner con color granate */
+.spinner-admin {
+  color: var(--color-garnet);
+}
+
+/* Sombra y sin borde para modales admin */
+.modal-content {
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
+  border: none;
+}
+
+/* KPI de métricas grandes */
+.kpi-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Fila clicable en tablas */
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover td {
+  background: rgba(107, 30, 46, 0.06);
+}
+
+/* Contenedor de gráficos Chart.js */
+.chart-container {
+  position: relative;
+  height: 260px;
+  width: 100%;
+}

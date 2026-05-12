@@ -113,3 +113,6 @@ body {
   align-items: center;
   padding: 2rem 0;
 }
+
+@import './auth.css';
+@import './admin.css';

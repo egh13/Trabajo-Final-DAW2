@@ -186,7 +186,4 @@ onMounted(() => load(Number(route.params.id)))
   cursor: default;
 }
 
-.text-accent {
-  color: var(--color-accent);
-}
 </style>

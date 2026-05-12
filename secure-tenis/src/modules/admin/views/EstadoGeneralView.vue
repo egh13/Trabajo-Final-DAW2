@@ -209,25 +209,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.status-text {
-  color: var(--color-surface, #1E1E1E);
-}
-
-.card-header-console {
-  background: var(--color-surface, #1E1E1E);
-  color: #fff;
-}
-
-.btn-outline-admin {
-  border-color: var(--color-garnet, #6B1E2E);
-  color: var(--color-garnet, #6B1E2E);
-}
-
-.btn-outline-admin:hover {
-  background: var(--color-garnet, #6B1E2E);
-  color: #fff;
-}
-
 .status-indicator {
   width: 13px;
   height: 13px;
@@ -244,17 +225,5 @@ onMounted(async () => {
   50% {
     box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
   }
-}
-
-.kpi-value {
-  font-size: 1.8rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.chart-container {
-  position: relative;
-  height: 260px;
-  width: 100%;
 }
 </style>

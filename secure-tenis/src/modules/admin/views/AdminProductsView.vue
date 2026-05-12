@@ -124,7 +124,7 @@
                     <option value="">Seleccionar categoría...</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                   </select>
-                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openCategoryModal" title="Crear nueva categoría">
+                  <button type="button" class="btn btn-outline-admin btn-sm" @click="openCategoryModal" title="Crear nueva categoría">
                     <i class="bi bi-plus-circle"></i>
                   </button>
                 </div>
@@ -193,7 +193,7 @@
                     <option value="">Seleccionar categoría...</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
                   </select>
-                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openCategoryModal" title="Crear nueva categoría">
+                  <button type="button" class="btn btn-outline-admin btn-sm" @click="openCategoryModal" title="Crear nueva categoría">
                     <i class="bi bi-plus-circle"></i>
                   </button>
                 </div>
@@ -518,97 +518,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.card-header-admin {
-  background: var(--color-surface, #1E1E1E);
-  color: #fff;
-  padding: 0.9rem 1.25rem;
-  border-radius: 0;
-}
-
-.modal-header-admin {
-  background: var(--color-garnet, #6B1E2E);
-  color: #fff;
-}
-
-.modal-header-admin .btn-close {
-  filter: invert(1) grayscale(100%) brightness(200%);
-}
-
-.btn-admin {
-  background: var(--color-garnet, #6B1E2E);
-  border-color: var(--color-garnet, #6B1E2E);
-  color: #fff;
-  font-weight: 600;
-}
-
-.btn-admin:hover, .btn-admin:focus {
-  background: var(--color-garnet-dark, #4E1420);
-  border-color: var(--color-garnet-dark, #4E1420);
-  color: #fff;
-}
-
-.btn-admin:disabled {
-  background: var(--color-garnet, #6B1E2E);
-  opacity: 0.6;
-}
-
-.btn-admin-outline {
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #fff;
-  background: transparent;
-  font-weight: 500;
-}
-
-.btn-admin-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.btn-outline-admin {
-  border-color: var(--color-garnet, #6B1E2E);
-  color: var(--color-garnet, #6B1E2E);
-}
-
-.btn-outline-admin:hover {
-  background: var(--color-garnet, #6B1E2E);
-  color: #fff;
-}
-
-.btn-ghost-sm {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.btn-ghost-sm:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.spinner-admin {
-  color: var(--color-garnet, #6B1E2E);
-}
-
-.modal-content {
-  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
-  border: none;
-}
-
 .product-thumb {
   width: 44px;
   height: 44px;
   object-fit: cover;
   border-radius: 6px;
-  border: 1px solid var(--color-border, #CECECE);
-}
-
-.clickable-row {
-  cursor: pointer;
-  transition: background-color 0.15s;
-}
-
-.clickable-row:hover {
-  background-color: rgba(107, 30, 46, 0.04) !important;
+  border: 1px solid var(--color-border);
 }
 </style>

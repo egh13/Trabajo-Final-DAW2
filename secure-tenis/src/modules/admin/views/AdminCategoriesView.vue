@@ -61,7 +61,7 @@
                       <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="badge bg-primary">{{ category.productCount || 0 }} productos</span>
                         <button class="btn btn-sm btn-outline-primary" @click="viewCategoryProducts(category)">
-                          <i class="bi" :class="expandedCategoryId === category.id ? 'bi-chevron-up' : 'bi-eye'" me-1></i>
+                        <i class="bi me-1" :class="expandedCategoryId === category.id ? 'bi-chevron-up' : 'bi-eye'"></i>
                           {{ expandedCategoryId === category.id ? 'Ocultar productos' : 'Ver productos' }}
                         </button>
                       </div>
@@ -73,7 +73,7 @@
               <!-- Productos expandidos -->
               <div v-if="expandedCategoryId" class="mt-4">
                 <div class="card border-0 shadow-sm">
-                  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                  <div class="card-header card-header-admin d-flex justify-content-between align-items-center">
                     <h6 class="mb-0">
                       <i class="bi bi-box-seam me-2"></i>
                       Productos en "{{ selectedCategory?.name }}"
@@ -473,58 +473,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.card-header-admin {
-  background: var(--color-surface, #1E1E1E);
-  color: #fff;
-  padding: 0.9rem 1.25rem;
-  border-radius: 0;
-}
-
-.modal-header-admin {
-  background: var(--color-garnet, #6B1E2E);
-  color: #fff;
-}
-
-.modal-header-admin .btn-close {
-  filter: invert(1) grayscale(100%) brightness(200%);
-}
-
-.btn-admin {
-  background: var(--color-garnet, #6B1E2E);
-  border-color: var(--color-garnet, #6B1E2E);
-  color: #fff;
-  font-weight: 600;
-}
-
-.btn-admin:hover, .btn-admin:focus {
-  background: var(--color-garnet-dark, #5a1926);
-  border-color: var(--color-garnet-dark, #5a1926);
-}
-
-.btn-admin-outline {
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: #fff;
-  background: transparent;
-  font-weight: 500;
-}
-
-.btn-admin-outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.btn-ghost-sm {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.btn-ghost-sm:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
 .product-thumb-small {
   width: 40px;
   height: 40px;
