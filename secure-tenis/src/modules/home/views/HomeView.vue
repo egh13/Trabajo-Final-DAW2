@@ -3,7 +3,6 @@
     <HeroBanner @scroll-to-products="scrollToProducts" />
     <ConfidenceTicker />
     <FeaturedProducts ref="productsSection" />
-    <EditorialBlock />
   </div>
 </template>
 
@@ -12,7 +11,6 @@ import { ref } from 'vue'
 import HeroBanner from '../components/HeroBanner.vue'
 import ConfidenceTicker from '../components/ConfidenceTicker.vue'
 import FeaturedProducts from '../components/FeaturedProducts.vue'
-import EditorialBlock from '../components/EditorialBlock.vue'
 
 const productsSection = ref<InstanceType<typeof FeaturedProducts> | null>(null)
 
