@@ -41,6 +41,24 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
+// Igual que authenticate pero no rechaza si no hay token (para rutas mixtas como el carrito)
+export const optionalAuthenticate = (req: Request, _res: Response, next: NextFunction): void => {
+  const header = req.headers.authorization
+  if (!header || !header.startsWith('Bearer ')) {
+    next()
+    return
+  }
+
+  const token = header.split(' ')[1]
+  try {
+    req.user = jwt.verify(token, jwtConfig.secret) as JwtPayload
+  } catch {
+    // Token inválido → se ignora, el usuario sigue como anónimo
+  }
+  next()
+}
+
+
 // Verifica que el usuario tenga uno de los roles permitidos
 export const authorize = (...roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction): Promise<void> => {

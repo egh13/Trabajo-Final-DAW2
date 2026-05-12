@@ -13,9 +13,24 @@
     <div v-else-if="error" class="alert alert-danger" role="alert">{{ error }}</div>
 
     <div v-else-if="items.length === 0" class="text-center text-muted py-5">
-      <i class="bi bi-cart-x" style="font-size: 3rem;"></i>
-      <p class="mt-3">El carrito está vacío.</p>
-      <router-link to="/" class="btn btn-dark px-4">Ver Productos</router-link>
+      <div v-if="orderSuccess" class="mb-4">
+        <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+        <p class="mt-3 text-success fw-semibold">¡Pedido realizado correctamente!</p>
+        <p class="text-muted small">Puedes consultar tus pedidos en tu perfil.</p>
+        <a
+          v-if="lastOrderId"
+          :href="invoiceUrl"
+          target="_blank"
+          class="btn btn-outline-dark mt-2"
+        >
+          <i class="bi bi-file-earmark-pdf me-2"></i>Ver Factura
+        </a>
+      </div>
+      <div v-else>
+        <i class="bi bi-cart-x" style="font-size: 3rem;"></i>
+        <p class="mt-3">El carrito está vacío.</p>
+      </div>
+      <router-link to="/" class="btn btn-dark px-4 mt-3">Ver Productos</router-link>
     </div>
 
     <div v-else class="row g-4">
@@ -96,10 +111,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useCartStore } from '@/stores/cartStore'
 import { createOrderRequest } from '@/modules/checkout/services/orderService'
+
+const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
 
 const cartStore = useCartStore()
 const { items, loading, error, total, itemCount } = storeToRefs(cartStore)
@@ -107,13 +124,22 @@ const { load, updateItem, removeItem, clearCart } = cartStore
 
 const orderSuccess = ref(false)
 const checkoutError = ref<string | null>(null)
+const lastOrderId = ref<number | null>(null)
+
+const invoiceUrl = computed(() => {
+  if (!lastOrderId.value) return ''
+  const token = localStorage.getItem('auth_token') ?? ''
+  return `${BASE_URL}/orders/${lastOrderId.value}/invoice?token=${encodeURIComponent(token)}`
+})
 
 const handleCheckout = async () => {
   orderSuccess.value = false
   checkoutError.value = null
+  lastOrderId.value = null
   try {
-    await createOrderRequest()
+    const res = await createOrderRequest()
     orderSuccess.value = true
+    lastOrderId.value = res.data?.id ?? null
     await cartStore.load()
   } catch (err) {
     checkoutError.value = err instanceof Error ? err.message : 'Error al procesar el pedido'
