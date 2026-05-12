@@ -55,10 +55,8 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
-const route = useRoute()
 const authStore = useAuthStore()
 
 const userName = computed(() => authStore.userName)
@@ -89,12 +87,12 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .admin-layout {
   display: flex;
   min-height: 100vh;
-  background: var(--color-bg, #F4F4F2);
+  background: var(--color-bg);
 }
 
 .admin-sidebar {
   width: 250px;
-  background: var(--color-surface, #1E1E1E);
+  background: var(--color-surface);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -110,7 +108,7 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .sidebar-header {
   padding: 1.1rem 1.25rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  background: var(--color-surface-2, #282828);
+  background: var(--color-surface-2);
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -119,7 +117,7 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .brand-icon {
   width: 38px;
   height: 38px;
-  background: var(--color-garnet, #6B1E2E);
+  background: var(--color-garnet);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -181,7 +179,7 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .sidebar-link.active {
   background: rgba(107, 30, 46, 0.22);
   color: #fff;
-  border-left-color: var(--color-garnet, #6B1E2E);
+  border-left-color: var(--color-garnet);
   font-weight: 600;
 }
 
@@ -225,18 +223,11 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-.topbar-left h1 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin: 0;
-  color: var(--color-surface, #1E1E1E);
-}
-
 .admin-topbar h1 {
   font-size: 0.95rem;
   font-weight: 700;
   margin: 0;
-  color: var(--color-surface, #1E1E1E);
+  color: var(--color-surface);
 }
 
 .topbar-user {
@@ -248,7 +239,7 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .user-avatar {
   width: 34px;
   height: 34px;
-  background: var(--color-garnet, #6B1E2E);
+  background: var(--color-garnet);
   color: #fff;
   border-radius: 50%;
   display: flex;
@@ -269,12 +260,12 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .user-name {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-surface, #1E1E1E);
+  color: var(--color-surface);
   line-height: 1.2;
 }
 
 .role-badge {
-  background: var(--color-garnet, #6B1E2E);
+  background: var(--color-garnet);
   color: #fff;
   padding: 0.1rem 0.5rem;
   border-radius: 10px;
@@ -288,6 +279,6 @@ const seguridadItems = computed(() => menuItems.value.filter(i => i.section === 
 .admin-content {
   flex: 1;
   padding: 1.75rem;
-  background: var(--color-bg, #F4F4F2);
+  background: var(--color-bg);
 }
 </style>

@@ -1,7 +1,7 @@
 import type { ApiResponse } from '@/types'
 
 // Configurar en .env.development o .env.production
-const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
+export const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
 
 // Obtener o generar un ID de sesión persistente para el carrito
 const getSessionId = (): string => {
