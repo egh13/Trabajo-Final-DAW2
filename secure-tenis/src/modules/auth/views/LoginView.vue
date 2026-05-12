@@ -28,12 +28,13 @@
                     id="email"
                     v-model="form.email"
                     type="email"
-                    class="form-control auth-input"
-                    :class="{ 'is-invalid': submitted && !form.email }"
+                    class="form-control auth-input" :class="{ 'is-invalid': submitted && !emailValid }"
                     placeholder="tu@email.com"
                     autocomplete="email"
                   />
-                  <div class="invalid-feedback">El email es obligatorio.</div>
+                  <div class="invalid-feedback">
+                    {{ !form.email ? 'El email es obligatorio.' : 'Introduce un email válido.' }}
+                  </div>
                 </div>
               </div>
 
@@ -78,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import type { LoginPayload } from '@/types'
@@ -93,9 +94,11 @@ const form = reactive<LoginPayload>({
 
 const submitted = ref(false)
 
+const emailValid = computed(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+
 const handleLogin = async () => {
-  submitted.value = true  
-  if (!form.email || !form.password) return
+  submitted.value = true
+  if (!emailValid.value || !form.password) return
 
   try {
     await authStore.login(form)
