@@ -71,14 +71,30 @@ const updateUser = async (id: number, data: { name?: string; email?: string; pas
   }
 }
 
-// Elimina un usuario por su ID
+// Elimina un usuario y sus registros relacionados en una transacción
 const deleteUser = async (id: number): Promise<boolean> => {
-  try {
-    await prisma.user.delete({ where: { id } })
-    return true
-  } catch {
-    return false
-  }
+  const user = await prisma.user.findUnique({ where: { id } })
+  if (!user) return false
+
+  await prisma.$transaction(async (tx) => {
+    // Eliminar ítems de pedidos del usuario
+    const orders = await tx.order.findMany({ where: { userId: id }, select: { id: true } })
+    const orderIds = orders.map(o => o.id)
+    if (orderIds.length > 0) {
+      await tx.orderItem.deleteMany({ where: { orderId: { in: orderIds } } })
+    }
+
+    // Eliminar pedidos, carrito, logs y bloqueos asociados
+    await tx.order.deleteMany({ where: { userId: id } })
+    await tx.cartItem.deleteMany({ where: { userId: id } })
+    await tx.userLog.deleteMany({ where: { userId: id } })
+    await tx.ipBlock.deleteMany({ where: { userId: id } })
+
+    // Eliminar el usuario
+    await tx.user.delete({ where: { id } })
+  })
+
+  return true
 }
 
 export default { findAll, createUser, updateUser, deleteUser }
