@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SecureTenis — Documentación del Proyecto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────────────────── */
+    :root {
+      --bg:          #f5f7fb;
+      --surface:     #ffffff;
+      --surface2:    #eef1f8;
+      --border:      #dde1ed;
+      --border2:     #c8cedd;
+
+      --accent:      #2563eb;
+      --accent-glow: rgba(37,99,235,.09);
+      --accent2:     #7c3aed;
+      --green:       #059669;
+      --amber:       #d97706;
+      --red:         #dc2626;
+      --teal:        #0891b2;
+
+      --text:        #111827;
+      --text-muted:  #4b5563;
+      --text-dim:    #9ca3af;
+
+      --font-head:   'Inter', sans-serif;
+      --font-body:   'Inter', sans-serif;
+      --font-mono:   'JetBrains Mono', monospace;
+
+      --nav-w:       295px;
+      --radius:      10px;
+      --radius-sm:   6px;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── Scrollbar ─────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+    /* ─── Sidebar Navigation ────────────────────────────────────────── */
+    #sidebar {
+      width: var(--nav-w);
+      min-width: var(--nav-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      overflow-y: auto;
+      z-index: 100;
+      transition: transform .3s ease;
+    }
+
+    .sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo h1 {
+      font-family: var(--font-head);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -.02em;
+    }
+    .sidebar-logo span {
+      display: block;
+      font-size: .72rem;
+      color: var(--text-muted);
+      font-weight: 300;
+      margin-top: 3px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .nav-section {
+      padding: 20px 0 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-section:last-child {
+      border-bottom: none;
+    }
+    .nav-section-title {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 28px 10px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 11px 28px;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: .92rem;
+      font-weight: 400;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-glow);
+      font-weight: 600;
+    }
+    .nav-badge {
+      margin-left: auto;
+      font-size: .62rem;
+      font-family: var(--font-mono);
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text-muted);
+      padding: 1px 6px;
+      border-radius: 99px;
+    }
+
+    /* ─── Main Content ──────────────────────────────────────────────── */
+    #main {
+      margin-left: var(--nav-w);
+      flex: 1;
+      max-width: 1000px;
+      padding: 60px 56px;
+    }
+
+    /* ─── Sections ──────────────────────────────────────────────────── */
+    .section {
+      display: none;
+      animation: fadeIn .25s ease;
+    }
+    .section.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Typography ─────────────────────────────────────────────────── */
+    .page-title {
+      font-family: var(--font-head);
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .page-title .accent { color: var(--accent); }
+    .page-subtitle {
+      color: var(--text-muted);
+      font-size: .95rem;
+      font-weight: 300;
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+    h2 {
+      font-family: var(--font-head);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 40px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 28px 0 10px;
+    }
+    p { color: var(--text-muted); margin-bottom: 14px; line-height: 1.75; }
+    strong { color: var(--text); font-weight: 500; }
+
+    /* ─── Cards ─────────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card p { margin-bottom: 0; font-size: .9rem; }
+
+    /* ─── Grid layouts ────────────────────────────────────────────────── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* ─── File entries ───────────────────────────────────────────────── */
+    .file-entry {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .file-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .file-header:hover { background: var(--surface2); }
+    .file-path {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      color: var(--accent);
+      flex: 1;
+    }
+    .file-type-badge {
+      font-size: .65rem;
+      font-family: var(--font-mono);
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .badge-ts   { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .badge-vue  { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .badge-sql  { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-json { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+    .badge-conf { background: #cffafe; color: #155e75; border: 1px solid #a5f3fc; }
+    .file-toggle {
+      color: var(--text-dim);
+      font-size: .8rem;
+      transition: transform .2s;
+    }
+    .file-entry.open .file-toggle { transform: rotate(90deg); }
+    .file-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .file-entry.open .file-body { display: block; }
+    .file-desc {
+      color: var(--text-muted);
+      font-size: .88rem;
+      margin-top: 14px;
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+
+    /* ─── Route table ─────────────────────────────────────────────────── */
+    .route-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: .84rem;
+    }
+    .route-table th {
+      font-family: var(--font-head);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .route-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+      vertical-align: top;
+    }
+    .route-table tr:last-child td { border-bottom: none; }
+    .route-table tr:hover td { background: var(--surface2); }
+    .method {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .method-get    { background: #d1fae5; color: #065f46; }
+    .method-post   { background: #dbeafe; color: #1d4ed8; }
+    .method-put    { background: #fef3c7; color: #92400e; }
+    .method-delete { background: #fee2e2; color: #991b1b; }
+    .route-path {
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      color: var(--text);
+    }
+
+    /* ─── Tech pill ──────────────────────────────────────────────────── */
+    .tech-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: .78rem;
+      color: var(--text-muted);
+      margin: 3px 3px 3px 0;
+    }
+    .tech-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── Callout ─────────────────────────────────────────────────────── */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-glow);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 14px 18px;
+      margin: 20px 0;
+      font-size: .88rem;
+    }
+    .callout.warn { border-left-color: var(--amber); background: rgba(217,119,6,.09); }
+    .callout.success { border-left-color: var(--green); background: rgba(5,150,105,.09); }
+    .callout p { margin: 0; font-size: .88rem; }
+    .callout strong { color: var(--accent); }
+    .callout.warn strong { color: var(--amber); }
+    .callout.success strong { color: var(--green); }
+
+    /* ─── Schema model ────────────────────────────────────────────────── */
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 14px;
+    }
+    .model-name {
+      font-family: var(--font-head);
+      font-size: .95rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .model-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 6px;
+    }
+    .model-field {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .model-field .fname { color: var(--text); }
+    .model-field .ftype { color: var(--teal); margin-left: 6px; }
+
+    /* ─── Flow diagram ────────────────────────────────────────────────── */
+    .flow-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 6px;
+    }
+    .flow-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-family: var(--font-head);
+      font-size: .8rem;
+      font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .flow-line {
+      flex: 1;
+      font-size: .88rem;
+      color: var(--text-muted);
+      padding-bottom: 6px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .flow-step:last-child .flow-line { border-bottom: none; }
+    .flow-line strong { color: var(--text); font-weight: 500; }
+
+    /* ─── Arch diagram SVG container ──────────────────────────────────── */
+    .arch-container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    /* ─── Mobile hamburger ────────────────────────────────────────────── */
+    #menu-toggle {
+      display: none;
+      position: fixed;
+      top: 14px; left: 14px;
+      z-index: 200;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 11px;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+
+    /* ─── Divider ─────────────────────────────────────────────────────── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+    /* ─── Responsive ──────────────────────────────────────────────────── */
+    @media (max-width: 800px) {
+      #sidebar { transform: translateX(-100%); }
+      #sidebar.open { transform: translateX(0); }
+      #main { margin-left: 0; padding: 60px 22px 40px; }
+      #menu-toggle { display: block; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Mobile hamburger toggle -->
+<button id="menu-toggle" onclick="toggleSidebar()" title="Abrir menú">☰</button>
+
+<!-- ─── Sidebar ─────────────────────────────────────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <h1>SecureTenis</h1>
+    <span>Documentación técnica</span>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Introducción</div>
+    <a class="nav-item active" onclick="show('overview')" href="#">Visión general</a>
+    <a class="nav-item" onclick="show('stack')" href="#">Stack tecnológico</a>
+    <a class="nav-item" onclick="show('arquitectura')" href="#">Arquitectura</a>
+    <a class="nav-item" onclick="show('bbdd')" href="#">Base de datos</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Backend</div>
+    <a class="nav-item" onclick="show('be-entry')" href="#">Punto de entrada <span class="nav-badge">server / app</span></a>
+    <a class="nav-item" onclick="show('be-middlewares')" href="#">Middlewares</a>
+    <a class="nav-item" onclick="show('be-routes')" href="#">Rutas API</a>
+    <a class="nav-item" onclick="show('be-controllers')" href="#">Controladores</a>
+    <a class="nav-item" onclick="show('be-services')" href="#">Servicios</a>
+    <a class="nav-item" onclick="show('be-validators')" href="#">Validadores</a>
+    <a class="nav-item" onclick="show('be-config')" href="#">Configuración</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Frontend</div>
+    <a class="nav-item" onclick="show('fe-entry')" href="#">Punto de entrada <span class="nav-badge">main / App</span></a>
+    <a class="nav-item" onclick="show('fe-router')" href="#">Router y Guards</a>
+    <a class="nav-item" onclick="show('fe-stores')" href="#">Stores (Pinia)</a>
+    <a class="nav-item" onclick="show('fe-apiclient')" href="#">API Client</a>
+    <a class="nav-item" onclick="show('fe-modules')" href="#">Módulos</a>
+    <a class="nav-item" onclick="show('fe-admin')" href="#">Módulo Admin</a>
+    <a class="nav-item" onclick="show('fe-estilos')" href="#">Estilos globales</a>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">Infraestructura</div>
+    <a class="nav-item" onclick="show('infra-docker')" href="#">Docker Compose</a>
+    <a class="nav-item" onclick="show('infra-scripts')" href="#">Scripts de inicio</a>
+    <a class="nav-item" onclick="show('infra-prisma')" href="#">Prisma &amp; Migraciones</a>
+  </div>
+</nav>
+
+<!-- ─── Main Content ──────────────────────────────────────────────────────── -->
+<main id="main">
+
+  <!-- ══ VISIÓN GENERAL ══════════════════════════════════════════════════ -->
+  <section id="overview" class="section active">
+    <div class="page-title">Bienvenido a <span class="accent">SecureTenis</span></div>
+    <p class="page-subtitle">Documentación técnica completa del proyecto de fin de grado · 2º DAW · 2025–2026</p>
+
+    <div class="callout success">
+      <p><strong>¿Qué es SecureTenis?</strong> Una plataforma de comercio electrónico de zapatillas deportivas con panel de administración completo, autenticación segura con JWT, control de acceso por roles y auditoría de eventos en tiempo real.</p>
+    </div>
+
+    <h2>Descripción del proyecto</h2>
+    <p>SecureTenis es una tienda online construida como Trabajo de Fin de Grado del ciclo superior de Desarrollo de Aplicaciones Web. Integra un <strong>frontend reactivo en Vue 3</strong> con un <strong>backend REST en Express</strong> sobre TypeScript, base de datos <strong>MariaDB</strong> gestionada mediante <strong>Prisma ORM</strong> y toda la infraestructura orquestada con <strong>Docker Compose</strong>.</p>
+    <p>El proyecto demuestra cómo implementar de forma profesional conceptos avanzados como autenticación JWT, protección contra ataques de fuerza bruta, registro de auditoría completo y un panel de administración con estadísticas y gráficas.</p>
+
+    <h2>Funcionalidades principales</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Tienda</div>
+        <p>Catálogo con filtrado por categoría, carrito persistente (anónimo + autenticado con fusión automática al hacer login), gestión de cantidades, proceso de compra con reducción de stock y historial de pedidos.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Autenticación y seguridad</div>
+        <p>Registro e inicio de sesión con JWT, hash de contraseñas con bcrypt, auto-bloqueo tras 5 intentos fallidos en 10 minutos, bloqueo manual de usuarios e IPs, correo de bienvenida automático.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Panel de administración</div>
+        <p>Gestión de usuarios, productos y categorías. Visualización de estadísticas con Chart.js, registro de auditoría con filtros avanzados, gestión de bloqueos activos y exportación de logs en CSV/PDF.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Control de roles</div>
+        <p>Tres roles diferenciados: <strong>CLIENT</strong> (usuario de tienda), <strong>ADMIN</strong> (acceso total al panel) y <strong>ANALYST</strong> (solo lectura de métricas y auditoría). Protección aplicada en frontend y backend.</p>
+      </div>
+    </div>
+
+    <h2>Servicios y URLs</h2>
+    <table class="route-table">
+      <tr><th>Servicio</th><th>URL por defecto</th><th>Descripción</th></tr>
+      <tr><td>Frontend (Vite)</td><td class="route-path">http://localhost:5173</td><td>SPA de Vue 3</td></tr>
+      <tr><td>Backend (API REST)</td><td class="route-path">http://localhost:3000</td><td>Express + TypeScript</td></tr>
+      <tr><td>MariaDB</td><td class="route-path">localhost:3306</td><td>Base de datos relacional</td></tr>
+    </table>
+  </section>
+
+  <!-- ══ STACK TECNOLÓGICO ════════════════════════════════════════════════ -->
+  <section id="stack" class="section">
+    <div class="page-title">Stack <span class="accent">tecnológico</span></div>
+    <p class="page-subtitle">Todas las dependencias, frameworks y herramientas utilizadas en el proyecto.</p>
+
+    <h2>Frontend</h2>
+    <div class="card">
+      <p>
+        <span class="tech-pill"><span class="dot" style="background:#3ecf8e"></span>Vue 3.5</span>
+        <span class="tech-pill"><span class="dot" style="background:#f5a623"></span>Vite 7.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#7c5cfc"></span>Pinia 3.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#4f8ef7"></span>Vue Router 5.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#3178c6"></span>TypeScript 5.9</span>
+        <span class="tech-pill"><span class="dot" style="background:#7952b3"></span>Bootstrap 5.3</span>
+        <span class="tech-pill"><span class="dot" style="background:#f04d6a"></span>Chart.js 4.x</span>
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Vue 3 + Composition API</div>
+        <p>Framework reactivo principal. Toda la lógica de componentes usa <strong>script setup</strong> y la Composition API, lo que permite una mejor organización del código y reutilización de lógica entre vistas.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Vite</div>
+        <p>Bundler de nueva generación. Ofrece arranque instantáneo en desarrollo y compilaciones optimizadas para producción con code splitting automático.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Pinia</div>
+        <p>Gestor de estado global oficial para Vue 3. Se usa para compartir el estado de autenticación y el carrito entre todas las vistas sin necesidad de pasar props manualmente.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Vue Router</div>
+        <p>Manejo de navegación SPA con rutas anidadas. Implementa <strong>navigation guards</strong> para proteger rutas según rol y estado de autenticación.</p>
+      </div>
+    </div>
+
+    <h2>Backend</h2>
+    <div class="card">
+      <p>
+        <span class="tech-pill"><span class="dot" style="background:#339933"></span>Node.js 20+</span>
+        <span class="tech-pill"><span class="dot" style="background:#888"></span>Express 5.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#3178c6"></span>TypeScript 5.9</span>
+        <span class="tech-pill"><span class="dot" style="background:#5a67d8"></span>Prisma ORM 6.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#e53e3e"></span>Zod 4.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#f5a623"></span>bcryptjs 3.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#4f8ef7"></span>jsonwebtoken 9.x</span>
+        <span class="tech-pill"><span class="dot" style="background:#3ecf8e"></span>Nodemailer 8.x</span>
+      </p>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Express 5</div>
+        <p>Framework HTTP minimalista y maduro. La versión 5 mejora el manejo de promesas en los handlers, evitando tener que capturar errores manualmente en cada controlador asíncrono.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Prisma ORM</div>
+        <p>ORM moderno con tipado estático completo. Define el esquema en un único archivo <code>schema.prisma</code> y genera un cliente tipado automáticamente. Gestiona las migraciones de base de datos de forma versionada.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Zod</div>
+        <p>Librería de validación con inferencia de tipos TypeScript. Se usa para validar los datos de entrada en los endpoints de registro y login antes de que lleguen al controlador.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">bcryptjs + JWT</div>
+        <p>Combinación estándar para autenticación segura. <strong>bcryptjs</strong> aplica hash irreversible a las contraseñas antes de guardarlas. <strong>jsonwebtoken</strong> genera tokens firmados que identifican al usuario en cada petición.</p>
+      </div>
+    </div>
+
+    <h2>Infraestructura y base de datos</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Docker Compose</div>
+        <p>Orquesta los contenedores del backend y MariaDB en una red compartida. Un solo comando levanta todo el entorno.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">MariaDB 11</div>
+        <p>Base de datos relacional compatible con MySQL. Almacena usuarios, productos, pedidos, logs, carrito y bloqueos.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Prisma Migrate</div>
+        <p>Sistema de migraciones versionado. Cada cambio en el esquema genera un archivo SQL histórico que puede reproducirse en cualquier entorno.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ARQUITECTURA ═════════════════════════════════════════════════════ -->
+  <section id="arquitectura" class="section">
+    <div class="page-title">Arquitectura del <span class="accent">sistema</span></div>
+    <p class="page-subtitle">Cómo se comunican las capas del proyecto y qué responsabilidad tiene cada una.</p>
+
+    <h2>Diagrama de capas</h2>
+    <div class="arch-container">
+      <svg viewBox="0 0 820 380" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:820px;display:block;margin:0 auto;">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#2563eb" opacity=".7"/>
+          </marker>
+        </defs>
+        <!-- Frontend box -->
+        <rect x="20" y="20" width="240" height="340" rx="10" fill="#f8faff" stroke="#dde1ed" stroke-width="1.5"/>
+        <text x="140" y="50" text-anchor="middle" fill="#2563eb" font-family="Inter,sans-serif" font-size="13" font-weight="700">FRONTEND — Vue 3</text>
+        <rect x="40" y="60" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="140" y="83" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">Vue Router + Guards</text>
+        <rect x="40" y="104" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="140" y="127" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">Pinia (authStore, cartStore)</text>
+        <rect x="40" y="148" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="140" y="171" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">Vistas (módulos)</text>
+        <rect x="40" y="192" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="140" y="215" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">Composables</text>
+        <rect x="40" y="236" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="140" y="259" text-anchor="middle" fill="#2563eb" font-family="Inter,sans-serif" font-size="11">apiClient.ts (fetch wrapper)</text>
+        <text x="140" y="300" text-anchor="middle" fill="#4b5563" font-family="JetBrains Mono,monospace" font-size="10">x-session-id + Bearer JWT</text>
+        <!-- Arrow fe→be -->
+        <line x1="260" y1="190" x2="310" y2="190" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)" opacity=".7"/>
+        <text x="285" y="183" text-anchor="middle" fill="#2563eb" font-family="Inter,sans-serif" font-size="9" opacity=".7">HTTP/JSON</text>
+        <!-- Backend box -->
+        <rect x="310" y="20" width="240" height="340" rx="10" fill="#f8faff" stroke="#dde1ed" stroke-width="1.5"/>
+        <text x="430" y="50" text-anchor="middle" fill="#d97706" font-family="Inter,sans-serif" font-size="13" font-weight="700">BACKEND — Express 5</text>
+        <rect x="330" y="60" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="430" y="83" text-anchor="middle" fill="#dc2626" font-family="Inter,sans-serif" font-size="11">checkBlock middleware</text>
+        <rect x="330" y="104" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="430" y="127" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">Router (rutas + auth + Zod)</text>
+        <rect x="330" y="148" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="430" y="171" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">Controllers</text>
+        <rect x="330" y="192" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="430" y="215" text-anchor="middle" fill="#059669" font-family="Inter,sans-serif" font-size="11">Services (lógica de negocio)</text>
+        <rect x="330" y="236" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="430" y="259" text-anchor="middle" fill="#7c3aed" font-family="Inter,sans-serif" font-size="11">Prisma ORM</text>
+        <rect x="330" y="280" width="200" height="36" rx="6" fill="#eef1f8" stroke="#c8cedd" stroke-width="1"/>
+        <text x="430" y="303" text-anchor="middle" fill="#111827" font-family="Inter,sans-serif" font-size="11">errorHandler</text>
+        <!-- Arrow be→db -->
+        <line x1="550" y1="190" x2="600" y2="190" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)" opacity=".7"/>
+        <!-- DB box -->
+        <rect x="600" y="80" width="200" height="200" rx="10" fill="#f8faff" stroke="#dde1ed" stroke-width="1.5"/>
+        <text x="700" y="108" text-anchor="middle" fill="#7c3aed" font-family="Inter,sans-serif" font-size="13" font-weight="700">MARIADB</text>
+        <text x="700" y="134" text-anchor="middle" fill="#4b5563" font-family="JetBrains Mono,monospace" font-size="10">Users · Products</text>
+        <text x="700" y="152" text-anchor="middle" fill="#4b5563" font-family="JetBrains Mono,monospace" font-size="10">Categories · Orders</text>
+        <text x="700" y="170" text-anchor="middle" fill="#4b5563" font-family="JetBrains Mono,monospace" font-size="10">OrderItems · CartItems</text>
+        <text x="700" y="188" text-anchor="middle" fill="#4b5563" font-family="JetBrains Mono,monospace" font-size="10">UserLogs · IpBlocks</text>
+        <text x="700" y="240" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">Docker volume</text>
+        <text x="700" y="256" text-anchor="middle" fill="#9ca3af" font-family="Inter,sans-serif" font-size="10">mariadb_data</text>
+      </svg>
+    </div>
+
+    <h2>Flujo de una petición típica</h2>
+    <div class="flow-step"><div class="flow-num">1</div><div class="flow-line">El usuario realiza una acción en el frontend (p.ej. añadir al carrito). El <strong>apiClient</strong> construye la petición con el JWT y el session-id y la envía al backend.</div></div>
+    <div class="flow-step"><div class="flow-num">2</div><div class="flow-line"><strong>checkBlock</strong> comprueba si la IP o el usuario están bloqueados. Si lo están, devuelve 403 inmediatamente sin procesar nada más.</div></div>
+    <div class="flow-step"><div class="flow-num">3</div><div class="flow-line">El <strong>router</strong> de Express encuentra la ruta correspondiente y aplica los middlewares de autenticación (<code>authenticate</code>) y autorización (<code>authorize</code>) si la ruta los requiere.</div></div>
+    <div class="flow-step"><div class="flow-num">4</div><div class="flow-line">El middleware de <strong>validación Zod</strong> comprueba el cuerpo de la petición contra el esquema definido. Si hay errores, responde con 400 y los mensajes de error.</div></div>
+    <div class="flow-step"><div class="flow-num">5</div><div class="flow-line">El <strong>controlador</strong> recibe la petición ya validada y autenticada, llama al <strong>servicio</strong> correspondiente y devuelve la respuesta JSON al cliente.</div></div>
+    <div class="flow-step"><div class="flow-num">6</div><div class="flow-line">Si en cualquier paso ocurre un error no controlado, el <strong>errorHandler</strong> global lo captura y devuelve una respuesta 500 sin exponer detalles en producción.</div></div>
+
+    <h2>Separación de responsabilidades</h2>
+    <table class="route-table">
+      <tr><th>Capa</th><th>Responsabilidad</th><th>Ejemplo</th></tr>
+      <tr><td><strong>Store (Pinia)</strong></td><td>Estado global compartido entre vistas</td><td>authStore, cartStore</td></tr>
+      <tr><td><strong>Composable</strong></td><td>Lógica reactiva local/reutilizable</td><td>useProducts, useLogs</td></tr>
+      <tr><td><strong>Service (FE)</strong></td><td>Llamadas HTTP puras, sin estado</td><td>cartService, authService</td></tr>
+      <tr><td><strong>Controller (BE)</strong></td><td>Orquesta petición → servicio → respuesta</td><td>authController</td></tr>
+      <tr><td><strong>Service (BE)</strong></td><td>Lógica de negocio y acceso a datos</td><td>authService, blockService</td></tr>
+      <tr><td><strong>Middleware</strong></td><td>Validación, autenticación, bloqueos</td><td>authenticate, checkBlock</td></tr>
+    </table>
+  </section>
+
+  <!-- ══ BASE DE DATOS ════════════════════════════════════════════════════ -->
+  <section id="bbdd" class="section">
+    <div class="page-title">Base de <span class="accent">datos</span></div>
+    <p class="page-subtitle">Esquema de datos definido en Prisma, modelos y sus relaciones.</p>
+
+    <div class="callout">
+      <p><strong>Archivo de esquema:</strong> <code>backend/prisma/schema.prisma</code> — Define todos los modelos, relaciones y enumeraciones. Prisma genera automáticamente el cliente tipado a partir de este archivo.</p>
+    </div>
+
+    <h2>Modelos principales</h2>
+
+    <div class="model-card">
+      <div class="model-name">User</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px">Representa a cualquier persona registrada en la plataforma. Tiene relaciones con pedidos, carrito, logs y bloqueos.</p>
+      <div class="model-fields">
+        <div class="model-field"><span class="fname">id</span><span class="ftype">Int PK</span></div>
+        <div class="model-field"><span class="fname">email</span><span class="ftype">String UNIQUE</span></div>
+        <div class="model-field"><span class="fname">password</span><span class="ftype">String (hash)</span></div>
+        <div class="model-field"><span class="fname">name</span><span class="ftype">String</span></div>
+        <div class="model-field"><span class="fname">role</span><span class="ftype">Role (enum)</span></div>
+        <div class="model-field"><span class="fname">createdAt</span><span class="ftype">DateTime</span></div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-name">Product</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px">Artículo de la tienda. Pertenece a una categoría y puede aparecer en pedidos y en el carrito de múltiples usuarios.</p>
+      <div class="model-fields">
+        <div class="model-field"><span class="fname">id</span><span class="ftype">Int PK</span></div>
+        <div class="model-field"><span class="fname">name</span><span class="ftype">String</span></div>
+        <div class="model-field"><span class="fname">description</span><span class="ftype">Text?</span></div>
+        <div class="model-field"><span class="fname">price</span><span class="ftype">Float</span></div>
+        <div class="model-field"><span class="fname">stock</span><span class="ftype">Int</span></div>
+        <div class="model-field"><span class="fname">image</span><span class="ftype">String?</span></div>
+        <div class="model-field"><span class="fname">categoryId</span><span class="ftype">Int FK</span></div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-name">CartItem</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px">Elemento del carrito de compras. Puede pertenecer a un usuario registrado o a una sesión anónima (sessionId). La combinación <code>sessionId + productId</code> es única.</p>
+      <div class="model-fields">
+        <div class="model-field"><span class="fname">id</span><span class="ftype">Int PK</span></div>
+        <div class="model-field"><span class="fname">sessionId</span><span class="ftype">String</span></div>
+        <div class="model-field"><span class="fname">userId</span><span class="ftype">Int? FK</span></div>
+        <div class="model-field"><span class="fname">productId</span><span class="ftype">Int FK</span></div>
+        <div class="model-field"><span class="fname">quantity</span><span class="ftype">Int</span></div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-name">UserLog</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px">Registro de auditoría. Cada evento relevante del sistema (login, registro, error, etc.) genera una entrada. Tiene cuatro niveles: INFO, WARNING, ERROR, DEBUG.</p>
+      <div class="model-fields">
+        <div class="model-field"><span class="fname">id</span><span class="ftype">Int PK</span></div>
+        <div class="model-field"><span class="fname">level</span><span class="ftype">LogLevel (enum)</span></div>
+        <div class="model-field"><span class="fname">module</span><span class="ftype">String</span></div>
+        <div class="model-field"><span class="fname">userId</span><span class="ftype">Int? FK</span></div>
+        <div class="model-field"><span class="fname">action</span><span class="ftype">String</span></div>
+        <div class="model-field"><span class="fname">ip</span><span class="ftype">String?</span></div>
+        <div class="model-field"><span class="fname">detail</span><span class="ftype">Text?</span></div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-name">IpBlock</div>
+      <p style="font-size:.82rem;color:var(--text-muted);margin-bottom:12px">Bloqueo de acceso por IP, email o usuario. Puede ser manual (desde el panel) o automático (por intentos de login fallidos). Tiene una fecha de expiración opcional.</p>
+      <div class="model-fields">
+        <div class="model-field"><span class="fname">id</span><span class="ftype">Int PK</span></div>
+        <div class="model-field"><span class="fname">ip</span><span class="ftype">String?</span></div>
+        <div class="model-field"><span class="fname">userId</span><span class="ftype">Int? FK</span></div>
+        <div class="model-field"><span class="fname">email</span><span class="ftype">String?</span></div>
+        <div class="model-field"><span class="fname">reason</span><span class="ftype">String</span></div>
+        <div class="model-field"><span class="fname">manual</span><span class="ftype">Boolean</span></div>
+        <div class="model-field"><span class="fname">expiresAt</span><span class="ftype">DateTime?</span></div>
+      </div>
+    </div>
+
+    <h2>Migraciones</h2>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">prisma/migrations/20260420000000_init</span>
+        <span class="file-type-badge badge-sql">SQL</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Migración inicial. Crea todas las tablas del esquema: usuarios, productos, categorías, pedidos, items de pedido, items de carrito y la enumeración de roles. Es la base del esquema de la base de datos.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">prisma/migrations/20260427105053_add_user_logs</span>
+        <span class="file-type-badge badge-sql">SQL</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Añade la tabla <code>UserLog</code> para el sistema de auditoría. Esta tabla registra cada evento del sistema con su nivel (INFO, WARNING, ERROR, DEBUG), módulo, acción, IP y detalle opcional.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">prisma/migrations/20260505000000_add_ip_blocks</span>
+        <span class="file-type-badge badge-sql">SQL</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Añade la tabla <code>IpBlock</code> para la gestión de bloqueos. Permite bloquear accesos por dirección IP, email o usuario con fecha de expiración configurable, distinguiendo entre bloqueos manuales y automáticos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BACKEND: PUNTO DE ENTRADA ═══════════════════════════════════════ -->
+  <section id="be-entry" class="section">
+    <div class="page-title">Backend — Punto de <span class="accent">entrada</span></div>
+    <p class="page-subtitle">Los dos archivos que arrancan y configuran la aplicación Express.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/server.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Punto de entrada absoluto del servidor. Se encarga de tres cosas: cargar las variables de entorno con <code>dotenv</code>, arrancar el servidor Express en el puerto configurado (por defecto 3000), y verificar que la conexión a la base de datos es correcta al inicio. Esta última comprobación usa una consulta <code>SELECT 1</code> y registra el resultado como un log DEBUG en la base de datos, de forma que si la BD no está disponible queda constancia del fallo.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/app.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Configura la aplicación Express con todos sus middlewares y rutas. El orden de registro es importante y deliberado:<br/><br/>
+        <strong>1. Middlewares globales:</strong> CORS para permitir peticiones del frontend, <code>express.json()</code> para parsear el body, y Morgan para logging de peticiones HTTP en consola.<br/><br/>
+        <strong>2. checkBlock:</strong> Se aplica ANTES que todas las rutas. Cualquier petición de una IP o usuario bloqueado termina aquí con un 403.<br/><br/>
+        <strong>3. Rutas:</strong> Cada grupo de rutas está montado en su prefijo <code>/api/...</code>.<br/><br/>
+        <strong>4. Manejadores de error:</strong> Al final del todo. El <code>notFoundHandler</code> captura cualquier ruta no definida y el <code>errorHandler</code> captura excepciones no controladas de cualquier ruta anterior.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BACKEND: MIDDLEWARES ═════════════════════════════════════════════ -->
+  <section id="be-middlewares" class="section">
+    <div class="page-title">Backend — <span class="accent">Middlewares</span></div>
+    <p class="page-subtitle">Capas de procesamiento que interceptan las peticiones antes de que lleguen a los controladores.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/middlewares/authMiddleware.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Contiene tres funciones de control de acceso:</p>
+        <br/>
+        <p class="file-desc"><strong>authenticate</strong> — Verifica que la petición incluya un token JWT válido en la cabecera <code>Authorization: Bearer &lt;token&gt;</code>. Si no hay token o es inválido/expirado, rechaza con 401 y genera un log de advertencia. Si el token es válido, añade los datos del usuario a <code>req.user</code> para que los controladores puedan usarlos.</p>
+        <br/>
+        <p class="file-desc"><strong>optionalAuthenticate</strong> — Igual que <code>authenticate</code>, pero si no hay token simplemente continúa sin asignar usuario. Se usa en las rutas del carrito, que funcionan tanto para usuarios anónimos como autenticados.</p>
+        <br/>
+        <p class="file-desc"><strong>authorize(...roles)</strong> — Factory que devuelve un middleware de autorización para los roles indicados. Comprueba que el usuario autenticado (<code>req.user.role</code>) tenga uno de los roles permitidos. Si no, devuelve 403 y registra el intento de acceso no autorizado.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/middlewares/checkBlock.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Middleware global de bloqueo. Se ejecuta en cada petición antes de que llegue a cualquier ruta. Extrae la IP del cliente (usando <code>getClientIp</code>), el ID de usuario del token JWT (si existe) y el email del cuerpo de la petición. Luego consulta la base de datos para comprobar si alguno de esos identificadores tiene un bloqueo activo. Si está bloqueado, devuelve 403 con el motivo del bloqueo. Este mecanismo protege el sistema incluso si el atacante cambia de credenciales pero mantiene la misma IP.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/middlewares/errorMiddleware.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Manejo centralizado de errores. Expone dos handlers registrados al final de la cadena de middlewares en <code>app.ts</code>:<br/><br/>
+        <strong>notFoundHandler</strong> — Captura cualquier petición a una ruta que no exista y devuelve un 404 con el método y la URL solicitada.<br/><br/>
+        <strong>errorHandler</strong> — Captura cualquier excepción no controlada que haya pasado hacia Express. En entorno de desarrollo expone el mensaje de error para facilitar el debugging; en producción devuelve únicamente el mensaje genérico para no filtrar información sensible.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/middlewares/validateMiddleware.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Middleware de validación genérico que acepta un esquema Zod y devuelve un middleware de Express. Valida <code>req.body</code> contra el esquema. Si la validación falla, responde con 400 y un array con todos los mensajes de error. Si es válida, reemplaza <code>req.body</code> con el dato transformado por Zod (los esquemas Zod pueden transformar datos, como forzar el rol a <code>'cliente'</code> en el registro).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BACKEND: RUTAS ═══════════════════════════════════════════════════ -->
+  <section id="be-routes" class="section">
+    <div class="page-title">Backend — <span class="accent">Rutas API</span></div>
+    <p class="page-subtitle">Todos los endpoints disponibles, sus métodos y sus requisitos de autenticación.</p>
+
+    <h2>Autenticación — <code>/api/auth</code></h2>
+    <table class="route-table">
+      <tr><th>Método</th><th>Ruta</th><th>Acceso</th><th>Descripción</th></tr>
+      <tr><td><span class="method method-post">POST</span></td><td class="route-path">/api/auth/register</td><td>Público</td><td>Registra un nuevo usuario. Valida con Zod y fuerza el rol a 'cliente'.</td></tr>
+      <tr><td><span class="method method-post">POST</span></td><td class="route-path">/api/auth/login</td><td>Público</td><td>Inicia sesión. Registra intentos fallidos y auto-bloquea tras 5 intentos.</td></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/auth/me</td><td>JWT</td><td>Devuelve los datos del usuario autenticado actualmente.</td></tr>
+    </table>
+
+    <h2>Productos — <code>/api/products</code></h2>
+    <table class="route-table">
+      <tr><th>Método</th><th>Ruta</th><th>Acceso</th><th>Descripción</th></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/products</td><td>Público</td><td>Lista todos los productos. Soporta filtro por categoría y búsqueda.</td></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/products/:id</td><td>Público</td><td>Devuelve un producto por su ID.</td></tr>
+      <tr><td><span class="method method-post">POST</span></td><td class="route-path">/api/products</td><td>ADMIN</td><td>Crea un nuevo producto.</td></tr>
+      <tr><td><span class="method method-put">PUT</span></td><td class="route-path">/api/products/:id</td><td>ADMIN</td><td>Actualiza un producto existente.</td></tr>
+      <tr><td><span class="method method-delete">DELETE</span></td><td class="route-path">/api/products/:id</td><td>ADMIN</td><td>Elimina un producto.</td></tr>
+    </table>
+
+    <h2>Categorías — <code>/api/categories</code></h2>
+    <table class="route-table">
+      <tr><th>Método</th><th>Ruta</th><th>Acceso</th><th>Descripción</th></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/categories</td><td>Público</td><td>Lista todas las categorías.</td></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/categories/:id</td><td>Público</td><td>Devuelve una categoría por ID.</td></tr>
+      <tr><td><span class="method method-post">POST</span></td><td class="route-path">/api/categories</td><td>ADMIN</td><td>Crea una categoría.</td></tr>
+      <tr><td><span class="method method-put">PUT</span></td><td class="route-path">/api/categories/:id</td><td>ADMIN</td><td>Actualiza una categoría.</td></tr>
+      <tr><td><span class="method method-delete">DELETE</span></td><td class="route-path">/api/categories/:id</td><td>ADMIN</td><td>Elimina una categoría.</td></tr>
+    </table>
+
+    <h2>Carrito — <code>/api/cart</code></h2>
+    <div class="callout">
+      <p><strong>Carrito híbrido:</strong> Todas las rutas del carrito usan <code>optionalAuthenticate</code>. Si hay JWT, el carrito se vincula al usuario; si no, se vincula al <code>x-session-id</code>. Al hacer login, el carrito de la sesión se fusiona automáticamente con el del usuario.</p>
+    </div>
+    <table class="route-table">
+      <tr><th>Método</th><th>Ruta</th><th>Acceso</th><th>Descripción</th></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/cart</td><td>Opcional</td><td>Obtiene el carrito de la sesión o del usuario.</td></tr>
+      <tr><td><span class="method method-post">POST</span></td><td class="route-path">/api/cart</td><td>Opcional</td><td>Añade un producto al carrito.</td></tr>
+      <tr><td><span class="method method-put">PUT</span></td><td class="route-path">/api/cart/:productId</td><td>Opcional</td><td>Actualiza la cantidad de un item.</td></tr>
+      <tr><td><span class="method method-delete">DELETE</span></td><td class="route-path">/api/cart/:productId</td><td>Opcional</td><td>Elimina un item del carrito.</td></tr>
+      <tr><td><span class="method method-delete">DELETE</span></td><td class="route-path">/api/cart/clear</td><td>Opcional</td><td>Vacía el carrito completo.</td></tr>
+    </table>
+
+    <h2>Pedidos — <code>/api/orders</code></h2>
+    <table class="route-table">
+      <tr><th>Método</th><th>Ruta</th><th>Acceso</th><th>Descripción</th></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/orders</td><td>JWT</td><td>Lista los pedidos del usuario autenticado.</td></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/orders/:id</td><td>JWT</td><td>Devuelve un pedido con sus items.</td></tr>
+      <tr><td><span class="method method-post">POST</span></td><td class="route-path">/api/orders</td><td>JWT</td><td>Crea un pedido desde el carrito actual y reduce el stock.</td></tr>
+      <tr><td><span class="method method-get">GET</span></td><td class="route-path">/api/orders/:id/invoice</td><td>Query token</td><td>Genera y descarga la factura en PDF.</td></tr>
+    </table>
+
+    <h2>Admin — Usuarios, Logs, Stats, Bloqueos</h2>
+    <table class="route-table">
+      <tr><th>Ruta base</th><th>Roles permitidos</th><th>Descripción</th></tr>
+      <tr><td class="route-path">/api/users</td><td>ADMIN</td><td>CRUD de usuarios. Permite cambiar roles y bloquear cuentas.</td></tr>
+      <tr><td class="route-path">/api/logs</td><td>ADMIN, ANALYST</td><td>Listado paginado y filtrado de logs. Exportación en CSV y PDF.</td></tr>
+      <tr><td class="route-path">/api/stats/auth-stats</td><td>ADMIN, ANALYST</td><td>Estadísticas de autenticación: logins, fallos, sesiones recientes, gráfica de 7 días.</td></tr>
+      <tr><td class="route-path">/api/stats/system-stats</td><td>ADMIN, ANALYST</td><td>Estadísticas del sistema: conteos de tablas, latencia, logs por nivel y módulo.</td></tr>
+      <tr><td class="route-path">/api/blocks</td><td>ADMIN, ANALYST</td><td>Gestión de bloqueos activos: listar, crear y eliminar bloqueos manuales.</td></tr>
+    </table>
+  </section>
+
+  <!-- ══ BACKEND: CONTROLADORES ══════════════════════════════════════════ -->
+  <section id="be-controllers" class="section">
+    <div class="page-title">Backend — <span class="accent">Controladores</span></div>
+    <p class="page-subtitle">Los controladores orquestan la lógica: reciben la petición validada, llaman al servicio y devuelven la respuesta JSON.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/controllers/authController.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona el registro, login y consulta del perfil. La lógica de seguridad más relevante reside aquí:</p>
+        <br/>
+        <p class="file-desc"><strong>Registro (<code>POST /api/auth/register</code>):</strong> Llama a <code>authService.register</code>, fusiona el carrito de sesión con el del nuevo usuario (si existe un <code>x-session-id</code>), dispara el envío del correo de bienvenida de forma asíncrona (no bloquea la respuesta aunque falle el SMTP) y registra un log INFO.</p>
+        <br/>
+        <p class="file-desc"><strong>Login (<code>POST /api/auth/login</code>):</strong> Además del proceso normal de autenticación, implementa un sistema de auto-bloqueo en memoria. Mantiene un <code>Map</code> con los intentos fallidos por email: si en 10 minutos acumula 5 fallos, llama a <code>blockService.createAutoBlock</code> para bloquear ese email durante 15 minutos y limpia el contador.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/controllers/productController.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">CRUD de productos. Los métodos GET son públicos. Los métodos POST, PUT y DELETE están protegidos en las rutas y solo son accesibles para administradores. Delega toda la interacción con la base de datos en <code>productService</code>.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/controllers/cartController.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona las operaciones del carrito. Lee el <code>x-session-id</code> de la cabecera de la petición para identificar la sesión y lo pasa al servicio junto con el ID de usuario (si existe). Soporta añadir, actualizar cantidad, eliminar items y vaciar el carrito.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/controllers/orderController.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona los pedidos del usuario. Al crear un pedido, el servicio obtiene todos los items del carrito, calcula el total, crea el pedido con sus items y reduce el stock de cada producto. También expone un endpoint especial para generar una factura en PDF que acepta el token como parámetro de query en lugar de cabecera (ya que se abre en una nueva pestaña del navegador).</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/controllers/admin/</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Cuatro controladores exclusivos del panel de administración:</p>
+        <br/>
+        <p class="file-desc"><strong>userController</strong> — CRUD de usuarios. Solo para administradores. Permite listar usuarios, crear nuevos con rol asignado, cambiar el rol de un usuario existente y eliminar cuentas.</p>
+        <br/>
+        <p class="file-desc"><strong>logController</strong> — Consulta el registro de auditoría. Soporta filtros por nivel, módulo, texto y rango de fechas con paginación. También genera exportaciones en CSV (usando array join) y PDF (usando la librería pdfkit).</p>
+        <br/>
+        <p class="file-desc"><strong>statsController</strong> — Proxy delgado que llama a las funciones de <code>statsService</code> y devuelve las estadísticas de autenticación y del sistema directamente.</p>
+        <br/>
+        <p class="file-desc"><strong>blockController</strong> — Gestión de bloqueos activos. Permite listar todos los bloqueos no expirados, crear bloqueos manuales por IP o email con duración opcional, y eliminar (desbloquear) por ID.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BACKEND: SERVICIOS ═══════════════════════════════════════════════ -->
+  <section id="be-services" class="section">
+    <div class="page-title">Backend — <span class="accent">Servicios</span></div>
+    <p class="page-subtitle">La capa de lógica de negocio. Los servicios contienen toda la interacción con Prisma y las reglas del dominio.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/services/authService.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Núcleo de la autenticación. Gestiona cuatro operaciones: <strong>findByEmail</strong> (búsqueda con mapeo de roles), <strong>findById</strong> (para <code>/me</code>, devuelve datos públicos sin contraseña), <strong>register</strong> (comprueba que el email no exista, hashea la contraseña con bcrypt usando los salt rounds de la variable de entorno y genera el JWT) y <strong>login</strong> (verifica la contraseña con <code>bcrypt.compare</code> y genera el token).</p>
+        <br/>
+        <p class="file-desc">Contiene un mapa de traducción de roles entre el frontend (<code>'admin'/'cliente'/'analista'</code>) y la base de datos (<code>'ADMIN'/'CLIENT'/'ANALYST'</code>), que se aplica en todos los mapeos.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/services/admin/blockService.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona los bloqueos de acceso. La función más crítica es <strong>isBlocked</strong>: recibe la IP, el userId y el email, y busca en la base de datos si alguno de esos identificadores tiene un bloqueo activo (que no haya expirado). Devuelve <code>{ blocked: true, reason }</code> si se encuentra alguno.</p>
+        <br/>
+        <p class="file-desc"><strong>createAutoBlock</strong> registra un bloqueo temporal en la base de datos cuando el controlador de auth detecta que un email ha acumulado demasiados intentos fallidos.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/services/admin/statsService.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Genera las estadísticas del panel de administración a partir de los datos reales de la base de datos:</p>
+        <br/>
+        <p class="file-desc"><strong>getAuthStats</strong> — Cuenta logins exitosos y fallidos en los últimos 30 días, usuarios únicos que han hecho login hoy, y construye los datos para la gráfica de Chart.js (logins vs fallidos por día en los últimos 7 días).</p>
+        <br/>
+        <p class="file-desc"><strong>getSystemStats</strong> — Devuelve conteos de todas las tablas principales, el número total de tablas en la base de datos (con una raw query a <code>information_schema</code>), la latencia de la base de datos medida en la propia llamada y la distribución de logs por nivel y por módulo.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/services/mailService.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona el envío de correos electrónicos con Nodemailer. Si las variables de entorno <code>SMTP_USER</code> y <code>SMTP_PASS</code> no están configuradas, simula el envío mostrando un log en consola (modo seguro para desarrollo). Si están presentes, crea un transportador SMTP real y envía un correo HTML de bienvenida estilizado con el nombre del usuario y un enlace a la tienda.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/services/cartService.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Lógica del carrito de compras. La función más relevante es <strong>mergeSessionCartIntoUser</strong>: cuando un usuario anónimo hace login o se registra, esta función toma todos los items de su carrito de sesión y los fusiona con el carrito del usuario. Si un producto ya existe en ambos, suma las cantidades; si no, transfiere el item. Al terminar, elimina todos los registros de la sesión anónima.</p>
+      </div>
+    </div>
+
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/services/admin/logService.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Servicio de auditoría. Expone la función <strong>createLog</strong> que es llamada desde múltiples puntos de la aplicación (authController, authMiddleware, blockService) para registrar eventos. Gestiona también la consulta paginada de logs con filtros por nivel, módulo, texto libre y rango de fechas, y la generación de los archivos de exportación.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ BACKEND: VALIDADORES ════════════════════════════════════════════ -->
+  <section id="be-validators" class="section">
+    <div class="page-title">Backend — <span class="accent">Validadores</span></div>
+    <p class="page-subtitle">Esquemas Zod que validan y transforman los datos de entrada antes de que lleguen a los controladores.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/validators/authValidator.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Define dos esquemas de validación:</p>
+        <br/>
+        <p class="file-desc"><strong>registerSchema</strong> — Valida nombre (2-100 caracteres), email (formato HTML5) y contraseña (6-128 caracteres). Aplica una transformación que fuerza el campo <code>role</code> a <code>'cliente'</code> independientemente de lo que envíe el cliente, evitando que alguien se auto-asigne el rol de administrador en el registro público.</p>
+        <br/>
+        <p class="file-desc"><strong>loginSchema</strong> — Valida únicamente email y contraseña con presencia obligatoria. Sin restricciones de longitud mínima en la contraseña para no limitar casos de uso.</p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <p><strong>Seguridad por diseño:</strong> La transformación del rol en <code>registerSchema</code> es una medida de seguridad importante. Aunque la API devuelva un error si se envía un rol no válido, la transformación garantiza que incluso si Zod lo dejara pasar, el rol siempre será 'cliente'. El rol solo puede ser cambiado desde el panel de administración.</p>
+    </div>
+  </section>
+
+  <!-- ══ BACKEND: CONFIGURACIÓN ══════════════════════════════════════════ -->
+  <section id="be-config" class="section">
+    <div class="page-title">Backend — <span class="accent">Configuración</span></div>
+    <p class="page-subtitle">Archivos de configuración, utilidades y variables de entorno.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/config/jwt.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Centraliza la configuración de JWT. Lee <code>JWT_SECRET</code> y <code>JWT_EXPIRES_IN</code> de las variables de entorno. Si no están definidas, usa valores por defecto (no recomendado en producción). Al estar en un único archivo, cambiar la clave o la expiración solo requiere modificar este lugar.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/config/prisma.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Instancia singleton del cliente Prisma. Exporta un único objeto <code>prisma</code> que todos los servicios importan. Usar un singleton evita crear múltiples conexiones a la base de datos, lo que degradaría el rendimiento.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/utils/getClientIp.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Utilidad para extraer la IP real del cliente. En entornos con proxy o Docker, la petición llega con la cabecera <code>x-forwarded-for</code>. Esta función la lee primero, tomando solo la primera IP si hay varias. También normaliza las direcciones IPv4-mapped en IPv6 (<code>::ffff:1.2.3.4</code>) a su forma IPv4 pura (<code>1.2.3.4</code>) para garantizar que los bloqueos por IP funcionen correctamente.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/src/types/index.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Repositorio centralizado de tipos TypeScript del backend. Define las interfaces de todos los modelos de dominio (<code>User</code>, <code>Product</code>, <code>CartItem</code>, <code>Order</code>, etc.), los tipos de datos especiales (<code>UserRole</code>, <code>LogLevel</code>, <code>JwtPayload</code>), y el tipo genérico de respuesta de la API (<code>ApiResponse&lt;T&gt;</code>) que garantiza una estructura de respuesta coherente en todos los endpoints.</p>
+      </div>
+    </div>
+
+    <h2>Variables de entorno</h2>
+    <table class="route-table">
+      <tr><th>Variable</th><th>Descripción</th><th>Requerida</th></tr>
+      <tr><td class="route-path">DATABASE_URL</td><td>URL de conexión a MariaDB</td><td>Sí</td></tr>
+      <tr><td class="route-path">JWT_SECRET</td><td>Clave secreta para firmar los tokens</td><td>Sí</td></tr>
+      <tr><td class="route-path">JWT_EXPIRES_IN</td><td>Duración del token (ej: "24h")</td><td>No (def: 24h)</td></tr>
+      <tr><td class="route-path">SALT_ROUNDS</td><td>Coste del hash bcrypt</td><td>No (def: 10)</td></tr>
+      <tr><td class="route-path">PORT</td><td>Puerto del servidor</td><td>No (def: 3000)</td></tr>
+      <tr><td class="route-path">SMTP_HOST/PORT/USER/PASS</td><td>Configuración de correo SMTP</td><td>No (simulado)</td></tr>
+      <tr><td class="route-path">FRONTEND_URL</td><td>URL del frontend para el correo de bienvenida</td><td>No</td></tr>
+    </table>
+  </section>
+
+  <!-- ══ FRONTEND: PUNTO DE ENTRADA ══════════════════════════════════════ -->
+  <section id="fe-entry" class="section">
+    <div class="page-title">Frontend — Punto de <span class="accent">entrada</span></div>
+    <p class="page-subtitle">Los archivos que inicializan la aplicación Vue 3.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/main.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Punto de entrada del frontend. Crea la instancia de la aplicación Vue con <code>createApp(App)</code>, registra Pinia como gestor de estado global y Vue Router para la navegación, importa los estilos globales y monta la aplicación en el elemento <code>#app</code> del DOM definido en <code>index.html</code>.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/App.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Componente raíz de la aplicación. Su template es únicamente <code>&lt;router-view /&gt;</code>, que renderizará el layout activo según la ruta actual. En el <code>onMounted</code> realiza dos acciones: llama a <code>authStore.fetchMe()</code> para restaurar la sesión del usuario si hay un JWT válido en localStorage, e inicializa la librería AOS (Animate On Scroll) para las animaciones de entrada de los elementos. También refresca AOS después de cada cambio de ruta.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/layouts/MainLayout.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Layout principal de la tienda pública. Envuelve todas las rutas del catálogo y autenticación con el <strong>Navbar</strong> en la parte superior, el <strong>router-view</strong> (donde se renderiza la vista activa) en el centro, y el <strong>Footer</strong> al final. Cualquier cambio en la barra de navegación o el pie de página solo requiere modificar este archivo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FRONTEND: ROUTER ═════════════════════════════════════════════════ -->
+  <section id="fe-router" class="section">
+    <div class="page-title">Frontend — <span class="accent">Router y Guards</span></div>
+    <p class="page-subtitle">Sistema de navegación SPA con protección de rutas basada en autenticación y roles.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/router/index.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Define todas las rutas de la aplicación y el sistema de guards. Las rutas están organizadas en dos grupos principales:</p>
+        <br/>
+        <p class="file-desc"><strong>Rutas públicas (MainLayout):</strong> Inicio, catálogo, detalle de producto, carrito, login y registro. Las rutas de login y registro tienen el meta <code>guestOnly: true</code>, que redirige al inicio si el usuario ya está autenticado.</p>
+        <br/>
+        <p class="file-desc"><strong>Rutas de administración (/admin):</strong> Todas protegidas con <code>requiresAuth: true</code> y roles <code>['admin', 'analista']</code>. Las secciones más sensibles (usuarios, productos, categorías) están restringidas solo a <code>'admin'</code>.</p>
+        <br/>
+        <p class="file-desc"><strong>Navigation guard (beforeEach):</strong> Se ejecuta en cada cambio de ruta. Importa <code>authStore</code> dinámicamente la primera vez para evitar problemas de inicialización circular. Si hay token pero no hay usuario cargado, llama a <code>fetchMe</code> antes de evaluar el acceso. La lógica de evaluación es: si <code>guestOnly</code> y está autenticado → redirige al inicio; si <code>requiresAuth</code> y no está autenticado → redirige al login; si tiene roles requeridos y el rol del usuario no encaja → redirige al inicio.</p>
+      </div>
+    </div>
+
+    <h2>Estructura de rutas</h2>
+    <table class="route-table">
+      <tr><th>Ruta</th><th>Nombre</th><th>Protección</th></tr>
+      <tr><td class="route-path">/</td><td>Home</td><td>Pública</td></tr>
+      <tr><td class="route-path">/productos</td><td>Products</td><td>Pública</td></tr>
+      <tr><td class="route-path">/producto/:id</td><td>ProductDetail</td><td>Pública</td></tr>
+      <tr><td class="route-path">/:slug</td><td>Category</td><td>Pública</td></tr>
+      <tr><td class="route-path">/cart</td><td>Cart</td><td>Pública</td></tr>
+      <tr><td class="route-path">/login</td><td>Login</td><td>Solo invitados</td></tr>
+      <tr><td class="route-path">/register</td><td>Register</td><td>Solo invitados</td></tr>
+      <tr><td class="route-path">/admin</td><td>admin-dashboard</td><td>admin / analista</td></tr>
+      <tr><td class="route-path">/admin/estado</td><td>admin-estado</td><td>admin / analista</td></tr>
+      <tr><td class="route-path">/admin/autenticacion</td><td>admin-autenticacion</td><td>admin / analista</td></tr>
+      <tr><td class="route-path">/admin/auditoria</td><td>admin-auditoria</td><td>admin / analista</td></tr>
+      <tr><td class="route-path">/admin/bloqueos</td><td>admin-bloqueos</td><td>admin / analista</td></tr>
+      <tr><td class="route-path">/admin/usuarios</td><td>admin-usuarios</td><td>solo admin</td></tr>
+      <tr><td class="route-path">/admin/productos</td><td>admin-productos</td><td>solo admin</td></tr>
+      <tr><td class="route-path">/admin/categorias</td><td>admin-categorias</td><td>solo admin</td></tr>
+    </table>
+  </section>
+
+  <!-- ══ FRONTEND: STORES ═════════════════════════════════════════════════ -->
+  <section id="fe-stores" class="section">
+    <div class="page-title">Frontend — <span class="accent">Stores (Pinia)</span></div>
+    <p class="page-subtitle">Estado global reactivo compartido entre todos los componentes y vistas.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/stores/authStore.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona toda la sesión del usuario. Persiste el token en localStorage y expone las siguientes responsabilidades:</p>
+        <br/>
+        <p class="file-desc"><strong>Estado reactivo:</strong> <code>user</code> (datos del usuario), <code>token</code> (JWT), <code>loading</code> y <code>error</code>.</p>
+        <br/>
+        <p class="file-desc"><strong>Computed:</strong> <code>isAuthenticated</code> (requiere token Y usuario cargado), <code>userRole</code>, <code>userName</code>.</p>
+        <br/>
+        <p class="file-desc"><strong>Métodos:</strong> <code>login</code> y <code>register</code> llaman a la API y actualizan el estado si tienen éxito. <code>logout</code> limpia el estado y el localStorage. <code>fetchMe</code> recupera el perfil del usuario desde el servidor usando el token almacenado, lo que permite restaurar la sesión al recargar la página. <code>hasRole</code> y <code>hasAnyRole</code> facilitan la comprobación de permisos en los componentes.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/stores/cartStore.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestiona el carrito de compras como estado global, permitiendo que el Navbar muestre el contador de items al mismo tiempo que la vista CartView muestra el listado completo.</p>
+        <br/>
+        <p class="file-desc"><strong>Computed:</strong> <code>total</code> (suma de precio × cantidad de todos los items) e <code>itemCount</code> (suma de cantidades, mostrado en el badge del navbar).</p>
+        <br/>
+        <p class="file-desc"><strong>Métodos:</strong> <code>load</code> carga el carrito desde el servidor. <code>addItem</code>, <code>updateItem</code> y <code>removeItem</code> llaman al servicio correspondiente y recargan el carrito completo para garantizar consistencia con el servidor. <code>clearCart</code> vacía el carrito y limpia el estado local directamente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FRONTEND: API CLIENT ════════════════════════════════════════════ -->
+  <section id="fe-apiclient" class="section">
+    <div class="page-title">Frontend — <span class="accent">API Client</span></div>
+    <p class="page-subtitle">Capa de abstracción sobre fetch que centraliza la comunicación HTTP con el backend.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">secure-tenis/src/services/apiClient.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Wrapper centralizado sobre la API Fetch del navegador. Todos los servicios del frontend lo usan para hacer peticiones HTTP, garantizando comportamiento consistente:</p>
+        <br/>
+        <p class="file-desc"><strong>getSessionId:</strong> Genera o recupera un UUID de sesión persistido en localStorage. Este ID se envía en la cabecera <code>x-session-id</code> en todas las peticiones, permitiendo que el backend identifique el carrito anónimo del usuario incluso sin JWT.</p>
+        <br/>
+        <p class="file-desc"><strong>buildHeaders:</strong> Construye las cabeceras comunes de cada petición: <code>Content-Type: application/json</code>, <code>x-session-id</code> y, si existe, el token JWT como <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+        <br/>
+        <p class="file-desc"><strong>request:</strong> Realiza la petición fetch, parsea el JSON y lanza un Error con el mensaje del backend si la respuesta no es satisfactoria (código HTTP 4xx o 5xx). El objeto <code>api</code> exportado expone los métodos <code>get</code>, <code>post</code>, <code>put</code> y <code>delete</code> tipados con genéricos de TypeScript.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Configuración de entorno:</strong> La URL base (<code>VITE_API_URL</code>) se configura en <code>.env.development</code> (apunta a <code>http://localhost:3000/api</code>) y <code>.env.production</code>. Vite expone automáticamente las variables que empiezan por <code>VITE_</code> al código del frontend.</p>
+    </div>
+  </section>
+
+  <!-- ══ FRONTEND: MÓDULOS ════════════════════════════════════════════════ -->
+  <section id="fe-modules" class="section">
+    <div class="page-title">Frontend — <span class="accent">Módulos</span></div>
+    <p class="page-subtitle">El frontend está organizado por dominio funcional. Cada módulo agrupa vistas, servicios y composables relacionados.</p>
+
+    <div class="callout success">
+      <p><strong>Patrón de organización:</strong> Cada módulo sigue la misma estructura: <code>views/</code> (componentes de página), <code>services/</code> (llamadas HTTP puras) y opcionalmente <code>composables/</code> (lógica reactiva reutilizable) y <code>types/</code>.</p>
+    </div>
+
+    <h2>Módulo auth</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">LoginView.vue</div>
+        <p>Formulario de inicio de sesión. Llama a <code>authStore.login</code> y redirige al destino original (parámetro <code>redirect</code>) o al inicio si el login es exitoso.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">RegisterView.vue</div>
+        <p>Formulario de registro. Valida los campos en el cliente y llama a <code>authStore.register</code>. El backend siempre fuerza el rol 'cliente'.</p>
+      </div>
+    </div>
+
+    <h2>Módulo home</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">HeroBanner.vue</div>
+        <p>Sección de cabecera visual de la página de inicio con imagen destacada y llamada a la acción.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">FeaturedProducts.vue</div>
+        <p>Grid de productos destacados. Carga productos desde el servicio y muestra los primeros resultados con botón de añadir al carrito.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">ConfidenceTicker.vue</div>
+        <p>Banda animada de sellos de confianza y características del servicio (envío gratuito, seguridad, etc.).</p>
+      </div>
+      <div class="card">
+        <div class="card-title">EditorialBlock.vue</div>
+        <p>Bloque de contenido editorial con imagen y texto, orientado a destacar categorías o colecciones.</p>
+      </div>
+    </div>
+
+    <h2>Módulo products</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">ProductsView.vue</div>
+        <p>Vista de catálogo. Muestra el listado de productos con filtrado por categoría (mediante slug de ruta) y barra de búsqueda. Usa el composable <code>useProducts</code> para la lógica reactiva de filtrado y carga.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">ProductDetailView.vue</div>
+        <p>Vista de detalle de un producto. Carga el producto por ID, muestra la imagen, precio, descripción, stock disponible y permite añadir al carrito con cantidad configurable.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">useProducts.ts</div>
+        <p>Composable que gestiona el estado del listado: carga productos y categorías, aplica los filtros reactivos y expone el array filtrado a la vista.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">useProduct.ts</div>
+        <p>Composable para el detalle de un único producto. Carga el producto por ID y gestiona el estado de carga y error.</p>
+      </div>
+    </div>
+
+    <h2>Módulo cart</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">CartView.vue</div>
+        <p>Vista completa del carrito. Lista todos los items con imagen, nombre y precio. Permite cambiar cantidades, eliminar items y vaciar el carrito. Muestra el total y un botón para proceder al checkout.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">useCart.ts (composable)</div>
+        <p>Composable que expone las acciones del carrito de <code>cartStore</code> para uso local en componentes.</p>
+      </div>
+    </div>
+
+    <h2>Módulo checkout</h2>
+    <div class="card">
+      <div class="card-title">orderService.ts</div>
+      <p>Servicio simple que expone una única función para crear el pedido (llamada a <code>POST /api/orders</code>). El proceso de checkout toma el carrito actual del servidor, lo convierte en pedido y reduce el stock. No hay vista de checkout separada; el flujo se gestiona desde CartView.</p>
+    </div>
+
+    <h2>Componentes compartidos</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Navbar.vue</div>
+        <p>Barra de navegación global. Muestra el logo, los enlaces de categorías, el badge del carrito con el número de items (desde <code>cartStore.itemCount</code>), y el estado de sesión del usuario. Si el usuario es admin o analista, muestra el enlace al panel.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Footer.vue</div>
+        <p>Pie de página con información del proyecto y enlaces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FRONTEND: MÓDULO ADMIN ════════════════════════════════════════════ -->
+  <section id="fe-admin" class="section">
+    <div class="page-title">Frontend — <span class="accent">Módulo Admin</span></div>
+    <p class="page-subtitle">Panel de control para administradores y analistas. Accesible solo con rol autorizado.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">modules/admin/layouts/AdminLayout.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Layout exclusivo del panel de administración. Proporciona una barra lateral con la navegación entre las distintas secciones del panel, el header con el nombre del usuario y botón de logout, y el área de contenido donde se renderiza la vista activa. Es independiente del layout público, por lo que el panel tiene su propio diseño visual.</p>
+      </div>
+    </div>
+
+    <h2>Vistas del panel</h2>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/AdminDashboardView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Dashboard principal del panel. Muestra tarjetas de resumen con métricas clave del sistema (usuarios, productos, pedidos, logs) y accesos rápidos a las demás secciones. Es la primera pantalla que ve el administrador al acceder al panel.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/EstadoGeneralView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Estado del sistema en tiempo real. Consulta <code>/api/stats/system-stats</code> y muestra: estado del backend y la base de datos con latencia medida, conteo de registros en cada tabla, distribución de logs por nivel (con gráfica de dona de Chart.js) y top 10 de módulos más activos.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/AutenticacionView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Estadísticas de autenticación. Muestra los KPIs de los últimos 30 días (logins exitosos, intentos fallidos, usuarios únicos hoy), la gráfica de barras de actividad de los últimos 7 días, la tabla de sesiones recientes y el listado de intentos fallidos con IP y motivo. Usa el composable <code>useAuthStats</code>.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/AuditoriaView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Registro de auditoría completo. Tabla paginada con todos los logs del sistema. Permite filtrar por nivel (INFO/WARNING/ERROR/DEBUG), módulo, texto libre y rango de fechas. Botones para exportar los resultados en CSV o PDF. Usa el composable <code>useLogs</code> para gestionar los filtros y la paginación.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/AdminUsersView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestión de usuarios. Solo accesible para <strong>ADMIN</strong>. Tabla con todos los usuarios registrados. Permite crear nuevos usuarios asignando rol, cambiar el rol de un usuario existente mediante un selector inline y eliminar cuentas. Las operaciones llaman directamente a los endpoints de <code>/api/users</code>.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/AdminProductsView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestión del catálogo de productos. CRUD completo con formulario modal para crear y editar. Muestra el stock actual y permite modificarlo. Solo accesible para <strong>ADMIN</strong>.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/AdminCategoriesView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestión de categorías del catálogo. CRUD similar al de productos. Solo accesible para <strong>ADMIN</strong>.</p>
+      </div>
+    </div>
+    <div class="file-entry">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">views/BloqueosView.vue</span>
+        <span class="file-type-badge badge-vue">Vue</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Gestión de bloqueos de acceso. Accesible para admin y analista. Muestra todos los bloqueos activos (IP o email, manual o automático, con fecha de expiración). Permite crear bloqueos manuales indicando IP o email, motivo y duración opcional, y desbloquear cualquier entrada activa.</p>
+      </div>
+    </div>
+
+    <h2>Servicios y composables del módulo admin</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">useLogs.ts</div>
+        <p>Composable que gestiona los filtros de la vista de auditoría y la paginación. Reactivo: cualquier cambio en los filtros re-lanza la petición a la API automáticamente.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">useAuthStats.ts</div>
+        <p>Composable que carga y expone las estadísticas de autenticación. Gestiona el estado de carga y los datos para las gráficas de Chart.js.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">useFailedAttempts.ts</div>
+        <p>Composable dedicado a cargar y actualizar la lista de intentos de login fallidos recientes para la vista de autenticación.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">logService.ts / blockService.ts</div>
+        <p>Servicios HTTP puros del módulo admin. Llaman a los endpoints <code>/api/logs</code> y <code>/api/blocks</code> respectivamente usando el apiClient.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FRONTEND: ESTILOS ════════════════════════════════════════════════ -->
+  <section id="fe-estilos" class="section">
+    <div class="page-title">Frontend — <span class="accent">Estilos globales</span></div>
+    <p class="page-subtitle">Sistema de diseño CSS del proyecto: variables, reset y estilos base.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">src/assets/styles/variables.css</span>
+        <span class="file-type-badge badge-conf">CSS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Define las variables CSS (<code>--variables</code>) que forman la base del sistema de diseño: paleta de colores principal, tipografías, espaciados y sombras. Al centralizar aquí todos los valores, cambiar el tema visual del proyecto requiere modificar únicamente este archivo.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">src/assets/styles/global.css</span>
+        <span class="file-type-badge badge-conf">CSS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Estilos globales de la aplicación. Incluye el reset de CSS, estilos del body y html, clases utilitarias de uso frecuente y los estilos de las animaciones AOS. Es importado en <code>main.ts</code> y se aplica a toda la aplicación.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">src/assets/styles/base/_buttons.css</span>
+        <span class="file-type-badge badge-conf">CSS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Clases base para botones reutilizables en toda la aplicación. Define variantes de color, tamaño y estado (hover, disabled) siguiendo el sistema de variables de diseño.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ INFRA: DOCKER ════════════════════════════════════════════════════ -->
+  <section id="infra-docker" class="section">
+    <div class="page-title">Infraestructura — <span class="accent">Docker Compose</span></div>
+    <p class="page-subtitle">Orquestación de los servicios del proyecto en contenedores aislados.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">docker-compose.yml</span>
+        <span class="file-type-badge badge-conf">YAML</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Define dos servicios en red compartida:</p>
+        <br/>
+        <p class="file-desc"><strong>mariadb:</strong> Imagen oficial de MariaDB 11. Crea la base de datos <code>mydb</code> con usuario y contraseña configurables. Persiste los datos en el volumen <code>mariadb_data</code> para que sobrevivan a reinicios. Implementa un healthcheck con <code>healthcheck.sh</code> que verifica que InnoDB esté inicializado antes de permitir que el backend arranque.</p>
+        <br/>
+        <p class="file-desc"><strong>backend:</strong> Construye la imagen desde <code>backend/Dockerfile.development</code>. Expone el puerto 3000. Lee las variables de entorno desde <code>backend/.env</code>. Monta el directorio <code>backend/</code> como volumen para que los cambios en el código sean inmediatos (hot-reload). Espera a que MariaDB esté sano (<code>depends_on: condition: service_healthy</code>) antes de arrancar.</p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <p><strong>Frontend no está en Docker:</strong> El frontend (Vite) se ejecuta directamente en el host con <code>npm run dev</code>. Esto permite aprovechar el Hot Module Replacement de Vite de forma más eficiente en desarrollo.</p>
+    </div>
+  </section>
+
+  <!-- ══ INFRA: SCRIPTS ═══════════════════════════════════════════════════ -->
+  <section id="infra-scripts" class="section">
+    <div class="page-title">Infraestructura — <span class="accent">Scripts de inicio</span></div>
+    <p class="page-subtitle">Scripts para automatizar el arranque y parada del proyecto en Windows y Linux/macOS.</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">start.sh / start.ps1</div>
+        <p>Script de inicio completo. Automatiza en orden: copia <code>.env.example</code> a <code>.env</code> si no existe (generando un <code>JWT_SECRET</code> aleatorio), instala las dependencias npm del frontend, levanta Docker Compose y opcionalmente ejecuta el seed de la base de datos (con el flag <code>--seed</code> / <code>-Seed</code>).</p>
+      </div>
+      <div class="card">
+        <div class="card-title">stop.sh / stop.ps1</div>
+        <p>Script de parada. Con el flag <code>--clean</code> / <code>-Clean</code> elimina también el volumen de datos de MariaDB. Sin el flag, solo detiene los contenedores preservando los datos para el próximo arranque.</p>
+      </div>
+    </div>
+
+    <div class="callout success">
+      <p><strong>Primer arranque:</strong> En Windows, ejecutar <code>.\start.ps1 -Seed</code>. En Linux/macOS, ejecutar <code>./start.sh --seed</code>. El seed carga datos de ejemplo (usuarios de prueba, productos y categorías) en la base de datos, listos para usar.</p>
+    </div>
+  </section>
+
+  <!-- ══ INFRA: PRISMA ════════════════════════════════════════════════════ -->
+  <section id="infra-prisma" class="section">
+    <div class="page-title">Infraestructura — <span class="accent">Prisma & Migraciones</span></div>
+    <p class="page-subtitle">ORM y sistema de gestión de esquema de base de datos.</p>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/prisma/schema.prisma</span>
+        <span class="file-type-badge badge-conf">Prisma</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">El archivo central de Prisma. Define el proveedor de base de datos (MySQL/MariaDB), todos los modelos con sus campos y tipos, las relaciones entre modelos (un <code>User</code> tiene muchos <code>Order</code>, muchos <code>CartItem</code>, etc.) y las enumeraciones (<code>Role</code> con CLIENT/ADMIN/ANALYST y <code>LogLevel</code> con INFO/WARNING/ERROR/DEBUG). A partir de este archivo, Prisma genera el cliente TypeScript tipado y las migraciones SQL.</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/prisma/seed.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Script de siembra de datos de ejemplo. Crea usuarios de prueba (incluyendo un administrador), categorías de zapatillas y un catálogo de productos con precios, stock e imágenes de ejemplo. Diseñado para ejecutarse una única vez durante el primer arranque del proyecto, usando <code>upsert</code> para ser idempotente (se puede ejecutar varias veces sin duplicar datos).</p>
+      </div>
+    </div>
+
+    <div class="file-entry open">
+      <div class="file-header" onclick="toggle(this)">
+        <span class="file-path">backend/prisma.config.ts</span>
+        <span class="file-type-badge badge-ts">TS</span>
+        <span class="file-toggle">▶</span>
+      </div>
+      <div class="file-body">
+        <p class="file-desc">Archivo de configuración de Prisma para el proyecto. Define la ruta del esquema y la ubicación del cliente generado, adaptado al entorno de TypeScript del proyecto.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Flujo de trabajo con Prisma:</strong> Para modificar la base de datos, se edita <code>schema.prisma</code>, se ejecuta <code>npx prisma migrate dev</code> (genera el SQL y aplica el cambio) y Prisma regenera automáticamente el cliente TypeScript tipado. Nunca se editan los archivos SQL de migración manualmente.</p>
+    </div>
+
+    <h2>Comandos Prisma útiles</h2>
+    <table class="route-table">
+      <tr><th>Comando</th><th>Descripción</th></tr>
+      <tr><td class="route-path">npx prisma generate</td><td>Regenera el cliente TypeScript a partir del schema</td></tr>
+      <tr><td class="route-path">npx prisma migrate dev</td><td>Crea y aplica una nueva migración en desarrollo</td></tr>
+      <tr><td class="route-path">npx prisma migrate deploy</td><td>Aplica migraciones pendientes en producción</td></tr>
+      <tr><td class="route-path">npx prisma studio</td><td>Abre un explorador visual de la base de datos</td></tr>
+      <tr><td class="route-path">npx ts-node prisma/seed.ts</td><td>Ejecuta el seed de datos de ejemplo</td></tr>
+    </table>
+  </section>
+
+</main>
+
+<script>
+  /**
+   * Shows a section and highlights the corresponding nav item.
+   * Hides all other sections.
+   */
+  function show(id) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    // Show the target section
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+
+    // Update nav active state
+    document.querySelectorAll('.nav-item').forEach(a => a.classList.remove('active'));
+    const activeLink = [...document.querySelectorAll('.nav-item')]
+      .find(a => a.getAttribute('onclick')?.includes(`'${id}'`));
+    if (activeLink) activeLink.classList.add('active');
+
+    // Close mobile sidebar after navigation
+    document.getElementById('sidebar').classList.remove('open');
+
+    // Scroll main content to top
+    document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0 });
+  }
+
+  /** Toggles the expand/collapse state of a file entry. */
+  function toggle(header) {
+    header.parentElement.classList.toggle('open');
+  }
+
+  /** Toggles the mobile sidebar visibility. */
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // Prevent navigation link default behavior
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', e => e.preventDefault());
+  });
+</script>
+
+</body>
+</html>
