@@ -113,12 +113,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cartStore'
+import { useAuthStore } from '@/stores/authStore'
 import { createOrderRequest } from '@/modules/checkout/services/orderService'
 
 const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
 
+const router = useRouter()
 const cartStore = useCartStore()
+const authStore = useAuthStore()
 const { items, loading, error, total, itemCount } = storeToRefs(cartStore)
 const { load, updateItem, removeItem, clearCart } = cartStore
 
@@ -133,6 +137,12 @@ const invoiceUrl = computed(() => {
 })
 
 const handleCheckout = async () => {
+  // Redirige al login si el usuario no está autenticado
+  if (!authStore.isAuthenticated) {
+    router.push({ name: 'Login', query: { redirect: '/cart' } })
+    return
+  }
+
   orderSuccess.value = false
   checkoutError.value = null
   lastOrderId.value = null
