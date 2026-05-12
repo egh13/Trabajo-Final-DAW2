@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import type { LoginPayload } from '@/types'
@@ -94,7 +94,7 @@ const form = reactive<LoginPayload>({
 const submitted = ref(false)
 
 const handleLogin = async () => {
-  submitted.value = true
+  submitted.value = true  
   if (!form.email || !form.password) return
 
   try {
@@ -104,6 +104,9 @@ const handleLogin = async () => {
     // El error ya se muestra desde el store
   }
 }
+
+// Limpia errores residuales de otras vistas al entrar en login
+onMounted(() => { authStore.error = null })
 </script>
 
 <style scoped>

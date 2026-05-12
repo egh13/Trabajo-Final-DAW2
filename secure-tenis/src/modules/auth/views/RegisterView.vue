@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -143,7 +143,6 @@ const confirmError = computed(() => {
 const handleRegister = async () => {
   submitted.value = true
   if (!form.name || !form.email || passwordError.value || confirmError.value) return
-
   try {
     await authStore.register(form)
     router.push('/')
@@ -151,6 +150,9 @@ const handleRegister = async () => {
     // El error ya se muestra desde el store
   }
 }
+
+// Limpia errores residuales de otras vistas al entrar en registro
+onMounted(() => { authStore.error = null })
 </script>
 
 <style scoped>

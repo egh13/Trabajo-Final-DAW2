@@ -1,6 +1,6 @@
 import type { ApiResponse } from '@/types'
 
-// En desarrollo usa el proxy de Vite; en producción configurar VITE_API_URL
+// Configurar en .env.development o .env.production
 const BASE_URL = import.meta.env.VITE_API_URL ?? '/api'
 
 // Obtener o generar un ID de sesión persistente para el carrito
