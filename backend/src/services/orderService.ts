@@ -31,8 +31,18 @@ export const createOrderFromCart = async (userId: number) => {
   const total = cartItems.reduce((sum, item) =>
     sum + (item.product_price ?? 0) * item.quantity, 0
   )
-
   return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    
+    // Verifica que todos los productos tienen stock suficiente antes de procesar
+    for (const item of cartItems) {
+      const product = await tx.product.findUnique({ where: { id: item.product_id } })
+      if (!product || product.stock < item.quantity) {
+        const err = new Error(`Stock insuficiente para "${product?.name ?? `producto #${item.product_id}`}"`)
+        Object.assign(err, { statusCode: 409 })
+        throw err
+      }
+    }
+
     const order = await tx.order.create({
       data: {
         userId,
