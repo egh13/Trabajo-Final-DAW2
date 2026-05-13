@@ -151,13 +151,44 @@ async function main() {
                 stock: 65,
                 image: "https://res.cloudinary.com/dqezwrvov/image/upload/v1778167587/ChatGPT_Image_7_may_2026_17_25_47_rrc9it.png",
                 categoryId: catRopa.id
-            },
-            {
+            },            {
                 name: "Secure Hoodie",
                 description: "Sudadera azul marino, ideal para ir a tomar el vermut",
                 price: 60.0,
                 stock: 35,
                 image: "https://res.cloudinary.com/dqezwrvov/image/upload/v1778485960/ChatGPT_Image_11_may_2026_09_50_55_mqfq3e.png",
+                categoryId: catRopa.id
+            },
+            {
+                name: "Secure Zip x Louis Vuitton",
+                description: "Sudadera colaboracion de Secure Tenis y Louis Vouitton",
+                price: 220.0,
+                stock: 55,
+                image: "https://res.cloudinary.com/dqezwrvov/image/upload/v1778672196/ChatGPT_Image_13_may_2026_13_31_42_h0ybb2.png",
+                categoryId: catRopa.id
+            },
+            {
+                name: "Gorra Gatón",
+                description: "Gorra ajustable con cierre de seguridad",
+                price: 20.0,
+                stock: 70,
+                image: "https://res.cloudinary.com/dqezwrvov/image/upload/v1778672196/ChatGPT_Image_13_may_2026_13_28_11_lsyexa.png",
+                categoryId: catRopa.id
+            },
+            {
+                name: "Secure Watch",
+                description: "Reloj de oro con cierre antirrobo de seguridad",
+                price: 430.0,
+                stock: 10,
+                image: "https://res.cloudinary.com/dqezwrvov/image/upload/v1778672196/ChatGPT_Image_13_may_2026_13_28_53_keloat.png",
+                categoryId: catAccesorios.id
+            },
+            {
+                name: "Luxury Trousers",
+                description: "Pantalones de lino, perfectos para bautizos y comuniones",
+                price: 120.0,
+                stock: 200,
+                image: "https://res.cloudinary.com/dqezwrvov/image/upload/v1778672196/ChatGPT_Image_13_may_2026_13_30_06_dk56wn.png",
                 categoryId: catRopa.id
             }
         ]

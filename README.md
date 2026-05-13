@@ -35,6 +35,7 @@ El proyecto demuestra la integración de un frontend reactivo en **Vue 3** con u
 - Carrito persistente: funciona sin cuenta y se fusiona automáticamente al iniciar sesión
 - Gestión de cantidad, eliminación de artículos y vaciado de carrito
 - Proceso de compra con reducción de stock automática en base de datos
+- Imágenes de productos servidas desde **Cloudinary** (CDN)
 - Historial de pedidos por usuario
 
 ### Autenticación y seguridad
@@ -129,6 +130,7 @@ Esta separación permite que el carrito, por ejemplo, sea accesible desde el `Na
 | MariaDB 10+ | Base de datos relacional principal |
 | Prisma Migrate | Migraciones versionadas del esquema |
 | Docker Compose | Orquestación de contenedores (backend + BD) |
+| Cloudinary | CDN para almacenamiento y entrega de imágenes de productos |
 
 ---
 
